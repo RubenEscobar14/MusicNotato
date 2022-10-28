@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
-import 'Graphics.dart';
-import 'Note.dart';
-import 'PlayingPage.dart';
+import 'graphics.dart';
+import 'note.dart';
+import 'playing_page.dart';
 import 'save.dart';
 
 void main() {

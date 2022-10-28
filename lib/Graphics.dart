@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
-import 'Note.dart';
+import 'note.dart';
 
 class Graphics extends CustomPainter {
   // String noteName;
