@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'note.dart';
 
@@ -13,7 +16,10 @@ class Graphics extends CustomPainter {
   List<double> altoBasePositions = [0,0.5,1,1.5,2,2.5,3];
   List<double> bassBasePositions = [3,3.5,4,4.5,5,5.5,6];
 
-  Graphics(this.x, this.noteList, this.notePosition, this.currentClef);
+  double signature;
+  double signature_;
+
+  Graphics(this.x, this.noteList, this.notePosition, this.currentClef, this.signature, this.signature_);
 
   double calculateBasePosition(String noteName, String currentClef) {
     if(noteName == 'c') {
@@ -114,11 +120,69 @@ class Graphics extends CustomPainter {
     canvas.drawLine(Offset(0, x), Offset(size.width, x), paint);
     canvas.drawLine(Offset(0, 2*x), Offset(size.width, 2*x), paint);
 
+    //节拍选择框
+    var points = [
+      //上面横线
+      Offset(10, -2 * x - 5),
+      Offset(15, -2 * x - 5),
+      Offset(20, -2 * x - 5),
+      Offset(25, -2 * x - 5),
+      Offset(30, -2 * x - 5),
+      //左边竖线
+      Offset(5, -2 * x - 5),
+      Offset(5, -2 * x),
+      Offset(5, -2 * x + 5),
+      Offset(5, -2 * x + 10),
+      Offset(5, -2 * x + 15),
+      Offset(5, -2 * x + 20),
+      Offset(5, 2 * x - 20),
+      Offset(5, 2 * x - 15),
+      Offset(5, 2 * x - 5),
+      Offset(5, 2 * x),
+      Offset(5, 2 * x + 5),
+      //下面横线
+      Offset(10, 2 * x + 5),
+      Offset(15, 2 * x + 5),
+      Offset(20, 2 * x + 5),
+      Offset(25, 2 * x + 5),
+      Offset(30, 2 * x + 5),
+      //右边竖线
+      Offset(35, -2 * x - 5),
+      Offset(35, -2 * x),
+      Offset(35, -2 * x + 5),
+      Offset(35, -2 * x + 10),
+      Offset(35, -2 * x + 15),
+      Offset(35, -2 * x + 20),
+      Offset(35, 2 * x - 20),
+      Offset(35, 2 * x - 15),
+      Offset(35, 2 * x - 5),
+      Offset(35, 2 * x),
+      Offset(35, 2 * x + 5),
+    ];
+    //画节拍选择框
+    paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+    canvas.drawPoints(PointMode.points, points, paint);
+
+    //画节拍分子分母
+    var textPainter = TextPainter(
+        text: TextSpan(
+          text: '${signature}\n${signature_}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center);
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(20 - (textPainter.width / 2), 0 - (textPainter.height / 2)));
+
     for(int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition = notePosition[i]; // x-coordinate of the note to be drawn
       double position = calculatePosition(currentNote.note, noteList[i].octave, currentClef); // position of the current note on the staff
-      print(position);
       double y = -position*x; // y-coordinate of the note to be drawn
 
       if(currentNote.duration == 1 || currentNote.duration == 2) { // draws an unfilled notehead (notehead for whole and half notes)
@@ -188,6 +252,10 @@ class Graphics extends CustomPainter {
       }
       if(position > 2.5 || position < -2.5) {
         canvas.drawLine(Offset(xPosition+0.5*x, y-0.1*x), Offset(xPosition+3*x, y-0.1*x), paint);
+      }
+      if (currentNote.complete == signature / signature_) {
+        canvas.drawLine(Offset(xPosition + 50, -2 * x),
+            Offset(xPosition + 50, 2 * x), paint);
       }
     }
   }
