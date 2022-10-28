@@ -61,9 +61,7 @@ class Save {
             int.parse(noteParts[1]),
             int.parse(noteParts[2]),
             int.parse(noteParts[3]),
-            int.parse(noteParts[4]),
-            double.parse(noteParts[5]),
-            ));
+            int.parse(noteParts[4])));
       }
     }
     return toReturn;
