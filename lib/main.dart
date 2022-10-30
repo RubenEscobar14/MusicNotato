@@ -59,8 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int duration = 0;
   int octave = 4;
   int dotted = 0;
-  int accidental =
-      0; // not implemented yet (when it is implemented, will also have to implement keys)
+  int accidental = 0; // not implemented yet (when it is implemented, will also have to implement keys)
 
   String currentClef = 'treble';
   String dropdownvalue = '4/4';
@@ -89,7 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
+<<<<<<< Updated upstream
       // if(currentNote.complete <= signature / signature_) {
+=======
+      if(currentNote.complete <= signature / signature_) {
+>>>>>>> Stashed changes
         noteList.add(currentNote);
         notePosition.add(xPosition);
         xPosition += 40;
@@ -97,7 +100,11 @@ class _MyHomePageState extends State<MyHomePage> {
         if (saveOnAdd) {
           save.writeFile(_allNotes);
         }
+<<<<<<< Updated upstream
       // }
+=======
+      }
+>>>>>>> Stashed changes
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
       }
