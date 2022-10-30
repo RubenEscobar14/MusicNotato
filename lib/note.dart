@@ -15,7 +15,8 @@ class Note {
 
   double complete;
 
-  Note(this.note, this.octave, this.duration, this.dotted, this.accidental, this.complete);
+  Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
+      this.complete);
   Note.rest(this.duration, this.complete)
       : note = 'r',
         accidental = 0,

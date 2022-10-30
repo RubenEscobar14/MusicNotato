@@ -41,7 +41,7 @@ class Save {
   Future<File> writeFile(List<Note> notesToSave) async {
     _allNotes = notesToSave;
     final file = await _localFile;
-    return file.writeAsString(encoder.convert(_allNotes));
+    return file.writeAsString(jsonEncode(_allNotes));
   }
 
   List<Note> strToNoteList(String fileText) {

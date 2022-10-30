@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Note> noteList = [];
   List<double> notePosition = [];
 
-  int duration = 0;
+  int duration = 4;
   int octave = 4;
   int dotted = 0;
   int accidental =
@@ -66,21 +66,28 @@ class _MyHomePageState extends State<MyHomePage> {
   String dropdownvalue = '4/4';
   double tempo = 100;
 
-  var items = ['4/4','3/4','2/4','2/2'];
+  var items = ['4/4', '3/4', '2/4', '2/2'];
 
   double signature = 4;
   double signature_ = 4;
 
   final player = AudioPlayer();
 
+  /// Loads notes by reading the notato data file (if found) and mapping each
+  /// property to a "new" note, which is then added to the staff.
   @override
   void initState() {
     super.initState();
     widget.storage.readFile().then((value) {
       setState(() {
         for (dynamic fakeNote in value) {
-          Note note = Note(fakeNote['note'], fakeNote['octave'],
-              fakeNote['duration'], fakeNote['dotted'], fakeNote['accidental'], fakeNote['complete']);
+          Note note = Note(
+              fakeNote['note'],
+              fakeNote['octave'],
+              fakeNote['duration'],
+              fakeNote['dotted'],
+              fakeNote['accidental'],
+              fakeNote['complete']);
           _addNote(note, saveOnAdd: false);
         }
       });
@@ -90,13 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
       // if(currentNote.complete <= signature / signature_) {
-        noteList.add(currentNote);
-        notePosition.add(xPosition);
-        xPosition += 40;
-        _allNotes.add(currentNote);
-        if (saveOnAdd) {
-          save.writeFile(_allNotes);
-        }
+      noteList.add(currentNote);
+      notePosition.add(xPosition);
+      xPosition += 40;
+      _allNotes.add(currentNote);
+      if (saveOnAdd) {
+        save.writeFile(_allNotes);
+      }
       // }
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
@@ -195,7 +202,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/c.wav'));
-                _addNote(Note('c', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('c', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -204,7 +212,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/d.wav'));
-                _addNote(Note('d', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('d', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -213,7 +222,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/e.wav'));
-                _addNote(Note('e', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('e', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -222,7 +232,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/f.wav'));
-                _addNote(Note('f', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('f', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -231,7 +242,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/g.wav'));
-                _addNote(Note('g', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('g', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -240,7 +252,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/a.wav'));
-                _addNote(Note('a', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('a', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -249,7 +262,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/b.wav'));
-                _addNote(Note('b', octave, duration, dotted, accidental, return_complete()));
+                _addNote(Note('b', octave, duration, dotted, accidental,
+                    return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -263,8 +277,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 CustomPaint(
                   size: const Size(1000, 50),
                   // size: Size(context.size!.width, context.size!.height), // does not work; compile error
-                  painter:
-                      Graphics(xPosition, noteList, notePosition, 'treble', signature, signature_),
+                  painter: Graphics(xPosition, noteList, notePosition, 'treble',
+                      signature, signature_),
                 ),
               ],
             ),
