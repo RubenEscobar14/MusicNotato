@@ -88,11 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-<<<<<<< Updated upstream
-      // if(currentNote.complete <= signature / signature_) {
-=======
       if(currentNote.complete <= signature / signature_) {
->>>>>>> Stashed changes
         noteList.add(currentNote);
         notePosition.add(xPosition);
         xPosition += 40;
@@ -100,11 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (saveOnAdd) {
           save.writeFile(_allNotes);
         }
-<<<<<<< Updated upstream
-      // }
-=======
       }
->>>>>>> Stashed changes
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
       }
