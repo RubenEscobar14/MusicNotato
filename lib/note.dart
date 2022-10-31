@@ -1,6 +1,8 @@
+enum NoteLetter { a, b, c, d, e, f, g, r }
+
 class Note {
   // a, b, c, d, e, f, g, r (for rest)
-  String note;
+  NoteLetter note;
 
   // Which octave should be played - Middle C is C4.
   int octave;
@@ -24,12 +26,12 @@ class Note {
 
   /// Creates a rest, only requiring duration and complete to be specified
   Note.rest(this.duration, this.complete)
-      : note = 'r',
+      : note = NoteLetter.r,
         accidental = 0,
         octave = 0,
         dotted = 0;
 
-  String getNote() {
+  NoteLetter getNote() {
     return note;
   }
 
@@ -49,8 +51,8 @@ class Note {
     return accidental;
   }
 
-  /// Doesn't seem to work? If you're seeing this comment, I forgot to try
-  /// deleting it before pushing. Please remind me (Ruben)!
+  /// I think I've used this method wrong. I can't really give it a helpful description
+  /// until I figure out how to use it
   Note.fromJson(Map<String, dynamic> json)
       : note = json['note'],
         octave = json['octave'],
@@ -61,7 +63,7 @@ class Note {
 
   /// Tells the json encoder how to store note properties in the save file.
   Map<String, dynamic> toJson() => {
-        'note': note,
+        'note': note.name,
         'octave': octave,
         'duration': duration,
         'accidental': accidental,

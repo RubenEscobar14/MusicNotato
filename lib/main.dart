@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         for (dynamic fakeNote in value) {
           Note note = Note(
-              fakeNote['note'],
+              NoteLetter.values.byName(fakeNote['note']),
               fakeNote['octave'],
               fakeNote['duration'],
               fakeNote['dotted'],
@@ -129,9 +129,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //returns a note n steps higher than
-  String _increasePitch(int n, String note) {
-    int prev = noteNames.indexOf(note);
-    return noteNames[(prev + n) % 7];
+  NoteLetter _increasePitch(int n, NoteLetter note) {
+    return NoteLetter.values[(note.index + 1) % 7];
   }
 
   //prints current noteList and notePosition, debugging use only
@@ -232,8 +231,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/c.wav'));
-                _addNote(Note('c', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.c, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -242,8 +241,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/d.wav'));
-                _addNote(Note('d', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.d, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -252,8 +251,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/e.wav'));
-                _addNote(Note('e', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.e, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -262,8 +261,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/f.wav'));
-                _addNote(Note('f', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.f, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -272,8 +271,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/g.wav'));
-                _addNote(Note('g', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.g, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -282,8 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/a.wav'));
-                _addNote(Note('a', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.a, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -292,8 +291,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/b.wav'));
-                _addNote(Note('b', octave, duration, dotted, accidental,
-                    return_complete()));
+                _addNote(Note(NoteLetter.b, octave, duration, dotted,
+                    accidental, return_complete()));
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -311,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Note previous = _getLastNote();
                 _deleteNote();
-                String newPitch = _increasePitch(1, previous.getNote());
+                NoteLetter newPitch = _increasePitch(1, previous.getNote());
                 _addNote(Note(
                     newPitch,
                     previous.getOctave(),
@@ -329,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Note previous = _getLastNote();
                 _deleteNote();
                 // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
-                String newPitch = _increasePitch(6, previous.getNote());
+                NoteLetter newPitch = _increasePitch(6, previous.getNote());
                 _addNote(Note(
                     newPitch,
                     previous.getOctave(),
