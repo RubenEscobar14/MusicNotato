@@ -23,6 +23,26 @@ class Note {
         octave = 0,
         dotted = 0;
 
+  String getNote() {
+    return note;
+  }
+
+  int getDotted() {
+    return dotted;
+  }
+
+  int getOctave() {
+    return octave;
+  }
+
+  int getDuration() {
+    return duration;
+  }
+
+  int getAccidental() {
+    return accidental;
+  }
+
   Note.fromJson(Map<String, dynamic> json)
       : note = json['note'],
         octave = json['octave'],

@@ -56,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Note> noteList = [];
   List<double> notePosition = [];
 
+  final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+
   int duration = 4;
   int octave = 4;
   int dotted = 0;
@@ -109,6 +111,33 @@ class _MyHomePageState extends State<MyHomePage> {
         xPosition += 20;
       }
     });
+  }
+
+  // Deletes the last note in the list
+  void _deleteNote() {
+    _printNoteInfo();
+    noteList.remove(noteList[noteList.length - 1]);
+    xPosition = notePosition[notePosition.length - 1];
+    notePosition.remove(notePosition[notePosition.length - 1]);
+    _printNoteInfo();
+    print("delete call finished");
+  }
+
+  // Returns the last note in the current notelist
+  Note _getLastNote() {
+    return noteList[noteList.length - 1];
+  }
+
+  //returns a note n steps higher than
+  String _increasePitch(int n, String note) {
+    int prev = noteNames.indexOf(note);
+    return noteNames[(prev + n) % 7];
+  }
+
+  //prints current noteList and notePosition, debugging use only
+  void _printNoteInfo() {
+    print(noteList);
+    print(notePosition);
   }
 
   double return_complete() {
@@ -268,6 +297,49 @@ class _MyHomePageState extends State<MyHomePage> {
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('B'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _deleteNote();
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: const Text('Delete'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Note previous = _getLastNote();
+                _deleteNote();
+                String newPitch = _increasePitch(1, previous.getNote());
+                _addNote(Note(
+                    newPitch,
+                    previous.getOctave(),
+                    previous.getDuration(),
+                    previous.getDotted(),
+                    previous.getAccidental(),
+                    return_complete()));
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: const Text('Up'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Note previous = _getLastNote();
+                _deleteNote();
+                // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
+                String newPitch = _increasePitch(6, previous.getNote());
+                _addNote(Note(
+                    newPitch,
+                    previous.getOctave(),
+                    previous.getDuration(),
+                    previous.getDotted(),
+                    previous.getAccidental(),
+                    return_complete()));
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: const Text('Down'),
             ),
           ]),
           Center(
