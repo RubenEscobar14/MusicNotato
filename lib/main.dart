@@ -341,6 +341,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('Down'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  octave++;
+                });
+              }, 
+              child: const Text('Octave Up')
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  octave--;
+                });
+              }, 
+              child: const Text('Octave Down')
+            ),
           ]),
           Center(
             child: Column(
