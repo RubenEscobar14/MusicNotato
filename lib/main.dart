@@ -231,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
             /////////////////// All the buttons ///////////////////
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/c.wav'));
+                player.play(AssetSource('audio/Piano.ff.C$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.c, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -241,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/d.wav'));
+                player.play(AssetSource('audio/Piano.ff.D$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.d, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/e.wav'));
+                player.play(AssetSource('audio/Piano.ff.E$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.e, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/f.wav'));
+                player.play(AssetSource('audio/Piano.ff.F$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.f, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -271,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/g.wav'));
+                player.play(AssetSource('audio/Piano.ff.G$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.g, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -281,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/a.wav'));
+                player.play(AssetSource('audio/Piano.ff.A$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.a, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -291,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/b.wav'));
+                player.play(AssetSource('audio/Piano.ff.B$octave.aiff'), position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.b, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -345,14 +345,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    octave++;
+                    if(octave + 1 <= 8) {
+                      octave++;
+                    }
                   });
                 },
                 child: const Text('Octave Up')),
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    octave--;
+                    if(octave - 1 >= 0) {
+                      octave--;
+                    }
+                    
                   });
                 },
                 child: const Text('Octave Down')),
