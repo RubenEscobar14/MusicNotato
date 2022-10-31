@@ -19,7 +19,11 @@ void main() {
 }
 
 Save save = Save();
+<<<<<<< Updated upstream
 List<Note> _allNotes = List.empty(growable: true);
+=======
+List<Note> _allNotes = save.getAllNotes();
+>>>>>>> Stashed changes
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -54,7 +58,24 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Note> noteList = [];
   List<double> notePosition = [];
 
+<<<<<<< Updated upstream
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+=======
+  // Initial Selected Value
+  String dropdownvalue = '4/4';
+
+  // beat list
+  var items = [
+    '4/4',
+    '3/4',
+    '2/4',
+    '2/2',
+  ];
+
+  //beat
+  double signature = 4;
+  double signature_ = 4;
+>>>>>>> Stashed changes
 
   int duration = 4;
   int octave = 4;
@@ -80,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     widget.storage.readFile().then((value) {
       setState(() {
+<<<<<<< Updated upstream
         for (dynamic fakeNote in value) {
           Note note = Note(
               NoteLetter.values.byName(fakeNote['note']),
@@ -90,10 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
               fakeNote['complete']);
           _addNote(note, saveOnAdd: false);
         }
+=======
+        _allNotes = value;
+>>>>>>> Stashed changes
       });
     });
   }
 
+<<<<<<< Updated upstream
   /// Adds a note to the staff and list of notes. Will automatically re-save to
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
@@ -139,6 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
     print(notePosition);
   }
 
+=======
+  //back to current complete
+>>>>>>> Stashed changes
   double return_complete() {
     double duration_ = 1 / duration;
     double complete = 0;
@@ -154,12 +183,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return complete;
   }
 
+<<<<<<< Updated upstream
+=======
+  void _addNote(Note currentNote) {
+    setState(() {
+      if (currentNote.complete <= signature / signature_) {
+        noteList.add(currentNote);
+        notePosition.add(xPosition);
+        xPosition += 40;
+        _allNotes.add(currentNote);
+      }
+    });
+    print('completed:${currentNote.complete} ${signature / signature_}');
+    if (currentNote.complete == signature / signature_) {
+      xPosition += 20;
+    }
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
+<<<<<<< Updated upstream
       body: Row(
         children: <Widget>[
           Column(children: <Widget>[
@@ -180,6 +228,28 @@ class _MyHomePageState extends State<MyHomePage> {
             //       builder: (BuildContext context) {
             //         return StatefulBuilder(builder: (context1, state) {
             //           //这里的state就是setState
+=======
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Listener(
+              child: CustomPaint(
+                size: const Size(1000, 50),
+                // size: Size(context.size!.width, context.size!.height), // does not work; compile error
+                painter: Graphics(xPosition, noteList, notePosition, 'treble',
+                    signature, signature_),
+              ),
+              onPointerDown: (event) => {
+                // when raised button is pressed
+                // we display showModalBottomSheet
+                showModalBottomSheet<void>(
+                  // context and builder are
+                  // required properties in this widget
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(builder: (context1, state) {
+>>>>>>> Stashed changes
 
             //           // Returning SizedBox
             //           return SizedBox(
@@ -195,6 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //                     // Down Arrow Icon
             //                     icon: Icon(Icons.keyboard_arrow_down),
 
+<<<<<<< Updated upstream
             //                     // Array list of items
             //                     items: items.map((String items) {
             //                       return DropdownMenuItem(
@@ -233,11 +304,44 @@ class _MyHomePageState extends State<MyHomePage> {
                 player.play(AssetSource('audio/c.wav'));
                 _addNote(Note(NoteLetter.c, octave, duration, dotted,
                     accidental, return_complete()));
+=======
+                                // Array list of items
+                                items: items.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                // After selecting the desired option,it will
+                                // change button value to selected value
+                                onChanged: (String? newValue) {
+                                  if (noteList.isEmpty) {
+                                    state(() {
+                                      dropdownvalue = newValue!;
+                                      var str_li = dropdownvalue.split('/');
+                                      print(str_li);
+                                      setState(() {
+                                        signature = double.parse(str_li[0]);
+                                        signature_ = double.parse(str_li[1]);
+                                      });
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+                  },
+                )
+>>>>>>> Stashed changes
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('C'),
             ),
+<<<<<<< Updated upstream
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/d.wav'));
@@ -342,6 +446,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Down'),
             ),
             ElevatedButton(
+=======
+            //CustomPaint(
+            //size: const Size(1000, 50),
+            // size: Size(context.size!.width, context.size!.height), // does not work; compile error
+            //painter: Graphics(xPosition, noteList, notePosition, 'treble'),
+            // ),
+            ButtonBar(children: <Widget>[
+              ElevatedButton(
+>>>>>>> Stashed changes
                 onPressed: () {
                   setState(() {
                     octave++;

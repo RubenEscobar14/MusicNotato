@@ -17,6 +17,7 @@ class Note {
   // -2 is double flat, -1 is flat, 0 is natural, 1 is sharp, 2 is double sharp
   int accidental;
 
+<<<<<<< Updated upstream
   // Tracks how far this note is in its measure
   double complete;
 
@@ -71,3 +72,18 @@ class Note {
         'complete': complete,
       };
 }
+=======
+  //小节是否结束，记录当前音符时值，与小节的拍子相等则是当前小节完成
+  double complete;
+
+  Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
+      this.complete);
+
+  Note.rest(this.duration)
+      : note = "r",
+        accidental = 0,
+        octave = 0,
+        dotted = 0,
+        complete = 0;
+}
+>>>>>>> Stashed changes
