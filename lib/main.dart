@@ -1,9 +1,6 @@
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:path_provider/path_provider.dart';
 import 'graphics.dart';
 import 'note.dart';
 import 'playing_page.dart';
@@ -13,6 +10,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   //https://mightytechno.com/screen-orientation-in-flutter/
+  // Sets screen to be sideways on mobile
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
@@ -61,7 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int duration = 4;
   int octave = 4;
   int dotted = 0;
-  int accidental = 0; // not implemented yet (when it is implemented, will also have to implement keys)
+  int accidental =
+      0; // not implemented yet (when it is implemented, will also have to implement keys)
 
   String currentClef = 'treble';
   String dropdownvalue = '4/4';
@@ -95,9 +94,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// Adds a note to the staff and list of notes. Will automatically re-save to
+  /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      if(currentNote.complete <= signature / signature_) {
+      if (currentNote.complete <= signature / signature_) {
         noteList.add(currentNote);
         notePosition.add(xPosition);
         xPosition += 40;
@@ -227,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //     )
             //   },
             // ),
+            /////////////////// All the buttons ///////////////////
             ElevatedButton(
               onPressed: () {
                 player.play(AssetSource('audio/c.wav'));
@@ -341,21 +343,19 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Down'),
             ),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  octave++;
-                });
-              }, 
-              child: const Text('Octave Up')
-            ),
+                onPressed: () {
+                  setState(() {
+                    octave++;
+                  });
+                },
+                child: const Text('Octave Up')),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  octave--;
-                });
-              }, 
-              child: const Text('Octave Down')
-            ),
+                onPressed: () {
+                  setState(() {
+                    octave--;
+                  });
+                },
+                child: const Text('Octave Down')),
           ]),
           Center(
             child: Column(
@@ -452,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Go to playing page',
         child: const Icon(Icons.arrow_forward),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
