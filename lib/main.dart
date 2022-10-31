@@ -61,8 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int duration = 4;
   int octave = 4;
   int dotted = 0;
-  int accidental =
-      0; // not implemented yet (when it is implemented, will also have to implement keys)
+  int accidental = 0; // not implemented yet (when it is implemented, will also have to implement keys)
 
   String currentClef = 'treble';
   String dropdownvalue = '4/4';
@@ -98,15 +97,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      // if(currentNote.complete <= signature / signature_) {
-      noteList.add(currentNote);
-      notePosition.add(xPosition);
-      xPosition += 40;
-      _allNotes.add(currentNote);
-      if (saveOnAdd) {
-        save.writeFile(_allNotes);
+      if(currentNote.complete <= signature / signature_) {
+        noteList.add(currentNote);
+        notePosition.add(xPosition);
+        xPosition += 40;
+        _allNotes.add(currentNote);
+        if (saveOnAdd) {
+          save.writeFile(_allNotes);
+        }
       }
-      // }
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
       }

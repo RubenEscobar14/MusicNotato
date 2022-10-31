@@ -250,12 +250,25 @@ class Graphics extends CustomPainter {
       if(currentNote.dotted == 1) {
         canvas.drawCircle(Offset(xPosition + 1.75*x, y), 0.15*x, paint);
       }
-      if(position > 2.5 || position < -2.5) {
-        canvas.drawLine(Offset(xPosition+0.5*x, y-0.1*x), Offset(xPosition+3*x, y-0.1*x), paint);
+      if(position > 2.5) {
+        int counter = position.floor();
+        while(counter > 2.5) {
+          double ledgerLineY = -counter*x;
+          canvas.drawLine(Offset(xPosition-1.25*x, ledgerLineY+0.25*x), Offset(xPosition+1*x, ledgerLineY+0.25*x), paint);
+          counter--;
+        }
+      }
+      if(position < -2.5) {
+        double positivePosition = -position;
+        int counter = positivePosition.floor();
+        while(counter > 2.5) {
+          double ledgerLineY = counter*x;
+          canvas.drawLine(Offset(xPosition+1*x, ledgerLineY-0.15*x), Offset(xPosition+3*x, ledgerLineY-0.15*x), paint);
+          counter--;
+        }
       }
       if (currentNote.complete == signature / signature_) {
-        canvas.drawLine(Offset(xPosition + 50, -2 * x),
-            Offset(xPosition + 50, 2 * x), paint);
+        canvas.drawLine(Offset(xPosition + 50, -2 * x), Offset(xPosition + 50, 2 * x), paint);
       }
     }
   }
