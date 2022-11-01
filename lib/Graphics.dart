@@ -170,7 +170,7 @@ class Graphics extends CustomPainter {
           currentClef); // position of the current note on the staff
       double y = -position * x; // y-coordinate of the note to be drawn
 
-      if (currentNote.duration == 1 || currentNote.duration == 2) {
+      if (currentNote.duration == 1 || currentNote.duration == 2 || currentNote.duration == 0 || currentNote.duration == 3) {
         // draws an unfilled notehead (notehead for whole and half notes)
         paint = Paint()
           ..style = PaintingStyle.stroke
@@ -182,7 +182,8 @@ class Graphics extends CustomPainter {
         canvas.drawOval(noteHead, paint);
         canvas.translate(-xPosition, 0);
         canvas.restore();
-      } else {
+      } 
+      else {
         // draws a filled notehead (notehead for all other notes)
         paint = Paint()
           ..style = PaintingStyle.fill
@@ -195,54 +196,45 @@ class Graphics extends CustomPainter {
         canvas.translate(-xPosition + 40, 0);
         canvas.restore();
       }
-      if (currentNote.duration != 1) {
+      if (currentNote.duration != 1 && currentNote.duration != 0) {
         var stemEndX;
         var stemEndY;
         if (position > 0) {
           // draws a stem going down
-          stemEndX =
-              xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x;
+          stemEndX = xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x;
           stemEndY = y + 3.5 * x;
           canvas.drawLine(
-              Offset(
-                  xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x,
-                  y),
-              Offset(
-                  xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x,
-                  y + 3.5 * x),
-              paint);
+            Offset(xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x, y),
+            Offset(xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x, y + 3.5 * x), paint);
         } // draws a stem going up
         else {
           stemEndX = xPosition - position * 0.317 * x + 1.6 * x;
           stemEndY = y - 3.5 * x;
           canvas.drawLine(
-              Offset(xPosition - position * 0.317 * x + 1.6 * x, y),
-              Offset(xPosition - position * 0.317 * x + 1.6 * x, y - 3.5 * x),
-              paint);
+            Offset(xPosition - position * 0.317 * x + 1.6 * x, y),
+            Offset(xPosition - position * 0.317 * x + 1.6 * x, y - 3.5 * x),
+            paint);
         }
-        if (currentNote.duration != 4 && currentNote.duration != 2) {
+        if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
           if (position > 0) {
-            canvas.drawLine(Offset(stemEndX, stemEndY),
-                Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
-          } else {
-            canvas.drawLine(Offset(stemEndX, stemEndY),
-                Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
+            canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
+          } 
+          else {
+            canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
           }
-          if (currentNote.duration != 8) {
+          if (currentNote.duration != 8 && currentNote.duration != 12) {
             if (position > 0) {
-              canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x),
-                  Offset(stemEndX + x, stemEndY - 2 * x), paint);
-            } else {
-              canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x),
-                  Offset(stemEndX + x, stemEndY + 2 * x), paint);
+              canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x), Offset(stemEndX + x, stemEndY - 2 * x), paint);
+            } 
+            else {
+              canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x), Offset(stemEndX + x, stemEndY + 2 * x), paint);
             }
-            if (currentNote.duration != 16) {
+            if (currentNote.duration != 16 && currentNote.duration != 24) {
               if (position > 0) {
-                canvas.drawLine(Offset(stemEndX, stemEndY - x),
-                    Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
-              } else {
-                canvas.drawLine(Offset(stemEndX, stemEndY + x),
-                    Offset(stemEndX + x, stemEndY + 2.5 * x), paint);
+                canvas.drawLine(Offset(stemEndX, stemEndY - x), Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
+              } 
+              else {
+                canvas.drawLine(Offset(stemEndX, stemEndY + x), Offset(stemEndX + x, stemEndY + 2.5 * x), paint);
               }
             }
           }

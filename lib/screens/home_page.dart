@@ -445,13 +445,25 @@ class HomePage extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 if(dotted == 0) { // toggle between dotted and not-dotted
-                  print(duration);
                   dotted = 1;
+                  if(duration == 1) {
+                    duration = 0;
+                  }
+                  else {
+                    duration = (duration*1.5).round();
+                  }
                 }
                 else {
-                  print(duration);
                   dotted = 0;
+                  if(duration == 0) {
+                    duration = 1;
+                  }
+                  else {
+                    duration = (duration/1.5).round();
+                  }
                 }
+                print(duration);
+                print(dotted);
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
