@@ -365,32 +365,25 @@ class HomePage extends State<MyHomePage> {
             // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
             ElevatedButton(
               onPressed: () {
-                duration = 32;
-                // print(duration);
+                if(dotted == 1) {
+                  duration = 48;
+                }
+                else {
+                  duration = 32;
+                }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
-                    return Colors.green;
-                  }
-                  return Colors.blue;
-                }),
-              ),
+                backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('Thirtysecond'),
             ),
             ElevatedButton(
               onPressed: () {
-                duration = 16;
-                setState(() {
-                  if (duration == 16) {
-                    ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                    );
-                  }
-                  ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                  );
-                });
+                if(dotted == 1) {
+                  duration = 24;
+                }
+                else {
+                  duration = 16;
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -399,7 +392,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                duration = 8;
+                if(dotted == 1) {
+                  duration = 12;
+                }
+                else {
+                  duration = 8;
+                }
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -407,7 +405,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                duration = 4;
+                if(dotted == 1) {
+                  duration = 6;
+                }
+                else {
+                  duration = 4;
+                }
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -415,7 +418,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                duration = 2;
+                if(dotted == 1) {
+                  duration = 3;
+                }
+                else {
+                  duration = 2;
+                }
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -423,7 +431,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                duration = 1;
+                if(dotted == 1) {
+                  duration = 0;
+                }
+                else {
+                  duration = 1;
+                }
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -431,18 +444,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(duration == 1 && dotted == 0) { 
-                  duration = 0; // handles exception for dotted whole notes
-                }
-                else {
-                  if(dotted == 0) { // ensures that duration does not keep increasing if clicked twice
-                    duration = duration*1.5.round(); // handles all other cases (will work out to be an integer)
-                  }
-                }
                 if(dotted == 0) { // toggle between dotted and not-dotted
+                  print(duration);
                   dotted = 1;
                 }
                 else {
+                  print(duration);
                   dotted = 0;
                 }
               },

@@ -4,7 +4,7 @@ import 'package:music_notato/models/note.dart';
 
 class Score {
   // ignore: prefer_final_fields
-  List<Note> _allNotes;
+  List<Note> _allNotes = List.empty(growable: true);
 
   bool get isEmpty => _allNotes.isEmpty;
   int get length => _allNotes.length;
@@ -12,8 +12,12 @@ class Score {
   Score(): _allNotes = List.empty(growable: true);
   Score.fromList(this._allNotes);
 
+  // List<Note> getAllNotes() {
+  //   return UnmodifiableListView(_allNotes);
+  // }
+
   List<Note> getAllNotes() {
-    return UnmodifiableListView(_allNotes);
+    return _allNotes;
   }
 
   Note getNote(int index) {
