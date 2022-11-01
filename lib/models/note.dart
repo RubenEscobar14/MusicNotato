@@ -35,6 +35,10 @@ class Note {
     return note;
   }
 
+  String getNoteName() {
+    return note.toString().toUpperCase();
+  }
+
   int getDotted() {
     return dotted;
   }

@@ -4,7 +4,7 @@ import 'package:music_notato/models/note.dart';
 
 class Score {
   // ignore: prefer_final_fields
-  List<Note> _allNotes = [];
+  List<Note> _allNotes;
 
   bool get isEmpty => _allNotes.isEmpty;
   int get length => _allNotes.length;

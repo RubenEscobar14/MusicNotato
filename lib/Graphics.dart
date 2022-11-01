@@ -7,8 +7,7 @@ import 'package:music_notato/models/note.dart';
 
 class Graphics extends CustomPainter {
   // String noteName;
-  double
-      x; // Current x-direction offset; determines positioning of note in the x-direction
+  double x; // Current x-direction offset; determines positioning of note in the x-direction
   List<Note> noteList;
   List<double> notePosition;
 
@@ -17,8 +16,8 @@ class Graphics extends CustomPainter {
   List<double> altoBasePositions = [0, 0.5, 1, 1.5, 2, 2.5, 3];
   List<double> bassBasePositions = [3, 3.5, 4, 4.5, 5, 5.5, 6];
 
-  double signature;
-  double signature_;
+  int signature;
+  int signature_;
 
   Graphics(this.x, this.noteList, this.notePosition, this.currentClef,
       this.signature, this.signature_);
@@ -250,7 +249,7 @@ class Graphics extends CustomPainter {
         }
       }
       if (currentNote.dotted == 1) {
-        canvas.drawCircle(Offset(xPosition + 1.75 * x, y), 0.15 * x, paint);
+        canvas.drawCircle(Offset(xPosition + 6.5 * x, y-0.1*x), 0.15 * x, paint);
       }
       if (position > 2.5) {
         int counter = position.floor();

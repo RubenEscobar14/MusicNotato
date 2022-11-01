@@ -8,7 +8,7 @@ import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/widgets/note_duration_button.dart';
 
 class HomePage extends State<MyHomePage> {
-  Score score = Score();
+  Score _score = Score();
   
   Note? currentNote;
   String currentNoteString = '';
@@ -27,14 +27,26 @@ class HomePage extends State<MyHomePage> {
 
   String currentClef = 'treble';
   String dropdownvalue = '4/4';
-  double tempo = 100;
+  int _tempo = 100;
 
   var items = ['4/4', '3/4', '2/4', '2/2'];
 
-  double signature = 4;
-  double signature_ = 4;
+  int signature = 4;
+  int signature_ = 4;
 
   final player = AudioPlayer();
+
+  Score getScore() {
+    return _score;
+  }
+
+  int getTempo() {
+    return _tempo;
+  }
+
+  int getSignature_() {
+    return signature_;
+  }
 
   /// Loads notes by reading the notato data file (if found) and mapping each
   /// property to a "new" note, which is then added to the staff.
@@ -65,9 +77,9 @@ class HomePage extends State<MyHomePage> {
         noteList.add(currentNote);
         notePosition.add(xPosition);
         xPosition += 40;
-        score.getAllNotes().add(currentNote);
+        _score.getAllNotes().add(currentNote);
         if (saveOnAdd) {
-          widget.storage.writeFile(score.getAllNotes());
+          widget.storage.writeFile(_score.getAllNotes());
         }
       }
       if (currentNote.complete == signature / signature_) {
@@ -416,6 +428,27 @@ class HomePage extends State<MyHomePage> {
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('Whole'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if(duration == 1 && dotted == 0) { 
+                  duration = 0; // handles exception for dotted whole notes
+                }
+                else {
+                  if(dotted == 0) { // ensures that duration does not keep increasing if clicked twice
+                    duration = duration*1.5.round(); // handles all other cases (will work out to be an integer)
+                  }
+                }
+                if(dotted == 0) { // toggle between dotted and not-dotted
+                  dotted = 1;
+                }
+                else {
+                  dotted = 0;
+                }
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: const Text('.'),
             ),
           ]),
         ],
