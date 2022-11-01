@@ -14,7 +14,6 @@ class HomePage extends State<MyHomePage> {
   String currentNoteString = '';
   String noteName = '';
   double xPosition = 40;
-  List<Note> noteList = [];
   List<double> notePosition = [];
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
@@ -29,7 +28,20 @@ class HomePage extends State<MyHomePage> {
   String dropdownvalue = '4/4';
   int _tempo = 100;
 
-  var items = ['4/4', '3/4', '2/4', '2/2'];
+  // var items = ['4/4', '3/4', '2/4', '2/2'];
+  Map<int, double> durationRatios = {
+    32: 1/32,
+    48: 3/64,
+    16: 1/16,
+    24: 3/32,
+    8: 1/8,
+    12: 3/16,
+    4: 1/4,
+    6: 3/8,
+    2: 1/2,
+    3: 3/4,
+    1: 1,
+  };
 
   int signature = 4;
   int signature_ = 4;
@@ -74,10 +86,10 @@ class HomePage extends State<MyHomePage> {
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
       if (currentNote.complete <= signature / signature_) {
-        noteList.add(currentNote);
+        List<Note> noteList = _score.getAllNotes();
         notePosition.add(xPosition);
         xPosition += 40;
-        _score.getAllNotes().add(currentNote);
+        _score.addNote(currentNote);
         if (saveOnAdd) {
           widget.storage.writeFile(_score.getAllNotes());
         }
@@ -91,15 +103,16 @@ class HomePage extends State<MyHomePage> {
   // Deletes the last note in the list
   void _deleteNote() {
     _printNoteInfo();
-    noteList.remove(noteList[noteList.length - 1]);
     xPosition = notePosition[notePosition.length - 1];
     notePosition.remove(notePosition[notePosition.length - 1]);
+    _score.removeNote(notePosition.length - 1);
     _printNoteInfo();
     print("delete call finished");
   }
 
   // Returns the last note in the current notelist
   Note _getLastNote() {
+    List<Note> noteList = _score.getAllNotes();
     return noteList[noteList.length - 1];
   }
 
@@ -110,11 +123,13 @@ class HomePage extends State<MyHomePage> {
 
   //prints current noteList and notePosition, debugging use only
   void _printNoteInfo() {
+    List<Note> noteList = _score.getAllNotes();
     print(noteList);
     print(notePosition);
   }
 
   double return_complete() {
+    List<Note> noteList = _score.getAllNotes();
     double duration_ = 1 / duration;
     double complete = 0;
     if (noteList.isEmpty) {
@@ -128,6 +143,23 @@ class HomePage extends State<MyHomePage> {
     }
     return complete;
   }
+
+  // double return_complete() {
+  //   List<Note> workingMeasure = []; // current measure
+  //   workingMeasure.addAll(_score.getAllNotes()); // initializes the current measure to all of the notes
+  //   double measureProgress = 0; // number of beats (counting in whole notes) in the working measure
+  //   int noteCount = 0; // number of notes in the working measure
+  //   while(measureProgress != signature / signature_) {
+  //     for(int i = 0; i < workingMeasure.length; i++) { 
+  //       measureProgress = measureProgress + durationRatios[workingMeasure[i].duration]!; // add current note
+  //     }
+  //   }
+  //   for(int i = 0; i < noteCount; i++) {
+  //     workingMeasure.remove(workingMeasure[i]);
+  //   }
+  //   measureProgress = 0;
+  //   return 1;
+  // }
 
   void _handleDurationChanged() {
     setState(() {
@@ -350,7 +382,7 @@ class HomePage extends State<MyHomePage> {
                 CustomPaint(
                   size: const Size(1000, 50),
                   // size: Size(context.size!.width, context.size!.height), // does not work; compile error
-                  painter: Graphics(xPosition, noteList, notePosition, 'treble',
+                  painter: Graphics(xPosition, _score.getAllNotes(), notePosition, 'treble',
                       signature, signature_),
                 ),
               ],

@@ -23,7 +23,6 @@ class PlayingPage extends StatelessWidget {
     2: 1/2,
     3: 3/4,
     1: 1,
-    
   };
 
   void playBack() {
