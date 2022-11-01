@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../main.dart';
+import 'package:flutter/material.dart';
+import 'package:music_notato/screens/home_page.dart';
 
-class playingPage extends StatelessWidget {
+class PlayingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +13,7 @@ class playingPage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
+            
           },
           child: const Text("Back to writing"),
         ),

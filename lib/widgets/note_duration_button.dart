@@ -21,7 +21,9 @@ class NoteDurationButton extends StatefulWidget {
 }
 
 class DurationChangedCallback {
-
+  callBack() {
+    
+  }
 }
 
 class _NoteDurationButtonState extends State<NoteDurationButton> {

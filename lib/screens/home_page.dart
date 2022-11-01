@@ -427,7 +427,7 @@ class HomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => playingPage()),
+            MaterialPageRoute(builder: (context) => PlayingPage()),
           );
         },
         tooltip: 'Go to playing page',
