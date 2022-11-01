@@ -12,8 +12,12 @@ class Score {
   Score(): _allNotes = List.empty(growable: true);
   Score.fromList(this._allNotes);
 
+  // List<Note> getAllNotes() {
+  //   return UnmodifiableListView(_allNotes);
+  // }
+
   List<Note> getAllNotes() {
-    return UnmodifiableListView(_allNotes);
+    return _allNotes;
   }
 
   Note getNote(int index) {
@@ -22,9 +26,5 @@ class Score {
 
   void addNote(Note note) {
     _allNotes.add(note);
-  }
-
-  void removeNote(int index) {
-    _allNotes.remove(_allNotes[index]);
   }
 }

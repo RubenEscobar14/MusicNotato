@@ -1,9 +1,12 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
 
 class Graphics extends CustomPainter {
+  // String noteName;
   double x; // Current x-direction offset; determines positioning of note in the x-direction
   List<Note> noteList;
   List<double> notePosition;

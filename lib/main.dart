@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:music_notato/models/note.dart';
 import 'package:music_notato/screens/home_page.dart';
 import 'save.dart';
 
@@ -17,6 +18,7 @@ void main() {
 }
 
 Save save = Save();
+// List<Note> _allNotes = List.empty(growable: true);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
