@@ -3,7 +3,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'note.dart';
+import 'package:music_notato/models/note.dart';
 
 class Graphics extends CustomPainter {
   // String noteName;

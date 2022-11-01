@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:music_notato/models/note.dart';
 import 'package:path_provider/path_provider.dart';
-import 'note.dart';
-import 'playing_page.dart';
 
 /// This class handles the transfer of information between the program and
 /// save files.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'main.dart';
+import '../main.dart';
 
 class playingPage extends StatelessWidget {
   @override
