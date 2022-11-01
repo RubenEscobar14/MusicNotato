@@ -12,6 +12,7 @@ class NoteDurationButton extends StatefulWidget {
     required this.duration,
     required this.buttonText,
     required this.isSelected, 
+    // required void onDurationChanged, 
     required this.onDurationChanged,
   }) :super(key: ObjectKey(duration));
 
@@ -20,6 +21,7 @@ class NoteDurationButton extends StatefulWidget {
 }
 
 class DurationChangedCallback {
+
 }
 
 class _NoteDurationButtonState extends State<NoteDurationButton> {
@@ -27,9 +29,9 @@ class _NoteDurationButtonState extends State<NoteDurationButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        widget.onDurationChanged;
+        // widget.onDurationChanged;
       },
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black)),
+      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(widget.isSelected ? Colors.green : Colors.blue)),
       child: Text(widget.buttonText),
     );
   }

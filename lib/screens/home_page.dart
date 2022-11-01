@@ -5,6 +5,7 @@ import 'package:music_notato/main.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
+import 'package:music_notato/widgets/note_duration_button.dart';
 
 class HomePage extends State<MyHomePage> {
   Score score = Score();
@@ -114,6 +115,13 @@ class HomePage extends State<MyHomePage> {
       }
     }
     return complete;
+  }
+
+  void _handleDurationChanged() {
+    setState(() {
+      // ignore: unnecessary_this
+      this.duration = duration;
+    });
   }
 
   @override
@@ -337,6 +345,12 @@ class HomePage extends State<MyHomePage> {
             ),
           ),
           Column(children: <Widget>[
+            // NoteDurationButton(duration: 32, buttonText: 'Thirtysecond', isSelected: false, onDurationChanged: _handleDurationChanged()),
+            // NoteDurationButton(duration: 16, buttonText: 'Sixteenth', isSelected: false, onDurationChanged: _handleDurationChanged()),
+            // NoteDurationButton(duration: 8, buttonText: 'Eigth', isSelected: false, onDurationChanged: _handleDurationChanged()),
+            // NoteDurationButton(duration: 4, buttonText: 'Quarter', isSelected: false, onDurationChanged: _handleDurationChanged()),
+            // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
+            // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
             ElevatedButton(
               onPressed: () {
                 duration = 32;
