@@ -9,7 +9,7 @@ import 'package:music_notato/widgets/note_duration_button.dart';
 
 class HomePage extends State<MyHomePage> {
   Score _score = Score();
-  
+
   Note? currentNote;
   String currentNoteString = '';
   String noteName = '';
@@ -85,16 +85,15 @@ class HomePage extends State<MyHomePage> {
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
       }
+      _printNoteInfo();
     });
   }
 
   // Deletes the last note in the list
   void _deleteNote() {
-    _printNoteInfo();
     noteList.remove(noteList[noteList.length - 1]);
     xPosition = notePosition[notePosition.length - 1];
     notePosition.remove(notePosition[notePosition.length - 1]);
-    _printNoteInfo();
     print("delete call finished");
   }
 
@@ -103,9 +102,16 @@ class HomePage extends State<MyHomePage> {
     return noteList[noteList.length - 1];
   }
 
-  //returns a note n steps higher than
+  //returns a note n steps higher than entered
   NoteLetter _increasePitch(int n, NoteLetter note) {
-    return NoteLetter.values[(note.index + 1) % 7];
+    return NoteLetter.values[(note.index + n) % 7];
+  }
+
+  Note nextNoteWithNewDuration(int duration) {
+    Note lastNote = _getLastNote();
+    Note newNote = new Note(lastNote.getNote(), lastNote.getOctave(), duration,
+        lastNote.getDotted(), lastNote.getAccidental(), return_complete());
+    return newNote;
   }
 
   //prints current noteList and notePosition, debugging use only
@@ -212,7 +218,8 @@ class HomePage extends State<MyHomePage> {
             /////////////////// All the buttons ///////////////////
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.C$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.C$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.c, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -222,7 +229,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.D$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.D$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.d, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -232,7 +240,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.E$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.E$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.e, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -242,7 +251,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.F$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.F$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.f, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -252,7 +262,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.G$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.G$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.g, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -262,7 +273,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.A$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.A$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.a, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -272,7 +284,8 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                player.play(AssetSource('audio/Piano.ff.B$octave.aiff'), position: const Duration(seconds: 1));
+                player.play(AssetSource('audio/Piano.ff.B$octave.aiff'),
+                    position: const Duration(seconds: 1));
                 _addNote(Note(NoteLetter.b, octave, duration, dotted,
                     accidental, return_complete()));
               },
@@ -307,9 +320,10 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
+                print("moving down");
                 Note previous = _getLastNote();
                 _deleteNote();
-                // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
+                // _increasePitch() uses mod, so increasing by  is the same as decreasing by 1
                 NoteLetter newPitch = _increasePitch(6, previous.getNote());
                 _addNote(Note(
                     newPitch,
@@ -326,7 +340,7 @@ class HomePage extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    if(octave + 1 <= 8) {
+                    if (octave + 1 <= 8) {
                       octave++;
                     }
                   });
@@ -335,10 +349,9 @@ class HomePage extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    if(octave - 1 >= 0) {
+                    if (octave - 1 >= 0) {
                       octave--;
                     }
-                    
                   });
                 },
                 child: const Text('Octave Down')),
@@ -365,24 +378,26 @@ class HomePage extends State<MyHomePage> {
             // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 48;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(48));
+                } else {
                   duration = 32;
+                  _addNote(nextNoteWithNewDuration(32));
                 }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.black)),
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('Thirtysecond'),
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 24;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(24));
+                } else {
                   duration = 16;
+                  _addNote(nextNoteWithNewDuration(16));
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -392,11 +407,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 12;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(12));
+                } else {
                   duration = 8;
+                  _addNote(nextNoteWithNewDuration(8));
                 }
               },
               style: ButtonStyle(
@@ -405,11 +421,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 6;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(6));
+                } else {
                   duration = 4;
+                  _addNote(nextNoteWithNewDuration(4));
                 }
               },
               style: ButtonStyle(
@@ -418,11 +435,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 3;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(3));
+                } else {
                   duration = 2;
+                  _addNote(nextNoteWithNewDuration(2));
                 }
               },
               style: ButtonStyle(
@@ -431,11 +449,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 1) {
+                if (dotted == 1) {
                   duration = 0;
-                }
-                else {
+                  _addNote(nextNoteWithNewDuration(0));
+                } else {
                   duration = 1;
+                  _addNote(nextNoteWithNewDuration(1));
                 }
               },
               style: ButtonStyle(
@@ -444,22 +463,20 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(dotted == 0) { // toggle between dotted and not-dotted
+                if (dotted == 0) {
+                  // toggle between dotted and not-dotted
                   dotted = 1;
-                  if(duration == 1) {
+                  if (duration == 1) {
                     duration = 0;
+                  } else {
+                    duration = (duration * 1.5).round();
                   }
-                  else {
-                    duration = (duration*1.5).round();
-                  }
-                }
-                else {
+                } else {
                   dotted = 0;
-                  if(duration == 0) {
+                  if (duration == 0) {
                     duration = 1;
-                  }
-                  else {
-                    duration = (duration/1.5).round();
+                  } else {
+                    duration = (duration / 1.5).round();
                   }
                 }
                 print(duration);
