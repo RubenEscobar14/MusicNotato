@@ -76,15 +76,16 @@ class Note {
       };
 
   String toString() {
-    return "note: " +
+    return "[note: " +
         note.toString() +
-        "dur: " +
+        ", dur: " +
         duration.toString() +
-        "oct: " +
+        ", oct: " +
         octave.toString() +
-        "dot: " +
+        ", dot: " +
         dotted.toString() +
-        "acc: " +
-        accidental.toString();
+        ", acc: " +
+        accidental.toString() +
+        "]";
   }
 }
