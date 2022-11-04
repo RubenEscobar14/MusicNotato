@@ -99,6 +99,9 @@ class HomePage extends State<MyHomePage> {
 
   // Returns the last note in the current notelist
   Note _getLastNote() {
+    if (noteList.isEmpty) {
+      return new Note(NoteLetter.a, 4, 4, 0, 0, return_complete());
+    }
     return noteList[noteList.length - 1];
   }
 
