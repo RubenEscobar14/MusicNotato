@@ -74,4 +74,19 @@ class Note {
         'dotted': dotted,
         'complete': complete,
       };
+
+  @override
+  String toString() {
+    return "[note: " +
+        note.toString() +
+        ", dur: " +
+        duration.toString() +
+        ", oct: " +
+        octave.toString() +
+        ", dot: " +
+        dotted.toString() +
+        ", acc: " +
+        accidental.toString() +
+        "]";
+  }
 }
