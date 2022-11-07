@@ -364,8 +364,9 @@ class HomePage extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CustomPaint(
-                  size: const Size(1000, 50),
-                  // size: Size(context.size!.width, context.size!.height), // does not work; compile error
+                  // size: const Size(1000, 50),
+                  // size: Size(MediaQuery.of(context).size.width-250, 0.1*MediaQuery.of(context).size.height),
+                  size: Size(MediaQuery.of(context).size.width-250, 50),
                   painter: Graphics(xPosition, noteList, notePosition, 'treble',
                       signature, signature_),
                 ),
