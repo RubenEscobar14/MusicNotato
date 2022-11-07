@@ -102,15 +102,15 @@ class Graphics extends CustomPainter {
     canvas.drawLine(Offset(0, x), Offset(size.width, x), paint);
     canvas.drawLine(Offset(0, 2 * x), Offset(size.width, 2 * x), paint);
 
-    //节拍选择框
+    //beat choosing frame
     var points = [
-      //上面横线
+      //upper line
       Offset(10, -2 * x - 5),
       Offset(15, -2 * x - 5),
       Offset(20, -2 * x - 5),
       Offset(25, -2 * x - 5),
       Offset(30, -2 * x - 5),
-      //左边竖线
+      //left line
       Offset(5, -2 * x - 5),
       Offset(5, -2 * x),
       Offset(5, -2 * x + 5),
@@ -122,13 +122,13 @@ class Graphics extends CustomPainter {
       Offset(5, 2 * x - 5),
       Offset(5, 2 * x),
       Offset(5, 2 * x + 5),
-      //下面横线
+      //bottom line
       Offset(10, 2 * x + 5),
       Offset(15, 2 * x + 5),
       Offset(20, 2 * x + 5),
       Offset(25, 2 * x + 5),
       Offset(30, 2 * x + 5),
-      //右边竖线
+      //right line
       Offset(35, -2 * x - 5),
       Offset(35, -2 * x),
       Offset(35, -2 * x + 5),
@@ -141,13 +141,13 @@ class Graphics extends CustomPainter {
       Offset(35, 2 * x),
       Offset(35, 2 * x + 5),
     ];
-    //画节拍选择框
+    //draw the beat choosing frame
     paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
     canvas.drawPoints(PointMode.points, points, paint);
 
-    //画节拍分子分母
+    //draw signature
     var textPainter = TextPainter(
         text: TextSpan(
           text: '${signature}\n${signature_}',
