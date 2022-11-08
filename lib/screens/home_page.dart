@@ -31,6 +31,21 @@ class HomePage extends State<MyHomePage> {
   String dropdownvalue = '4/4';
   int _tempo = 100;
 
+  Map<int, double> durationRatios = {
+    32: 1/32,
+    48: 3/64,
+    16: 1/16,
+    24: 3/32,
+    8: 1/8,
+    12: 3/16,
+    4: 1/4,
+    6: 3/8,
+    2: 1/2,
+    3: 3/4,
+    1: 1,
+    
+  };
+
   var items = ['4/4', '3/4', '2/4', '2/2'];
 
   int signature = 4;
@@ -508,6 +523,12 @@ class HomePage extends State<MyHomePage> {
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('.'),
             ),
+            IconButton(
+              onPressed: () {
+                playBack();
+              },
+              icon: const Icon(Icons.play_arrow),
+            ),
           ]),
         ],
       ),
@@ -525,5 +546,9 @@ class HomePage extends State<MyHomePage> {
         child: const Icon(Icons.arrow_forward),
       ),
     );
+  }
+  
+  void playBack() {
+    
   }
 }

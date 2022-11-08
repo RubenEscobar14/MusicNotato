@@ -201,12 +201,22 @@ class Graphics extends CustomPainter {
         double stemEndY;
         if (position > 0) { // draws a stem going down
           stemEndX = xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2;
-          stemEndY = y+3.5*x;
+          if(position > 3) {
+            stemEndY = 0;
+          }
+          else {
+            stemEndY = y+3.5*x;
+          }
           canvas.drawLine(Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,y+(748/1024)*x*sin(pi/9)),Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,stemEndY),paint);
         }
         else { // draws a stem going up
           stemEndX = xPosition+(748/1024)*x*cos(pi/9);
-          stemEndY = y-3.5*x;
+          if(position < -3) {
+            stemEndY = 0;
+          }
+          else {
+            stemEndY = y-3.5*x;
+          }
           canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(xPosition+(748/1024)*x*cos(pi/9),stemEndY),paint);
         }
         if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
