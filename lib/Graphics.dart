@@ -172,15 +172,15 @@ class Graphics extends CustomPainter {
 
       if (currentNote.duration == 1 || currentNote.duration == 2 || currentNote.duration == 0 || currentNote.duration == 3) {
         // draws an unfilled notehead (notehead for whole and half notes)
-        paint = Paint()
+       paint = Paint()
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0;
         canvas.save();
-        canvas.translate(xPosition, 0);
-        canvas.rotate(-20 * (pi / 180));
-        Rect noteHead = Offset(0, y - 2) & Size((748 / 512) * x, x);
+        canvas.translate(xPosition, y);
+        canvas.rotate(-pi/9);
+        canvas.translate(0, -y);
+        Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
         canvas.drawOval(noteHead, paint);
-        canvas.translate(-xPosition, 0);
         canvas.restore();
       } 
       else {
@@ -189,31 +189,25 @@ class Graphics extends CustomPainter {
           ..style = PaintingStyle.fill
           ..strokeWidth = 2.0;
         canvas.save();
-        canvas.translate(xPosition, 0);
-        canvas.rotate(-20 * (pi / 180));
-        Rect noteHead = Offset(0, y - 2) & Size((748 / 512) * x, x);
+        canvas.translate(xPosition, y);
+        canvas.rotate(-pi/9);
+        canvas.translate(0, -y);
+        Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
         canvas.drawOval(noteHead, paint);
-        canvas.translate(-xPosition + 40, 0);
         canvas.restore();
       }
       if (currentNote.duration != 1 && currentNote.duration != 0) {
-        var stemEndX;
-        var stemEndY;
-        if (position > 0) {
-          // draws a stem going down
-          stemEndX = xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x;
-          stemEndY = y + 3.5 * x;
-          canvas.drawLine(
-            Offset(xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x, y),
-            Offset(xPosition - position * 0.35 * x + 1.6 * x - (748 / 512) * x, y + 3.5 * x), paint);
-        } // draws a stem going up
-        else {
-          stemEndX = xPosition - position * 0.317 * x + 1.6 * x;
-          stemEndY = y - 3.5 * x;
-          canvas.drawLine(
-            Offset(xPosition - position * 0.317 * x + 1.6 * x, y),
-            Offset(xPosition - position * 0.317 * x + 1.6 * x, y - 3.5 * x),
-            paint);
+        double stemEndX;
+        double stemEndY;
+        if (position > 0) { // draws a stem going down
+          stemEndX = xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2;
+          stemEndY = y+3.5*x;
+          canvas.drawLine(Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,y+(748/1024)*x*sin(pi/9)),Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,stemEndY),paint);
+        }
+        else { // draws a stem going up
+          stemEndX = xPosition+(748/1024)*x*cos(pi/9);
+          stemEndY = y-3.5*x;
+          canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(xPosition+(748/1024)*x*cos(pi/9),stemEndY),paint);
         }
         if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
           if (position > 0) {
@@ -241,14 +235,14 @@ class Graphics extends CustomPainter {
         }
       }
       if (currentNote.dotted == 1) {
-        canvas.drawCircle(Offset(xPosition + 6.5 * x, y-0.1*x), 0.15 * x, paint);
+        canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), y), 0.15 * x, paint);
       }
       if (position > 2.5) {
         int counter = position.floor();
         while (counter > 2.5) {
           double ledgerLineY = -counter * x;
-          canvas.drawLine(Offset(xPosition - 1.25 * x, ledgerLineY + 0.25 * x),
-              Offset(xPosition + 1 * x, ledgerLineY + 0.25 * x), paint);
+          canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
+              Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
           counter--;
         }
       }
@@ -257,14 +251,14 @@ class Graphics extends CustomPainter {
         int counter = positivePosition.floor();
         while (counter > 2.5) {
           double ledgerLineY = counter * x;
-          canvas.drawLine(Offset(xPosition + 1 * x, ledgerLineY - 0.15 * x),
-              Offset(xPosition + 3 * x, ledgerLineY - 0.15 * x), paint);
+          canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
+              Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
           counter--;
         }
       }
       if (currentNote.complete == signature / signature_) {
-        canvas.drawLine(Offset(xPosition + 50, -2 * x),
-            Offset(xPosition + 50, 2 * x), paint);
+        canvas.drawLine(Offset(xPosition+20, -2 * x),
+            Offset(xPosition+20, 2 * x), paint);
       }
     }
   }
