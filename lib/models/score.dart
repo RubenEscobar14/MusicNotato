@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:music_notato/models/note.dart';
 
 class Score {

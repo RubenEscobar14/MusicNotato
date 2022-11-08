@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:music_notato/graphics.dart';
 import 'package:music_notato/main.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
