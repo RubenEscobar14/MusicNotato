@@ -22,65 +22,47 @@ class NoteWidget extends CustomPainter {
   NoteWidget(this.noteList, this.xPositions, this.currentClef,
       this.signature, this.signature_);
 
+  Map<String, Map<String, double>> noteToClefBasePositions = <String, Map<String, double>>{
+    'c': {
+      'treble': -3,
+      'alto': 0.5,
+      'bass': 3
+    },
+    'd': {
+      'treble': -2.5,
+      'alto': 0.5,
+      'bass': 3.5
+    },
+    'e': {
+      'treble': -2,
+      'alto': 1,
+      'bass': 4
+    },
+    'f': {
+      'treble': -1.5,
+      'alto': 1.5,
+      'bass': 4.5
+    },
+    'g': {
+      'treble': -1,
+      'alto': 2,
+      'bass': 5
+    },
+    'a': {
+      'treble': -0.5,
+      'alto': 2.5,
+      'bass': 5.5
+    },
+    'b': {
+      'treble': 0,
+      'alto': 3,
+      'bass': 6
+    },
+  };
+
   // Calculates the base position for a given note and clef
   double calculateBasePosition(String noteName, String currentClef) {
-    if (noteName == 'c') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[0];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[0];
-      } else {
-        return bassBasePositions[0];
-      }
-    } else if (noteName == 'd') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[1];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[1];
-      } else {
-        return bassBasePositions[1];
-      }
-    } else if (noteName == 'e') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[2];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[2];
-      } else {
-        return bassBasePositions[2];
-      }
-    } else if (noteName == 'f') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[3];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[3];
-      } else {
-        return bassBasePositions[3];
-      }
-    } else if (noteName == 'g') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[4];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[4];
-      } else {
-        return bassBasePositions[4];
-      }
-    } else if (noteName == 'a') {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[5];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[5];
-      } else {
-        return bassBasePositions[5];
-      }
-    } else {
-      if (currentClef == 'treble') {
-        return trebleBasePositions[6];
-      } else if (currentClef == 'alto') {
-        return altoBasePositions[6];
-      } else {
-        return bassBasePositions[6];
-      }
-    }
+    return noteToClefBasePositions.entries.firstWhere((element) => element.key == noteName).value.entries.firstWhere((element) => element.key == currentClef).value;
   }
 
   // Calculates the position of a specific note
