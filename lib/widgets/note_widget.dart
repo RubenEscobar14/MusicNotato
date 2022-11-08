@@ -22,6 +22,7 @@ class NoteWidget extends CustomPainter {
   NoteWidget(this.noteList, this.xPositions, this.currentClef,
       this.signature, this.signature_);
 
+  // Map of base positions for each note depending on the clef
   Map<String, Map<String, double>> noteToClefBasePositions = <String, Map<String, double>>{
     'c': {
       'treble': -3,

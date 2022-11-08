@@ -342,7 +342,7 @@ class HomePage extends State<MyHomePage> {
                 print("moving down");
                 Note previous = _getLastNote();
                 _deleteNote();
-                // _increasePitch() uses mod, so increasing by  is the same as decreasing by 1
+                // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
                 NoteLetter newPitch = _increasePitch(6, previous.getNote());
                 _addNote(Note(
                     newPitch,
@@ -506,8 +506,6 @@ class HomePage extends State<MyHomePage> {
                     duration = (duration / 1.5).round();
                   }
                 }
-                print(duration);
-                print(dotted);
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
