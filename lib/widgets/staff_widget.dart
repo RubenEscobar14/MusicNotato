@@ -2,20 +2,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class StaffWidget extends CustomPainter {
-  double x; // Distance between two staff lines
   String currentClef;
 
   int signature;
   int signature_;
 
-  StaffWidget(this.x, this.currentClef, this.signature, this.signature_);
+  StaffWidget(this.currentClef, this.signature, this.signature_);
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 1.0;
-    double x = size.height / 4;
+    double x = size.height / 4; // Distance between two staff lines
 
     // Draws the staff
     canvas.drawLine(Offset(0, -2 * x), Offset(size.width, -2 * x), paint);

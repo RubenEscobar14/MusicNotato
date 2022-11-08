@@ -382,26 +382,17 @@ class HomePage extends State<MyHomePage> {
               children: <Widget>[
                 Listener(
                   child: Stack(
-                    // ignore: prefer_const_literals_to_create_immutables
                     children: <Widget> [
-                      // CustomPaint(
-                      //   size: Size(MediaQuery.of(context).size.width-250, 50),
-                      //   painter: StaffWidget(xPosition, 'treble', signature, signature_),
-                      // ),
-                      // for(int i = 0; i < _score.length; i++)
-                      // CustomPaint(
-                      //   size: Size(MediaQuery.of(context).size.width-250, 50),
-                      //   painter: NoteWidget(_score.getNote(i), notePosition[i], 'treble', signature, signature_),
-                      // ),
+                      CustomPaint(
+                        size: Size(MediaQuery.of(context).size.width-250, 50),
+                        painter: StaffWidget('treble', signature, signature_),
+                      ),
+                      CustomPaint(
+                        size: Size(MediaQuery.of(context).size.width-250, 50),
+                        painter: NoteWidget(noteList, notePosition, 'treble', signature, signature_),
+                      ),
                     ],
                   ),
-                ),
-                CustomPaint(
-                  // size: const Size(1000, 50),
-                  // size: Size(MediaQuery.of(context).size.width-250, 0.1*MediaQuery.of(context).size.height),
-                  size: Size(MediaQuery.of(context).size.width-250, 50),
-                  painter: Graphics(xPosition, noteList, notePosition, 'treble',
-                      signature, signature_),
                 ),
               ],
             ),
