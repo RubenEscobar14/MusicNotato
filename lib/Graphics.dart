@@ -199,7 +199,7 @@ class Graphics extends CustomPainter {
       if (currentNote.duration != 1 && currentNote.duration != 0) {
         double stemEndX;
         double stemEndY;
-        if (position > 0) { // draws a stem going down
+        if (position >= 0) { // draws a stem going down
           stemEndX = xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2;
           if(position > 3) {
             stemEndY = 0;
