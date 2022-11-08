@@ -94,7 +94,7 @@ class NoteWidget extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..color = Colors.black
-      ..strokeWidth = 1.0;
+      ..strokeWidth = 2.0;
     double x = size.height / 4; // Distance between two lines of the staff
 
     for (int i = 0; i < noteList.length; i++) {
@@ -107,52 +107,34 @@ class NoteWidget extends CustomPainter {
 
       if (currentNote.duration == 1 || currentNote.duration == 2 || currentNote.duration == 0 || currentNote.duration == 3) {
         // draws an unfilled notehead (notehead for whole and half notes)
-       paint = Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.0;
-        canvas.save();
-        canvas.translate(xPosition, y);
-        canvas.rotate(-pi/9);
-        canvas.translate(0, -y);
-        Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
-        canvas.drawOval(noteHead, paint);
-        canvas.restore();
+        drawNotehead(canvas, paint, PaintingStyle.stroke, x, xPosition, y);
       } 
       else {
         // draws a filled notehead (notehead for all other notes)
-        paint = Paint()
-          ..style = PaintingStyle.fill
-          ..strokeWidth = 2.0;
-        canvas.save();
-        canvas.translate(xPosition, y);
-        canvas.rotate(-pi/9);
-        canvas.translate(0, -y);
-        Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
-        canvas.drawOval(noteHead, paint);
-        canvas.restore();
+        drawNotehead(canvas, paint, PaintingStyle.fill, x, xPosition, y);
       }
       if (currentNote.duration != 1 && currentNote.duration != 0) {
         double stemEndX;
         double stemEndY;
         if (position >= 0) { // draws a stem going down
-          stemEndX = xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2;
+          stemEndX = xPosition-(748/1024)*x*cos(pi/9)+(paint.strokeWidth/2);
           if(position > 3) {
             stemEndY = 0;
           }
           else {
             stemEndY = y+3.5*x;
           }
-          canvas.drawLine(Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,y+(748/1024)*x*sin(pi/9)),Offset(xPosition-(748/1024)*x*cos(pi/9)+paint.strokeWidth/2,stemEndY),paint);
+          canvas.drawLine(Offset(stemEndX,y+(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
         }
         else { // draws a stem going up
-          stemEndX = xPosition+(748/1024)*x*cos(pi/9);
+          stemEndX = xPosition+(748/1024)*x*cos(pi/9)+(paint.strokeWidth/2);
           if(position < -3) {
             stemEndY = 0;
           }
           else {
             stemEndY = y-3.5*x;
           }
-          canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(xPosition+(748/1024)*x*cos(pi/9),stemEndY),paint);
+          canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
         }
         // Draws the first flag on shorter notes
         if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
@@ -209,6 +191,20 @@ class NoteWidget extends CustomPainter {
             Offset(xPosition+20, 2 * x), paint);
       }
     }
+  }
+
+  // Draws a notehead
+  void drawNotehead(Canvas canvas, Paint paint, PaintingStyle paintingStyle, double x, double xPosition, double y) {
+    paint = Paint()
+          ..style = paintingStyle
+          ..strokeWidth = 2.0;
+    canvas.save();
+    canvas.translate(xPosition, y);
+    canvas.rotate(-pi/9);
+    canvas.translate(0, -y);
+    Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
+    canvas.drawOval(noteHead, paint);
+    canvas.restore();
   }
 
   @override
