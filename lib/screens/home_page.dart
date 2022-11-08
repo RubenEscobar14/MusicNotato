@@ -6,6 +6,8 @@ import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/widgets/note_duration_button.dart';
+import 'package:music_notato/widgets/note_widget.dart';
+import 'package:music_notato/widgets/staff_widget.dart';
 
 class HomePage extends State<MyHomePage> {
   Score _score = Score();
@@ -363,6 +365,22 @@ class HomePage extends State<MyHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Listener(
+                  child: Stack(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: <Widget> [
+                      // CustomPaint(
+                      //   size: Size(MediaQuery.of(context).size.width-250, 50),
+                      //   painter: StaffWidget(xPosition, 'treble', signature, signature_),
+                      // ),
+                      // for(int i = 0; i < _score.length; i++)
+                      // CustomPaint(
+                      //   size: Size(MediaQuery.of(context).size.width-250, 50),
+                      //   painter: NoteWidget(_score.getNote(i), notePosition[i], 'treble', signature, signature_),
+                      // ),
+                    ],
+                  ),
+                ),
                 CustomPaint(
                   // size: const Size(1000, 50),
                   // size: Size(MediaQuery.of(context).size.width-250, 0.1*MediaQuery.of(context).size.height),
