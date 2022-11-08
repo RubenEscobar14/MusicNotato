@@ -9,27 +9,25 @@ import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
 
 class HomePage extends State<MyHomePage> {
-  Score _score = Score();
+  Score _score = Score(); // current score
 
-  Note? currentNote;
-  String currentNoteString = '';
-  String noteName = '';
-  double xPosition = 40;
-  List<Note> noteList = [];
-  List<double> notePosition = [];
+  double xPosition = 40; // starting x-coordinate for notes
+  List<Note> noteList = []; // list of all notes
+  List<double> xPositions = []; // list of x-coordinates for the notes
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
-  int duration = 4;
-  int octave = 4;
-  int dotted = 0;
+  int duration = 4; // default length of a note
+  int octave = 4; // default octave of a note
+  int dotted = 0; // default set to not dotted
   int accidental =
       0; // not implemented yet (when it is implemented, will also have to implement keys)
 
-  String currentClef = 'treble';
-  String dropdownvalue = '4/4';
-  int _tempo = 100;
+  String currentClef = 'treble'; // default clef
+  String dropdownvalue = '4/4'; // default time signature
+  int _tempo = 100; // default tempo
 
+  // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
     32: 1/32,
     48: 3/64,
@@ -42,13 +40,14 @@ class HomePage extends State<MyHomePage> {
     2: 1/2,
     3: 3/4,
     1: 1,
-    
+    0: 0,
   };
 
-  var items = ['4/4', '3/4', '2/4', '2/2'];
 
-  int signature = 4;
-  int signature_ = 4;
+  var timeSignatures = ['4/4', '3/4', '2/4', '2/2']; // list of available time signatures
+
+  int signature = 4; // default number of beats in a measure
+  int signature_ = 4; // default beat unit
 
   final player = AudioPlayer();
 
@@ -64,8 +63,8 @@ class HomePage extends State<MyHomePage> {
     return signature_;
   }
 
-  /// Loads notes by reading the notato data file (if found) and mapping each
-  /// property to a "new" note, which is then added to the staff.
+  // Loads notes by reading the notato data file (if found) and mapping each
+  // property to a "new" note, which is then added to the staff.
   @override
   void initState() {
     super.initState();
@@ -85,13 +84,13 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  /// Adds a note to the staff and list of notes. Will automatically re-save to
-  /// the json file by default, but saveOnAdd can be set to false to not do this.
+  // Adds a note to the staff and list of notes. Will automatically re-save to
+  // the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
       if (currentNote.complete <= signature / signature_) {
         noteList.add(currentNote);
-        notePosition.add(xPosition);
+        xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
         if (saveOnAdd) {
@@ -108,8 +107,8 @@ class HomePage extends State<MyHomePage> {
   // Deletes the last note in the list
   void _deleteNote() {
     noteList.remove(noteList[noteList.length - 1]);
-    xPosition = notePosition[notePosition.length - 1];
-    notePosition.remove(notePosition[notePosition.length - 1]);
+    xPosition = xPositions[xPositions.length - 1];
+    xPositions.remove(xPositions[xPositions.length - 1]);
     print("delete call finished");
   }
 
@@ -121,7 +120,7 @@ class HomePage extends State<MyHomePage> {
     return noteList[noteList.length - 1];
   }
 
-  //returns a note n steps higher than entered
+  // Returns a note n steps higher than entered
   NoteLetter _increasePitch(int n, NoteLetter note) {
     return NoteLetter.values[(note.index + n) % 7];
   }
@@ -133,12 +132,13 @@ class HomePage extends State<MyHomePage> {
     return newNote;
   }
 
-  //prints current noteList and notePosition, debugging use only
+  // Prints current noteList and xPositions, debugging use only
   void _printNoteInfo() {
     print(noteList);
-    print(notePosition);
+    print(xPositions);
   }
 
+  // Returns the fraction of the measure that has been completed
   double return_complete() {
     double duration_ = 1 / duration;
     double complete = 0;
@@ -174,7 +174,7 @@ class HomePage extends State<MyHomePage> {
             //   child: CustomPaint(
             //     size: const Size(1000, 50),
             //     // size: Size(context.size!.width, context.size!.height), // does not work; compile error
-            //     painter: Graphics(xPosition, noteList, notePosition, 'treble',
+            //     painter: Graphics(xPosition, noteList, xPositions, 'treble',
             //         signature, signature_),
             //   ),
             //   onPointerDown: (event) => {
@@ -202,11 +202,11 @@ class HomePage extends State<MyHomePage> {
             //                     // Down Arrow Icon
             //                     icon: Icon(Icons.keyboard_arrow_down),
 
-            //                     // Array list of items
-            //                     items: items.map((String items) {
+            //                     // Array list of timeSignatures
+            //                     timeSignatures: timeSignatures.map((String timeSignatures) {
             //                       return DropdownMenuItem(
-            //                         value: items,
-            //                         child: Text(items),
+            //                         value: timeSignatures,
+            //                         child: Text(timeSignatures),
             //                       );
             //                     }).toList(),
             //                     // After selecting the desired option,it will
@@ -388,7 +388,7 @@ class HomePage extends State<MyHomePage> {
                       ),
                       CustomPaint(
                         size: Size(MediaQuery.of(context).size.width-250, 50),
-                        painter: NoteWidget(noteList, notePosition, 'treble', signature, signature_),
+                        painter: NoteWidget(noteList, xPositions, 'treble', signature, signature_),
                       ),
                     ],
                   ),

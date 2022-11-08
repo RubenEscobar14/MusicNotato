@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// Class that draws the staff and semi-permanent elements (e.g. clef, time signature) to the canvas
 class StaffWidget extends CustomPainter {
   String currentClef;
 
-  int signature;
-  int signature_;
+  int signature; // number of beats per measure
+  int signature_; // unit of beat
 
   StaffWidget(this.currentClef, this.signature, this.signature_);
 
@@ -14,7 +15,7 @@ class StaffWidget extends CustomPainter {
     var paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 1.0;
-    double x = size.height / 4; // Distance between two staff lines
+    double x = size.height / 4; // distance between two staff lines
 
     // Draws the staff
     canvas.drawLine(Offset(0, -2 * x), Offset(size.width, -2 * x), paint);
@@ -23,15 +24,15 @@ class StaffWidget extends CustomPainter {
     canvas.drawLine(Offset(0, x), Offset(size.width, x), paint);
     canvas.drawLine(Offset(0, 2 * x), Offset(size.width, 2 * x), paint);
 
-    //节拍选择框
+    // Time signature graphic frame
     var points = [
-      //上面横线
+      // Upper line
       Offset(10, -2 * x - 5),
       Offset(15, -2 * x - 5),
       Offset(20, -2 * x - 5),
       Offset(25, -2 * x - 5),
       Offset(30, -2 * x - 5),
-      //左边竖线
+      // Left line
       Offset(5, -2 * x - 5),
       Offset(5, -2 * x),
       Offset(5, -2 * x + 5),
@@ -43,13 +44,13 @@ class StaffWidget extends CustomPainter {
       Offset(5, 2 * x - 5),
       Offset(5, 2 * x),
       Offset(5, 2 * x + 5),
-      //下面横线
+      // Bottom line
       Offset(10, 2 * x + 5),
       Offset(15, 2 * x + 5),
       Offset(20, 2 * x + 5),
       Offset(25, 2 * x + 5),
       Offset(30, 2 * x + 5),
-      //右边竖线
+      // Right line
       Offset(35, -2 * x - 5),
       Offset(35, -2 * x),
       Offset(35, -2 * x + 5),
@@ -62,13 +63,14 @@ class StaffWidget extends CustomPainter {
       Offset(35, 2 * x),
       Offset(35, 2 * x + 5),
     ];
-    //画节拍选择框
+
+    // Draws the time signature graphic frame
     paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
     canvas.drawPoints(PointMode.points, points, paint);
 
-    //画节拍分子分母
+    // Draws the time signature graphic
     var textPainter = TextPainter(
         text: TextSpan(
           text: '${signature}\n${signature_}',

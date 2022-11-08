@@ -2,21 +2,27 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
 
+// Class that draws the notes to the canvas
 class NoteWidget extends CustomPainter {
-  List<Note> noteList;
-  List<double> notePosition;
+  List<Note> noteList; // list of all notes
+  List<double> xPositions; // list of x-positions for the notes
 
   String currentClef;
+
+  // Positions for C4-B4 depending on the clef
+  // Position is defined so that in descending order, the y-coordinate of the staff lines are 2x, x, 0, -x, and -2x
   List<double> trebleBasePositions = [-3, -2.5, -2, -1.5, -1, -0.5, 0];
   List<double> altoBasePositions = [0, 0.5, 1, 1.5, 2, 2.5, 3];
   List<double> bassBasePositions = [3, 3.5, 4, 4.5, 5, 5.5, 6];
 
-  int signature;
-  int signature_;
+  int signature; // number of beats per measure
+  int signature_; // unit of beat
 
-  NoteWidget(this.noteList, this.notePosition, this.currentClef,
+  // Constructor
+  NoteWidget(this.noteList, this.xPositions, this.currentClef,
       this.signature, this.signature_);
 
+  // Calculates the base position for a given note and clef
   double calculateBasePosition(String noteName, String currentClef) {
     if (noteName == 'c') {
       if (currentClef == 'treble') {
@@ -77,6 +83,7 @@ class NoteWidget extends CustomPainter {
     }
   }
 
+  // Calculates the position of a specific note
   double calculatePosition(
       NoteLetter noteName, int octave, String currentClef) {
     double basePosition = calculateBasePosition(noteName.name, currentClef);
@@ -88,12 +95,12 @@ class NoteWidget extends CustomPainter {
     var paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 1.0;
-    double x = size.height / 4;
+    double x = size.height / 4; // Distance between two lines of the staff
 
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition =
-          notePosition[i]; // x-coordinate of the note to be drawn
+          xPositions[i]; // x-coordinate of the note to be drawn
       double position = calculatePosition(currentNote.note, noteList[i].octave,
           currentClef); // position of the current note on the staff
       double y = -position * x; // y-coordinate of the note to be drawn
@@ -147,35 +154,38 @@ class NoteWidget extends CustomPainter {
           }
           canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(xPosition+(748/1024)*x*cos(pi/9),stemEndY),paint);
         }
+        // Draws the first flag on shorter notes
         if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
-          if (position > 0) {
+          if (position > 0) { // draws the flag pointing down
             canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
           } 
-          else {
+          else { // draws the flag pointing up
             canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
           }
+          // Draws the second flag on shorter notes
           if (currentNote.duration != 8 && currentNote.duration != 12) {
-            if (position > 0) {
+            if (position > 0) { // draws the flag pointing up
               canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x), Offset(stemEndX + x, stemEndY - 2 * x), paint);
             } 
-            else {
+            else { // draws the flag pointing down
               canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x), Offset(stemEndX + x, stemEndY + 2 * x), paint);
             }
+            // Draws the third flag on shorter notes
             if (currentNote.duration != 16 && currentNote.duration != 24) {
-              if (position > 0) {
+              if (position > 0) { // draws the flag point up
                 canvas.drawLine(Offset(stemEndX, stemEndY - x), Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
               } 
-              else {
+              else { // draws the flag pointing down
                 canvas.drawLine(Offset(stemEndX, stemEndY + x), Offset(stemEndX + x, stemEndY + 2.5 * x), paint);
               }
             }
           }
         }
       }
-      if (currentNote.dotted == 1) {
+      if (currentNote.dotted == 1) { // draws the dot for dotted notes
         canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), y), 0.15 * x, paint);
       }
-      if (position > 2.5) {
+      if (position > 2.5) { // draws ledger lines for notes above the middle staff line
         int counter = position.floor();
         while (counter > 2.5) {
           double ledgerLineY = -counter * x;
@@ -184,7 +194,7 @@ class NoteWidget extends CustomPainter {
           counter--;
         }
       }
-      if (position < -2.5) {
+      if (position < -2.5) { // draws ledger lines for notes below the middle staff line
         double positivePosition = -position;
         int counter = positivePosition.floor();
         while (counter > 2.5) {
@@ -194,7 +204,7 @@ class NoteWidget extends CustomPainter {
           counter--;
         }
       }
-      if (currentNote.complete == signature / signature_) {
+      if (currentNote.complete == signature / signature_) { // draws the measure line
         canvas.drawLine(Offset(xPosition+20, -2 * x),
             Offset(xPosition+20, 2 * x), paint);
       }
