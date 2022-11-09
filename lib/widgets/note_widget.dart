@@ -110,7 +110,7 @@ class NoteWidget extends CustomPainter {
           canvas.drawLine(Offset(stemEndX,y+(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
         }
         else { // draws a stem going up
-          stemEndX = xPosition+(748/1024)*x*cos(pi/9)+(paint.strokeWidth/2);
+          stemEndX = xPosition+(748/1024)*x*cos(pi/9);
           if(position < -3) {
             stemEndY = 0;
           }
