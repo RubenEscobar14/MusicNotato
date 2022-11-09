@@ -125,11 +125,6 @@ class HomePage extends State<MyHomePage> {
     return noteList[noteList.length - 1];
   }
 
-  // Returns a note n steps higher than entered
-  NoteLetter _increasePitch(int n, NoteLetter note) {
-    return NoteLetter.values[(note.index + n) % 7];
-  }
-
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     Note newNote = new Note(lastNote.getNote(), lastNote.getOctave(), duration,
@@ -327,16 +322,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Note previous = _getLastNote();
-                _deleteNote();
-                NoteLetter newPitch = _increasePitch(1, previous.getNote());
-                _addNote(Note(
-                    newPitch,
-                    previous.getOctave(),
-                    previous.getDuration(),
-                    previous.getDotted(),
-                    previous.getAccidental(),
-                    return_complete()));
+                Note previous = _deleteNote();
+                previous.increasePitch(1);
+                if (previous.getNote() == NoteLetter.c) {
+                  previous.setOctave(previous.getOctave() + 1);
+                }
+                _addNote(previous);
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -344,17 +335,12 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                Note previous = _getLastNote();
-                _deleteNote();
-                // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
-                NoteLetter newPitch = _increasePitch(6, previous.getNote());
-                _addNote(Note(
-                    newPitch,
-                    previous.getOctave(),
-                    previous.getDuration(),
-                    previous.getDotted(),
-                    previous.getAccidental(),
-                    return_complete()));
+                Note previous = _deleteNote();
+                previous.increasePitch(6);
+                if (previous.getNote() == NoteLetter.b) {
+                  previous.setOctave(previous.getOctave() - 1);
+                }
+                _addNote(previous);
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),

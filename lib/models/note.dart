@@ -30,6 +30,28 @@ class Note {
         accidental = 0,
         octave = 0,
         dotted = 0;
+  // increases the note value by n, raising octave if necissery
+  void increasePitch(int n) {
+    for (int i = n; i > 0; i--) {
+      if (note == NoteLetter.a) {
+        setNote(NoteLetter.b);
+      } else if (note == NoteLetter.b) {
+        setNote(NoteLetter.c);
+      } else if (note == NoteLetter.c) {
+        setNote(NoteLetter.d);
+      } else if (note == NoteLetter.d) {
+        setNote(NoteLetter.e);
+      } else if (note == NoteLetter.e) {
+        setNote(NoteLetter.f);
+      } else if (note == NoteLetter.f) {
+        setNote(NoteLetter.g);
+      } else if (note == NoteLetter.g) {
+        setNote(NoteLetter.a);
+      } else {
+        setNote(NoteLetter.r);
+      }
+    }
+  }
 
   void setNote(NoteLetter letter) {
     note = letter;
