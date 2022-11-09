@@ -5,7 +5,9 @@ import 'package:music_notato/main.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
+import 'package:music_notato/screens/save_page.dart';
 import 'package:music_notato/widgets/note_duration_button.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends State<MyHomePage> {
   Score _score = Score();
@@ -35,6 +37,7 @@ class HomePage extends State<MyHomePage> {
   int signature_ = 4;
 
   final player = AudioPlayer();
+  int currentFile = 1;
 
   Score getScore() {
     return _score;
@@ -48,12 +51,18 @@ class HomePage extends State<MyHomePage> {
     return signature_;
   }
 
-  /// Loads notes by reading the notato data file (if found) and mapping each
-  /// property to a "new" note, which is then added to the staff.
+  /// Loads a save on startup
   @override
   void initState() {
     super.initState();
-    widget.storage.readFile().then((value) {
+    loadSave();
+  }
+
+  /// Loads notes by reading the notato data file (if found) that corresponds to
+  /// currentFile, and mapping each property to a "new" note, which is then
+  /// added to the staff.
+  void loadSave() {
+    widget.storage.readFile(currentFile).then((value) {
       setState(() {
         for (dynamic fakeNote in value) {
           Note note = Note(
@@ -69,6 +78,21 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
+  /// Removes every note from the staff and everything that's not a file.
+  void clearNotes() {
+    noteList = [];
+    xPosition = 40;
+    notePosition = [];
+  }
+
+  /// Switches the file and loads information from the new one. Intended to be
+  /// called when loading a save from the save page.
+  void onLoad(int currentSave) {
+    currentFile = currentSave;
+    clearNotes();
+    loadSave();
+  }
+
   /// Adds a note to the staff and list of notes. Will automatically re-save to
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
@@ -79,7 +103,7 @@ class HomePage extends State<MyHomePage> {
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
         if (saveOnAdd) {
-          widget.storage.writeFile(_score.getAllNotes());
+          widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
       if (currentNote.complete == signature / signature_) {
@@ -150,6 +174,10 @@ class HomePage extends State<MyHomePage> {
       ),
       body: Row(
         children: <Widget>[
+          Consumer<Shouter>(builder: (context, value, child) {
+            onLoad(value.saveToShout);
+            return;
+          }),
           Column(children: <Widget>[
             // Listener(
             //   child: CustomPaint(
@@ -496,7 +524,7 @@ class HomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PlayingPage()),
+            MaterialPageRoute(builder: (context) => SavePage()),
           );
         },
         tooltip: 'Go to playing page',
