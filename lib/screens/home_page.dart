@@ -49,6 +49,8 @@ class HomePage extends State<MyHomePage> {
   int signature = 4; // default number of beats in a measure
   int signature_ = 4; // default beat unit
 
+  bool isRest = false;
+
   final player = AudioPlayer();
 
   Score getScore() {
@@ -127,9 +129,11 @@ class HomePage extends State<MyHomePage> {
 
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
-    Note newNote = new Note(lastNote.getNote(), lastNote.getOctave(), duration,
-        lastNote.getDotted(), lastNote.getAccidental(), return_complete());
-    return newNote;
+    if(isRest) {
+      return Note.rest(duration, return_complete());
+    }
+    return Note(lastNote.getNote(), lastNote.getOctave(), duration,
+      lastNote.getDotted(), lastNote.getAccidental(), return_complete());
   }
 
   // Prints current noteList and xPositions, debugging use only
@@ -510,6 +514,14 @@ class HomePage extends State<MyHomePage> {
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
               child: const Text('.'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                isRest = !isRest;
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black)),
+              child: const Text('Rest'),
             ),
             IconButton(
               onPressed: () {
