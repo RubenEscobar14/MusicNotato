@@ -31,6 +31,31 @@ class Note {
         octave = 0,
         dotted = 0;
 
+  void setNote(NoteLetter letter) {
+    note = letter;
+  }
+
+  void setDuration(int dur) {
+    duration = dur;
+  }
+
+  void setDotted(int dot) {
+    dotted = dot;
+  }
+
+  void setAccidental(int acc) {
+    accidental = acc;
+  }
+
+  void setOctave(int oct) {
+    if (oct > 8) {
+      octave = 8;
+    } else if (oct < 0) {
+      octave = 0;
+    }
+    octave = oct;
+  }
+
   NoteLetter getNote() {
     return note;
   }

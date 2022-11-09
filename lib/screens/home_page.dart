@@ -29,22 +29,26 @@ class HomePage extends State<MyHomePage> {
 
   // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
-    32: 1/32,
-    48: 3/64,
-    16: 1/16,
-    24: 3/32,
-    8: 1/8,
-    12: 3/16,
-    4: 1/4,
-    6: 3/8,
-    2: 1/2,
-    3: 3/4,
+    32: 1 / 32,
+    48: 3 / 64,
+    16: 1 / 16,
+    24: 3 / 32,
+    8: 1 / 8,
+    12: 3 / 16,
+    4: 1 / 4,
+    6: 3 / 8,
+    2: 1 / 2,
+    3: 3 / 4,
     1: 1,
     0: 0,
   };
 
-
-  var timeSignatures = ['4/4', '3/4', '2/4', '2/2']; // list of available time signatures
+  var timeSignatures = [
+    '4/4',
+    '3/4',
+    '2/4',
+    '2/2'
+  ]; // list of available time signatures
 
   int signature = 4; // default number of beats in a measure
   int signature_ = 4; // default beat unit
@@ -105,11 +109,12 @@ class HomePage extends State<MyHomePage> {
   }
 
   // Deletes the last note in the list
-  void _deleteNote() {
-    noteList.remove(noteList[noteList.length - 1]);
+  Note _deleteNote() {
+    Note toRemove = noteList[noteList.length - 1];
+    noteList.remove(toRemove);
     xPosition = xPositions[xPositions.length - 1];
     xPositions.remove(xPositions[xPositions.length - 1]);
-    print("delete call finished");
+    return toRemove;
   }
 
   // Returns the last note in the current notelist
@@ -339,7 +344,6 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                print("moving down");
                 Note previous = _getLastNote();
                 _deleteNote();
                 // _increasePitch() uses mod, so increasing by 7 is the same as decreasing by 1
@@ -358,20 +362,16 @@ class HomePage extends State<MyHomePage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    if (octave + 1 <= 8) {
-                      octave++;
-                    }
-                  });
+                  Note previous = _deleteNote();
+                  previous.setOctave(previous.getOctave() + 1);
+                  _addNote(previous);
                 },
                 child: const Text('Octave Up')),
             ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    if (octave - 1 >= 0) {
-                      octave--;
-                    }
-                  });
+                  Note previous = _deleteNote();
+                  previous.setOctave(previous.getOctave() - 1);
+                  _addNote(previous);
                 },
                 child: const Text('Octave Down')),
           ]),
@@ -381,14 +381,15 @@ class HomePage extends State<MyHomePage> {
               children: <Widget>[
                 Listener(
                   child: Stack(
-                    children: <Widget> [
+                    children: <Widget>[
                       CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width-250, 50),
+                        size: Size(MediaQuery.of(context).size.width - 250, 50),
                         painter: StaffWidget('treble', signature, signature_),
                       ),
                       CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width-250, 50),
-                        painter: NoteWidget(noteList, xPositions, 'treble', signature, signature_),
+                        size: Size(MediaQuery.of(context).size.width - 250, 50),
+                        painter: NoteWidget(noteList, xPositions, 'treble',
+                            signature, signature_),
                       ),
                     ],
                   ),
@@ -535,8 +536,6 @@ class HomePage extends State<MyHomePage> {
       ),
     );
   }
-  
-  void playBack() {
-    
-  }
+
+  void playBack() {}
 }
