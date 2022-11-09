@@ -11,6 +11,7 @@ class PlayingPage extends StatelessWidget {
 
   final player = AudioPlayer();
 
+  // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
     32: 1/32,
     48: 3/64,
@@ -23,7 +24,7 @@ class PlayingPage extends StatelessWidget {
     2: 1/2,
     3: 3/4,
     1: 1,
-    
+    0: 3/2,
   };
 
   void playBack() {

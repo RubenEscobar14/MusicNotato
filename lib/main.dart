@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:music_notato/models/note.dart';
 import 'package:music_notato/screens/home_page.dart';
 import 'package:music_notato/screens/save_page.dart';
 import 'package:provider/provider.dart';

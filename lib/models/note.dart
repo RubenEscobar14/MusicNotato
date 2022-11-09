@@ -75,6 +75,7 @@ class Note {
         'complete': complete,
       };
 
+  @override
   String toString() {
     return "[note: " +
         note.toString() +
