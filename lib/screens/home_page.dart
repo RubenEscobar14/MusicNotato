@@ -130,7 +130,7 @@ class HomePage extends State<MyHomePage> {
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     if(isRest) {
-      return Note.rest(duration, return_complete());
+      return Note.rest(duration, lastNote.getDotted(), return_complete());
     }
     return Note(lastNote.getNote(), lastNote.getOctave(), duration,
       lastNote.getDotted(), lastNote.getAccidental(), return_complete());

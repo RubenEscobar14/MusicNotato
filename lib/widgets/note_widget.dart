@@ -84,16 +84,16 @@ class NoteWidget extends CustomPainter {
       Note currentNote = noteList[i];
       double xPosition = xPositions[i]; // x-coordinate of the note to be drawn 
       try {
-        drawNote(currentNote, xPosition, canvas, paint, x, i);
+        drawNote(currentNote, xPosition, canvas, paint, x);
       }
       catch(e) {
-        drawNote(currentNote, xPosition, canvas, paint, x, i);
+        drawRest(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
 
-  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x, int i) {
-    double position = calculatePosition(currentNote.note, noteList[i].octave,
+  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x) {
+    double position = calculatePosition(currentNote.note, currentNote.octave,
           currentClef); // position of the current note on the staff
     double y = -position * x; // y-coordinate of the note to be drawn
 
@@ -109,7 +109,7 @@ class NoteWidget extends CustomPainter {
       double stemEndX;
       double stemEndY;
       if (position >= 0) { // draws a stem going down
-        stemEndX = xPosition-(748/1024)*x*cos(pi/9)+(paint.strokeWidth/2);
+        stemEndX = xPosition-(748/1024)*x*cos(pi/9)+0.15*paint.strokeWidth;
         if(position > 3) {
           stemEndY = 0;
         }
@@ -119,7 +119,7 @@ class NoteWidget extends CustomPainter {
         canvas.drawLine(Offset(stemEndX,y+(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
       }
       else { // draws a stem going up
-        stemEndX = xPosition+(748/1024)*x*cos(pi/9);
+        stemEndX = xPosition+(748/1024)*x*cos(pi/9)+0.5*paint.strokeWidth;
         if(position < -3) {
           stemEndY = 0;
         }
@@ -196,6 +196,26 @@ class NoteWidget extends CustomPainter {
     Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
     canvas.drawOval(noteHead, paint);
     canvas.restore();
+  }
+
+  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x) {
+    if(currentNote.duration == 1) {
+      drawRectRest(canvas, paint, x, xPosition, 0);
+    }
+    else if(currentNote.duration == 2) {
+      drawRectRest(canvas, paint, x, xPosition, -0.5*x);
+    }
+    if (currentNote.complete == signature / signature_) { // draws the measure line
+      canvas.drawLine(Offset(xPosition+20, -2 * x),
+          Offset(xPosition+20, 2 * x), paint);
+    }
+  }
+
+  void drawRectRest(Canvas canvas, Paint paint, double x, double xPosition, double y) {
+    paint = Paint()
+      ..style = PaintingStyle.fill;
+    Rect rectRest = Offset(xPosition-0.5*x, y) & Size(x,0.5*x);
+    canvas.drawRect(rectRest, paint);
   }
 
   @override
