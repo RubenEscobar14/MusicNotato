@@ -121,7 +121,7 @@ class NoteWidget extends CustomPainter {
         }
         // Draws the first flag on shorter notes
         if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
-          if (position > 0) { // draws the flag pointing down
+          if (position >= 0) { // draws the flag pointing down
             canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
           } 
           else { // draws the flag pointing up
@@ -129,7 +129,7 @@ class NoteWidget extends CustomPainter {
           }
           // Draws the second flag on shorter notes
           if (currentNote.duration != 8 && currentNote.duration != 12) {
-            if (position > 0) { // draws the flag pointing up
+            if (position >= 0) { // draws the flag pointing up
               canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x), Offset(stemEndX + x, stemEndY - 2 * x), paint);
             } 
             else { // draws the flag pointing down
@@ -137,7 +137,7 @@ class NoteWidget extends CustomPainter {
             }
             // Draws the third flag on shorter notes
             if (currentNote.duration != 16 && currentNote.duration != 24) {
-              if (position > 0) { // draws the flag point up
+              if (position >= 0) { // draws the flag point up
                 canvas.drawLine(Offset(stemEndX, stemEndY - x), Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
               } 
               else { // draws the flag pointing down
