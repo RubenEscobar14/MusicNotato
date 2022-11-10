@@ -214,7 +214,7 @@ class NoteWidget extends CustomPainter {
     }
     if (currentNote.dotted == 1) { // draws the dot for dotted rests
       // TODO: Implement dotted with pressing rests
-      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), 0), 0.15 * x, paint);
+      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), -0.25*x), 0.15 * x, paint);
     }
     if (currentNote.complete == signature / signature_) { // draws the measure line
       canvas.drawLine(Offset(xPosition+20, -2 * x),

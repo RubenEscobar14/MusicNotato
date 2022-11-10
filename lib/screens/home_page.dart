@@ -130,10 +130,10 @@ class HomePage extends State<MyHomePage> {
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     if(isRest) {
-      return Note.rest(duration, lastNote.getDotted(), return_complete());
+      return Note.rest(duration, dotted, return_complete());
     }
     return Note(lastNote.getNote(), lastNote.getOctave(), duration,
-      lastNote.getDotted(), lastNote.getAccidental(), return_complete());
+      dotted, lastNote.getAccidental(), return_complete());
   }
 
   // Prints current noteList and xPositions, debugging use only
@@ -420,6 +420,7 @@ class HomePage extends State<MyHomePage> {
                     duration = (duration / 1.5).round();
                   }
                 }
+                print(dotted);
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
