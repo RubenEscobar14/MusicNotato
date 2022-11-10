@@ -104,6 +104,7 @@ class NoteWidget extends CustomPainter {
     else {
       // draws a filled notehead (notehead for all other notes)
       drawNotehead(canvas, paint, PaintingStyle.fill, x, xPosition, y);
+      drawNotehead(canvas, paint, PaintingStyle.stroke, x, xPosition, y);
     }
     if (currentNote.duration != 1 && currentNote.duration != 0) {
       double stemEndX;
@@ -199,11 +200,21 @@ class NoteWidget extends CustomPainter {
   }
 
   void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x) {
-    if(currentNote.duration == 1) {
+    if(currentNote.duration == 1 || currentNote.duration == 0) { // draws a whole rest
       drawRectRest(canvas, paint, x, xPosition, 0);
     }
-    else if(currentNote.duration == 2) {
+    else if(currentNote.duration == 2 || currentNote.duration == 3) { // draws a half rest
       drawRectRest(canvas, paint, x, xPosition, -0.5*x);
+    }
+    else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
+
+    }
+    else {
+
+    }
+    if (currentNote.dotted == 1) { // draws the dot for dotted rests
+      // TODO: Implement dotted with pressing rests
+      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), 0), 0.15 * x, paint);
     }
     if (currentNote.complete == signature / signature_) { // draws the measure line
       canvas.drawLine(Offset(xPosition+20, -2 * x),
@@ -214,7 +225,8 @@ class NoteWidget extends CustomPainter {
   void drawRectRest(Canvas canvas, Paint paint, double x, double xPosition, double y) {
     paint = Paint()
       ..style = PaintingStyle.fill;
-    Rect rectRest = Offset(xPosition-0.5*x, y) & Size(x,0.5*x);
+    Rect rectRest = Offset(xPosition-0.5*x, y) & Size((748/512)*cos(pi/9)*x,0.5*x); // rest has the same width as notes
+    // Rect rectRest = Offset(xPosition-0.5*x, y) & Size(x,0.5*x); // rest has the same width as x
     canvas.drawRect(rectRest, paint);
   }
 
