@@ -25,11 +25,11 @@ class Note {
       this.complete);
 
   /// Creates a rest, only requiring duration and complete to be specified
-  Note.rest(this.duration, this.complete)
+  Note.rest(this.duration, this.dotted, this.complete)
       : note = NoteLetter.r,
         accidental = 0,
-        octave = 0,
-        dotted = 0;
+        octave = 0;
+
   // increases the note value by n, raising octave if necissery
   void increasePitch(int n) {
     for (int i = n; i > 0; i--) {

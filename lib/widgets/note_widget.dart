@@ -82,97 +82,106 @@ class NoteWidget extends CustomPainter {
 
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
-      double xPosition =
-          xPositions[i]; // x-coordinate of the note to be drawn
-      double position = calculatePosition(currentNote.note, noteList[i].octave,
-          currentClef); // position of the current note on the staff
-      double y = -position * x; // y-coordinate of the note to be drawn
-
-      if (currentNote.duration == 1 || currentNote.duration == 2 || currentNote.duration == 0 || currentNote.duration == 3) {
-        // draws an unfilled notehead (notehead for whole and half notes)
-        drawNotehead(canvas, paint, PaintingStyle.stroke, x, xPosition, y);
-      } 
-      else {
-        // draws a filled notehead (notehead for all other notes)
-        drawNotehead(canvas, paint, PaintingStyle.fill, x, xPosition, y);
+      double xPosition = xPositions[i]; // x-coordinate of the note to be drawn 
+      try {
+        drawNote(currentNote, xPosition, canvas, paint, x);
       }
-      if (currentNote.duration != 1 && currentNote.duration != 0) {
-        double stemEndX;
-        double stemEndY;
-        if (position >= 0) { // draws a stem going down
-          stemEndX = xPosition-(748/1024)*x*cos(pi/9)+(paint.strokeWidth/2);
-          if(position > 3) {
-            stemEndY = 0;
-          }
-          else {
-            stemEndY = y+3.5*x;
-          }
-          canvas.drawLine(Offset(stemEndX,y+(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
+      catch(e) {
+        drawRest(currentNote, xPosition, canvas, paint, x);
+      }
+    }
+  }
+
+  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x) {
+    double position = calculatePosition(currentNote.note, currentNote.octave,
+          currentClef); // position of the current note on the staff
+    double y = -position * x; // y-coordinate of the note to be drawn
+
+    if (currentNote.duration == 1 || currentNote.duration == 2 || currentNote.duration == 0 || currentNote.duration == 3) {
+      // draws an unfilled notehead (notehead for whole and half notes)
+      drawNotehead(canvas, paint, PaintingStyle.stroke, x, xPosition, y);
+    } 
+    else {
+      // draws a filled notehead (notehead for all other notes)
+      drawNotehead(canvas, paint, PaintingStyle.fill, x, xPosition, y);
+      drawNotehead(canvas, paint, PaintingStyle.stroke, x, xPosition, y);
+    }
+    if (currentNote.duration != 1 && currentNote.duration != 0) {
+      double stemEndX;
+      double stemEndY;
+      if (position >= 0) { // draws a stem going down
+        stemEndX = xPosition-(748/1024)*x*cos(pi/9)+0.15*paint.strokeWidth;
+        if(position > 3) {
+          stemEndY = 0;
         }
-        else { // draws a stem going up
-          stemEndX = xPosition+(748/1024)*x*cos(pi/9);
-          if(position < -3) {
-            stemEndY = 0;
-          }
-          else {
-            stemEndY = y-3.5*x;
-          }
-          canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
+        else {
+          stemEndY = y+3.5*x;
         }
-        // Draws the first flag on shorter notes
-        if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
-          if (position >= 0) { // draws the flag pointing down
-            canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
+        canvas.drawLine(Offset(stemEndX,y+(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
+      }
+      else { // draws a stem going up
+        stemEndX = xPosition+(748/1024)*x*cos(pi/9)+0.5*paint.strokeWidth;
+        if(position < -3) {
+          stemEndY = 0;
+        }
+        else {
+          stemEndY = y-3.5*x;
+        }
+        canvas.drawLine(Offset(stemEndX,y-(748/1024)*x*sin(pi/9)),Offset(stemEndX,stemEndY),paint);
+      }
+      // Draws the first flag on shorter notes
+      if (currentNote.duration != 4 && currentNote.duration != 2 && currentNote.duration != 6 && currentNote.duration != 3) {
+        if (position >= 0) { // draws the flag pointing down
+          canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY - 1.5 * x), paint);
+        } 
+        else { // draws the flag pointing up
+          canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
+        }
+        // Draws the second flag on shorter notes
+        if (currentNote.duration != 8 && currentNote.duration != 12) {
+          if (position >= 0) { // draws the flag pointing up
+            canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x), Offset(stemEndX + x, stemEndY - 2 * x), paint);
           } 
-          else { // draws the flag pointing up
-            canvas.drawLine(Offset(stemEndX, stemEndY), Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
+          else { // draws the flag pointing down
+            canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x), Offset(stemEndX + x, stemEndY + 2 * x), paint);
           }
-          // Draws the second flag on shorter notes
-          if (currentNote.duration != 8 && currentNote.duration != 12) {
-            if (position >= 0) { // draws the flag pointing up
-              canvas.drawLine(Offset(stemEndX, stemEndY - 0.5 * x), Offset(stemEndX + x, stemEndY - 2 * x), paint);
+          // Draws the third flag on shorter notes
+          if (currentNote.duration != 16 && currentNote.duration != 24) {
+            if (position >= 0) { // draws the flag point up
+              canvas.drawLine(Offset(stemEndX, stemEndY - x), Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
             } 
             else { // draws the flag pointing down
-              canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x), Offset(stemEndX + x, stemEndY + 2 * x), paint);
-            }
-            // Draws the third flag on shorter notes
-            if (currentNote.duration != 16 && currentNote.duration != 24) {
-              if (position >= 0) { // draws the flag point up
-                canvas.drawLine(Offset(stemEndX, stemEndY - x), Offset(stemEndX + x, stemEndY - 2.5 * x), paint);
-              } 
-              else { // draws the flag pointing down
-                canvas.drawLine(Offset(stemEndX, stemEndY + x), Offset(stemEndX + x, stemEndY + 2.5 * x), paint);
-              }
+              canvas.drawLine(Offset(stemEndX, stemEndY + x), Offset(stemEndX + x, stemEndY + 2.5 * x), paint);
             }
           }
         }
       }
-      if (currentNote.dotted == 1) { // draws the dot for dotted notes
-        canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), y), 0.15 * x, paint);
+    }
+    if (currentNote.dotted == 1) { // draws the dot for dotted notes
+      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), y), 0.15 * x, paint);
+    }
+    if (position > 2.5) { // draws ledger lines for notes above the middle staff line
+      int counter = position.floor();
+      while (counter > 2.5) {
+        double ledgerLineY = -counter * x;
+        canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
+            Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
+        counter--;
       }
-      if (position > 2.5) { // draws ledger lines for notes above the middle staff line
-        int counter = position.floor();
-        while (counter > 2.5) {
-          double ledgerLineY = -counter * x;
-          canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
-              Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
-          counter--;
-        }
+    }
+    if (position < -2.5) { // draws ledger lines for notes below the middle staff line
+      double positivePosition = -position;
+      int counter = positivePosition.floor();
+      while (counter > 2.5) {
+        double ledgerLineY = counter * x;
+        canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
+            Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
+        counter--;
       }
-      if (position < -2.5) { // draws ledger lines for notes below the middle staff line
-        double positivePosition = -position;
-        int counter = positivePosition.floor();
-        while (counter > 2.5) {
-          double ledgerLineY = counter * x;
-          canvas.drawLine(Offset(xPosition-0.75*(748/512)*x*cos(pi/9), ledgerLineY),
-              Offset(xPosition+0.75*(748/512)*x*cos(pi/9), ledgerLineY), paint);
-          counter--;
-        }
-      }
-      if (currentNote.complete == signature / signature_) { // draws the measure line
-        canvas.drawLine(Offset(xPosition+20, -2 * x),
-            Offset(xPosition+20, 2 * x), paint);
-      }
+    }
+    if (currentNote.complete == signature / signature_) { // draws the measure line
+      canvas.drawLine(Offset(xPosition+20, -2 * x),
+          Offset(xPosition+20, 2 * x), paint);
     }
   }
 
@@ -188,6 +197,37 @@ class NoteWidget extends CustomPainter {
     Rect noteHead = Offset(-(748/1024)*x*cos(pi/9), y-(748/512)*x*sin(pi/9)) & Size((748 / 512) * x, x);
     canvas.drawOval(noteHead, paint);
     canvas.restore();
+  }
+
+  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, double x) {
+    if(currentNote.duration == 1 || currentNote.duration == 0) { // draws a whole rest
+      drawRectRest(canvas, paint, x, xPosition, 0);
+    }
+    else if(currentNote.duration == 2 || currentNote.duration == 3) { // draws a half rest
+      drawRectRest(canvas, paint, x, xPosition, -0.5*x);
+    }
+    else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
+
+    }
+    else {
+
+    }
+    if (currentNote.dotted == 1) { // draws the dot for dotted rests
+      // TODO: Implement dotted with pressing rests
+      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), 0), 0.15 * x, paint);
+    }
+    if (currentNote.complete == signature / signature_) { // draws the measure line
+      canvas.drawLine(Offset(xPosition+20, -2 * x),
+          Offset(xPosition+20, 2 * x), paint);
+    }
+  }
+
+  void drawRectRest(Canvas canvas, Paint paint, double x, double xPosition, double y) {
+    paint = Paint()
+      ..style = PaintingStyle.fill;
+    Rect rectRest = Offset(xPosition-0.5*x, y) & Size((748/512)*cos(pi/9)*x,0.5*x); // rest has the same width as notes
+    // Rect rectRest = Offset(xPosition-0.5*x, y) & Size(x,0.5*x); // rest has the same width as x
+    canvas.drawRect(rectRest, paint);
   }
 
   @override
