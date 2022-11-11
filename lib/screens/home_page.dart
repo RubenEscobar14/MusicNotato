@@ -242,6 +242,7 @@ class HomePage extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 _deleteNote();
+                _addNote(_deleteNote());
                 selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
