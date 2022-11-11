@@ -14,6 +14,7 @@ class HomePage extends State<MyHomePage> {
   double xPosition = 40; // starting x-coordinate for notes
   List<Note> noteList = []; // list of all notes
   List<double> xPositions = []; // list of x-coordinates for the notes
+  int selectedNote = -1;
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
@@ -106,7 +107,6 @@ class HomePage extends State<MyHomePage> {
       if (currentNote.complete == signature / signature_) {
         xPosition += 20;
       }
-      _printNoteInfo();
     });
   }
 
@@ -129,11 +129,11 @@ class HomePage extends State<MyHomePage> {
 
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
-    if(isRest) {
+    if (isRest) {
       return Note.rest(duration, dotted, return_complete());
     }
-    return Note(lastNote.getNote(), lastNote.getOctave(), duration,
-      dotted, lastNote.getAccidental(), return_complete());
+    return Note(lastNote.getNote(), lastNote.getOctave(), duration, dotted,
+        lastNote.getAccidental(), return_complete());
   }
 
   // Prints current noteList and xPositions, debugging use only
@@ -242,6 +242,7 @@ class HomePage extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 _deleteNote();
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -302,7 +303,7 @@ class HomePage extends State<MyHomePage> {
                       CustomPaint(
                         size: Size(MediaQuery.of(context).size.width - 250, 50),
                         painter: NoteWidget(noteList, xPositions, 'treble',
-                            signature, signature_),
+                            signature, signature_, selectedNote),
                       ),
                     ],
                   ),
@@ -326,6 +327,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 32;
                   _addNote(nextNoteWithNewDuration(32));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -340,6 +342,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 16;
                   _addNote(nextNoteWithNewDuration(16));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -355,6 +358,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 8;
                   _addNote(nextNoteWithNewDuration(8));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -369,6 +373,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 4;
                   _addNote(nextNoteWithNewDuration(4));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -383,6 +388,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 2;
                   _addNote(nextNoteWithNewDuration(2));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -397,6 +403,7 @@ class HomePage extends State<MyHomePage> {
                   duration = 1;
                   _addNote(nextNoteWithNewDuration(1));
                 }
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -420,7 +427,7 @@ class HomePage extends State<MyHomePage> {
                     duration = (duration / 1.5).round();
                   }
                 }
-                print(dotted);
+                selectedNote = noteList.length - 1;
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
