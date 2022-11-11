@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music_notato/screens/home_page.dart';
 import 'package:music_notato/screens/save_page.dart';
-import 'package:provider/provider.dart';
 import 'save.dart';
 
 // Music Library: https://theremin.music.uiowa.edu/MISpiano.html
@@ -14,10 +13,7 @@ void main() {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(ChangeNotifierProvider(
-      create: (context) => Shouter(),
-      child: const MyApp(),
-    ));
+    runApp(const MyApp());
   });
 }
 

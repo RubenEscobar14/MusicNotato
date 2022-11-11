@@ -6,7 +6,6 @@ import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/screens/save_page.dart';
 import 'package:music_notato/widgets/note_duration_button.dart';
-import 'package:provider/provider.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
 
