@@ -232,20 +232,30 @@ class NoteWidget extends CustomPainter {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
       // draws a whole rest
       drawRectRest(canvas, paint, x, xPosition, 0);
-    } else if (currentNote.duration == 2 || currentNote.duration == 3) {
-      // draws a half rest
-      drawRectRest(canvas, paint, x, xPosition, -0.5 * x);
-    } else if (currentNote.duration == 4 || currentNote.duration == 6) {
-      // draws a quarter rest
+    }
+    else if(currentNote.duration == 2 || currentNote.duration == 3) { // draws a half rest
+      drawRectRest(canvas, paint, x, xPosition, -0.5*x);
+    }
+    else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
+      var path = Path();
+      var center = Offset(2*xPosition, -(2/3)*x);
+      path.moveTo(center.dx, center.dy);
+      path.lineTo(center.dx-x, center.dy-x);
+      Rect test = Offset(center.dx,center.dy) & Size(x,x);
+      // path.addArc(test, 0, pi/2);
+      // path.arcToPoint(Offset(50,20));
+      // path.arcTo(test, 0, pi, false);
+      // path.addRect(const Offset(200, 20) & Size(x, x));
+      path.lineTo(center.dx-x, center.dy+2*x);
+      path.addRect(const Offset(400, 20) & Size(x, x));
+      path.close();
+      canvas.drawPath(path, paint);
+    }
+    else {
 
-    } else {}
-    if (currentNote.dotted == 1) {
-      // draws the dot for dotted rests
-      // TODO: Implement dotted with pressing rests
-      canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.25 * x),
-          0.15 * x,
-          paint);
+    }
+    if (currentNote.dotted == 1) { // draws the dot for dotted rests
+      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), -0.25*x), 0.15 * x, paint);
     }
     paint = Paint()
       ..color = Colors.black
