@@ -1,10 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:music_notato/main.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
-import 'package:music_notato/widgets/note_duration_button.dart';
+// import 'package:music_notato/widgets/note_duration_button.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
 
@@ -171,285 +172,223 @@ class HomePage extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Row(
-        children: <Widget>[
-          Column(children: <Widget>[
-            // Listener(
-            //   child: CustomPaint(
-            //     size: const Size(1000, 50),
-            //     // size: Size(context.size!.width, context.size!.height), // does not work; compile error
-            //     painter: Graphics(xPosition, noteList, xPositions, 'treble',
-            //         signature, signature_),
-            //   ),
-            //   onPointerDown: (event) => {
-            //     // when raised button is pressed
-            //     // we display showModalBottomSheet
-            //     showModalBottomSheet<void>(
-            //       // context and builder are
-            //       // required properties in this widget
-            //       context: context,
-            //       builder: (BuildContext context) {
-            //         return StatefulBuilder(builder: (context1, state) {
-            //           //这里的state就是setState
-
-            //           // Returning SizedBox
-            //           return SizedBox(
-            //             height: 200,
-            //             child: Center(
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: <Widget>[
-            //                   DropdownButton(
-            //                     // Initial Value
-            //                     value: dropdownvalue,
-
-            //                     // Down Arrow Icon
-            //                     icon: Icon(Icons.keyboard_arrow_down),
-
-            //                     // Array list of timeSignatures
-            //                     timeSignatures: timeSignatures.map((String timeSignatures) {
-            //                       return DropdownMenuItem(
-            //                         value: timeSignatures,
-            //                         child: Text(timeSignatures),
-            //                       );
-            //                     }).toList(),
-            //                     // After selecting the desired option,it will
-            //                     // change button value to selected value
-            //                     onChanged: (String? newValue) {
-            //                       if (noteList.isEmpty) {
-            //                         state(() {
-            //                           dropdownvalue = newValue!;
-            //                           var str_li = dropdownvalue.split('/');
-            //                           print(str_li);
-            //                           setState(() {
-            //                             signature = double.parse(str_li[0]);
-            //                             signature_ = double.parse(str_li[1]);
-            //                           });
-            //                         });
-            //                       }
-            //                     },
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           );
-            //         });
-            //       },
-            //     )
-            //   },
-            // ),
-            /////////////////// All the buttons ///////////////////
-            ElevatedButton(
-              onPressed: () {
-                _deleteNote();
-                _addNote(_deleteNote());
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
+      body: SingleChildScrollView(
+        child: Row(
+          children: <Widget>[
+            Column(children: <Widget>[
+              /////////////////// All the buttons ///////////////////
+              ElevatedButton(
+                onPressed: () {
+                  _deleteNote();
+                  _addNote(_deleteNote());
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Delete'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Note previous = _deleteNote();
+                  previous.increasePitch(1);
+                  if (previous.getNote() == NoteLetter.c) {
+                    previous.setOctave(previous.getOctave() + 1);
+                  }
+                  _addNote(previous);
+                },
+                style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Delete'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Note previous = _deleteNote();
-                previous.increasePitch(1);
-                if (previous.getNote() == NoteLetter.c) {
-                  previous.setOctave(previous.getOctave() + 1);
-                }
-                _addNote(previous);
-              },
-              style: ButtonStyle(
+                child: const Text('Up'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Note previous = _deleteNote();
+                  previous.increasePitch(6);
+                  if (previous.getNote() == NoteLetter.b) {
+                    previous.setOctave(previous.getOctave() - 1);
+                  }
+                  _addNote(previous);
+                },
+                style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Up'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Note previous = _deleteNote();
-                previous.increasePitch(6);
-                if (previous.getNote() == NoteLetter.b) {
-                  previous.setOctave(previous.getOctave() - 1);
-                }
-                _addNote(previous);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Down'),
-            ),
-            ElevatedButton(
+                child: const Text('Down'),
+              ),
+              ElevatedButton(
                 onPressed: () {
                   Note previous = _deleteNote();
                   previous.setOctave(previous.getOctave() + 1);
                   _addNote(previous);
                 },
                 child: const Text('Octave Up')),
-            ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   Note previous = _deleteNote();
                   previous.setOctave(previous.getOctave() - 1);
                   _addNote(previous);
                 },
-                child: const Text('Octave Down')),
-          ]),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Listener(
-                  child: Stack(
-                    children: <Widget>[
-                      CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width - 250, 50),
-                        painter: StaffWidget('treble', signature, signature_),
-                      ),
-                      CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width - 250, 50),
-                        painter: NoteWidget(noteList, xPositions, 'treble',
-                            signature, signature_, selectedNote),
-                      ),
-                    ],
+                child: const Text('Octave Down')), 
+            ]),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Listener(
+                    child: Stack(
+                      children: <Widget>[
+                        CustomPaint(
+                          size: Size(MediaQuery.of(context).size.width - 250, 50),
+                          painter: StaffWidget('treble', signature, signature_),
+                        ),
+                        CustomPaint(
+                          size: Size(MediaQuery.of(context).size.width - 250, 50),
+                          painter: NoteWidget(noteList, xPositions, 'treble',
+                              signature, signature_, selectedNote),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Column(children: <Widget>[
-            // NoteDurationButton(duration: 32, buttonText: 'Thirtysecond', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            // NoteDurationButton(duration: 16, buttonText: 'Sixteenth', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            // NoteDurationButton(duration: 8, buttonText: 'Eigth', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            // NoteDurationButton(duration: 4, buttonText: 'Quarter', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 48;
-                  _addNote(nextNoteWithNewDuration(48));
-                } else {
-                  duration = 32;
-                  _addNote(nextNoteWithNewDuration(32));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Thirtysecond'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 24;
-                  _addNote(nextNoteWithNewDuration(24));
-                } else {
-                  duration = 16;
-                  _addNote(nextNoteWithNewDuration(16));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                ],
               ),
-              child: const Text('Sixteenth'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 12;
-                  _addNote(nextNoteWithNewDuration(12));
-                } else {
-                  duration = 8;
-                  _addNote(nextNoteWithNewDuration(8));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Eighth'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 6;
-                  _addNote(nextNoteWithNewDuration(6));
-                } else {
-                  duration = 4;
-                  _addNote(nextNoteWithNewDuration(4));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Quarter'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 3;
-                  _addNote(nextNoteWithNewDuration(3));
-                } else {
-                  duration = 2;
-                  _addNote(nextNoteWithNewDuration(2));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Half'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 1) {
-                  duration = 0;
-                  _addNote(nextNoteWithNewDuration(0));
-                } else {
-                  duration = 1;
-                  _addNote(nextNoteWithNewDuration(1));
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Whole'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (dotted == 0) {
-                  // toggle between dotted and not-dotted
-                  dotted = 1;
-                  if (duration == 1) {
+            Column(children: <Widget>[
+              // NoteDurationButton(duration: 32, buttonText: 'Thirtysecond', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              // NoteDurationButton(duration: 16, buttonText: 'Sixteenth', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              // NoteDurationButton(duration: 8, buttonText: 'Eigth', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              // NoteDurationButton(duration: 4, buttonText: 'Quarter', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
+                    duration = 48;
+                    _addNote(nextNoteWithNewDuration(48));
+                  } else {
+                    duration = 32;
+                    _addNote(nextNoteWithNewDuration(32));
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Thirtysecond'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
+                    duration = 24;
+                    _addNote(nextNoteWithNewDuration(24));
+                  } else {
+                    duration = 16;
+                    _addNote(nextNoteWithNewDuration(16));
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                ),
+                child: const Text('Sixteenth'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
+                    duration = 12;
+                    _addNote(nextNoteWithNewDuration(12));
+                  } else {
+                    duration = 8;
+                    _addNote(nextNoteWithNewDuration(8));
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Eighth'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
+                    duration = 6;
+                    _addNote(nextNoteWithNewDuration(6));
+                  } else {
+                    duration = 4;
+                    _addNote(nextNoteWithNewDuration(4));
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Quarter'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
+                    duration = 3;
+                    _addNote(nextNoteWithNewDuration(3));
+                  } else {
+                    duration = 2;
+                    _addNote(nextNoteWithNewDuration(2));
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Half'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 1) {
                     duration = 0;
+                    _addNote(nextNoteWithNewDuration(0));
                   } else {
-                    duration = (duration * 1.5).round();
-                  }
-                } else {
-                  dotted = 0;
-                  if (duration == 0) {
                     duration = 1;
-                  } else {
-                    duration = (duration / 1.5).round();
+                    _addNote(nextNoteWithNewDuration(1));
                   }
-                }
-                selectedNote = noteList.length - 1;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('.'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                isRest = !isRest;
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black)),
-              child: const Text('Rest'),
-            ),
-            IconButton(
-              onPressed: () {
-                playBack();
-              },
-              icon: const Icon(Icons.play_arrow),
-            ),
-          ]),
-        ],
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Whole'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (dotted == 0) {
+                    // toggle between dotted and not-dotted
+                    dotted = 1;
+                    if (duration == 1) {
+                      duration = 0;
+                    } else {
+                      duration = (duration * 1.5).round();
+                    }
+                  } else {
+                    dotted = 0;
+                    if (duration == 0) {
+                      duration = 1;
+                    } else {
+                      duration = (duration / 1.5).round();
+                    }
+                  }
+                  selectedNote = noteList.length - 1;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('.'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  isRest = !isRest;
+                },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
+                child: const Text('Rest'),
+              ),
+              IconButton(
+                onPressed: () {
+                  playBack();
+                },
+                icon: const Icon(Icons.play_arrow),
+              ),
+            ]),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
