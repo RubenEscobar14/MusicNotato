@@ -101,7 +101,7 @@ class HomePage extends State<MyHomePage> {
   void clearNotes() {
     noteList = [];
     xPosition = 40;
-    notePosition = [];
+    xPositions = [];
   }
 
   /// Switches the file and loads information from the new one. Intended to be
@@ -197,10 +197,6 @@ class HomePage extends State<MyHomePage> {
       ),
       body: Row(
         children: <Widget>[
-          Consumer<Shouter>(builder: (context, value, child) {
-            onLoad(value.saveToShout);
-            return;
-          }),
           Column(children: <Widget>[
             // Listener(
             //   child: CustomPaint(
