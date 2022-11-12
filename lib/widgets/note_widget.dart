@@ -210,7 +210,7 @@ class NoteWidget extends CustomPainter {
     }
   }
 
-  // Draws a notehead
+  /// Draws a notehead
   void drawNotehead(Canvas canvas, Paint paint, Color paintColor, PaintingStyle paintingStyle,
       double x, double xPosition, double y) {
     paint = Paint()
@@ -228,6 +228,7 @@ class NoteWidget extends CustomPainter {
     canvas.restore();
   }
 
+  /// draws a rest
   void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, Color paintColor, 
       double x) {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
@@ -238,19 +239,29 @@ class NoteWidget extends CustomPainter {
       drawRectRest(canvas, paint, paintColor, x, xPosition, -0.5*x);
     }
     else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
-      var path = Path();
-      var center = Offset(2*xPosition, -(2/3)*x);
-      path.moveTo(center.dx, center.dy);
-      path.lineTo(center.dx-x, center.dy-x);
-      Rect test = Offset(center.dx,center.dy) & Size(x,x);
-      // path.addArc(test, 0, pi/2);
-      // path.arcToPoint(Offset(50,20));
-      // path.arcTo(test, 0, pi, false);
-      // path.addRect(const Offset(200, 20) & Size(x, x));
-      path.lineTo(center.dx-x, center.dy+2*x);
-      path.addRect(const Offset(400, 20) & Size(x, x));
-      path.close();
-      canvas.drawPath(path, paint);
+      var center = Offset(xPosition, -(3/4)*x);
+      // draws the top line of rest
+      canvas.drawLine(Offset(center.dx, center.dy), Offset(center.dx-((0.75*x)/sqrt(2)),center.dy-((0.75*x)/sqrt(2))*sqrt(3)), paint);
+      
+      // draws the middle line of rest
+      canvas.drawLine(Offset(center.dx, center.dy), Offset(center.dx-0.5*x, center.dy+0.5*x), paint);
+      
+      var lastX = center.dx-0.5*x+((0.75*x)/sqrt(2)); // end x position of bottom line
+      var lastY = center.dy+0.5*x+((0.75*x)/sqrt(2))*sqrt(3); 
+
+      // draws the bottom line of rest
+      canvas.drawLine(Offset(center.dx-0.5*x, center.dy+0.5*x), Offset(lastX, lastY), paint);
+      
+      paint.style = PaintingStyle.stroke; // to keep arc section of rest unfilled
+      canvas.save();
+      canvas.translate(xPosition, 0);
+      canvas.rotate(pi/3);
+      canvas.translate(0, 0);
+      // arc section of rest
+      Rect arc = Offset(0.22*x,0.33*x) &
+        Size(x, 0.75*x);
+      canvas.drawArc(arc, 0.4*pi/3, 1.3*pi, false, paint);
+      canvas.restore();
     }
     else {
 
