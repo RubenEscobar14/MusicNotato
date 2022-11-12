@@ -264,7 +264,17 @@ class NoteWidget extends CustomPainter {
       canvas.restore();
     }
     else {
-
+      // draws an eighth rest
+      drawEighthRest(canvas, xPosition, x, paint, 0, 0);
+      // draws a sixteenth rest
+      if(currentNote.duration == 16 || currentNote.duration == 24) {
+        drawEighthRest(canvas, xPosition, x, paint, x, -1.1*x*cos(pi/3));
+      }
+      // draws a thirtysecond rest
+      if(currentNote.duration == 32 || currentNote.duration == 48) {
+        drawEighthRest(canvas, xPosition, x, paint, x, -1.1*x*cos(pi/3));
+        drawEighthRest(canvas, xPosition, x, paint, -x,1.1*x*cos(pi/3));
+      }
     }
     if (currentNote.dotted == 1) { // draws the dot for dotted rests
       canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), -0.25*x), 0.15 * x, paint);
@@ -287,8 +297,17 @@ class NoteWidget extends CustomPainter {
     Rect rectRest = Offset(xPosition - 0.5 * x, y) &
         Size((748 / 512) * cos(pi / 9) * x,
             0.5 * x); // rest has the same width as notes
-    // Rect rectRest = Offset(xPosition-0.5*x, y) & Size(x,0.5*x); // rest has the same width as x
     canvas.drawRect(rectRest, paint);
+  }
+
+  /// Draws an eighth rest
+  void drawEighthRest(Canvas canvas, double xPosition, double x, Paint paint, double y, double xOffset) {
+    paint.style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(xPosition+xOffset,-0.5*x+y), 0.3*x, paint);
+    paint.style = PaintingStyle.stroke;
+    Rect arc = Offset(-0.3*x+xPosition+xOffset,-1.42*x+y) & Size(1.2*x, 1.2*x);
+    canvas.drawArc(arc, pi/6, pi/2, false, paint);
+    canvas.drawLine(Offset(xPosition+0.8*x+xOffset,-0.5*x+y), Offset(xPosition+xOffset,x+y), paint);
   }
 
   @override
