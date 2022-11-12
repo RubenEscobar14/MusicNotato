@@ -1,5 +1,6 @@
 import 'package:music_notato/models/note.dart';
 
+/// Represents the current score
 class Score {
   // ignore: prefer_final_fields
   List<Note> _allNotes = List.empty(growable: true);
@@ -9,10 +10,6 @@ class Score {
 
   Score(): _allNotes = List.empty(growable: true);
   Score.fromList(this._allNotes);
-
-  // List<Note> getAllNotes() {
-  //   return UnmodifiableListView(_allNotes);
-  // }
 
   List<Note> getAllNotes() {
     return _allNotes;

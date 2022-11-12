@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
 
-// Class that draws the notes to the canvas
+/// Class that draws the notes to the canvas
 class NoteWidget extends CustomPainter {
   List<Note> noteList; // list of all notes
   List<double> xPositions; // list of x-positions for the notes
@@ -19,7 +19,7 @@ class NoteWidget extends CustomPainter {
   int signature; // number of beats per measure
   int signature_; // unit of beat
 
-  // Constructor
+  /// Constructor
   NoteWidget(this.noteList, this.xPositions, this.currentClef, this.signature,
       this.signature_, this.toHighlight);
 
@@ -35,7 +35,7 @@ class NoteWidget extends CustomPainter {
     'b': {'treble': 0, 'alto': 3, 'bass': 6},
   };
 
-  // Calculates the base position for a given note and clef
+  /// Calculates the base position for a given note and clef
   double calculateBasePosition(String noteName, String currentClef) {
     return noteToClefBasePositions.entries
         .firstWhere((element) => element.key == noteName)
@@ -45,7 +45,7 @@ class NoteWidget extends CustomPainter {
         .value;
   }
 
-  // Calculates the position of a specific note
+  /// Calculates the position of a specific note
   double calculatePosition(
       NoteLetter noteName, int octave, String currentClef) {
     double basePosition = calculateBasePosition(noteName.name, currentClef);
@@ -81,6 +81,7 @@ class NoteWidget extends CustomPainter {
     }
   }
 
+  /// Draws a note to the staff
   void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, Color paintColor, 
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,
@@ -126,7 +127,7 @@ class NoteWidget extends CustomPainter {
         canvas.drawLine(Offset(stemEndX, y - (748 / 1024) * x * sin(pi / 9)),
             Offset(stemEndX, stemEndY), paint);
       }
-      // Draws the first flag on shorter notes
+      // draws the first flag on shorter notes
       if (currentNote.duration != 4 &&
           currentNote.duration != 2 &&
           currentNote.duration != 6 &&
@@ -140,7 +141,7 @@ class NoteWidget extends CustomPainter {
           canvas.drawLine(Offset(stemEndX, stemEndY),
               Offset(stemEndX + x, stemEndY + 1.5 * x), paint);
         }
-        // Draws the second flag on shorter notes
+        // draws the second flag on shorter notes
         if (currentNote.duration != 8 && currentNote.duration != 12) {
           if (position >= 0) {
             // draws the flag pointing up
@@ -151,7 +152,7 @@ class NoteWidget extends CustomPainter {
             canvas.drawLine(Offset(stemEndX, stemEndY + 0.5 * x),
                 Offset(stemEndX + x, stemEndY + 2 * x), paint);
           }
-          // Draws the third flag on shorter notes
+          // draws the third flag on shorter notes
           if (currentNote.duration != 16 && currentNote.duration != 24) {
             if (position >= 0) {
               // draws the flag point up
@@ -204,7 +205,7 @@ class NoteWidget extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2.0;
     if (currentNote.complete == signature / signature_) {
-      // draws the measure line
+      // draws the measure lines
       canvas.drawLine(
           Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
     }
@@ -228,7 +229,7 @@ class NoteWidget extends CustomPainter {
     canvas.restore();
   }
 
-  /// draws a rest
+  /// Draws a rest
   void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, Color paintColor, 
       double x) {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
@@ -283,12 +284,13 @@ class NoteWidget extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2.0;
     if (currentNote.complete == signature / signature_) {
-      // draws the measure line
+      // draws the measure lines
       canvas.drawLine(
           Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
     }
   }
 
+  /// Draws a rest rectangular in shape (i.e. whole or half rests)
   void drawRectRest(
       Canvas canvas, Paint paint, Color paintColor, double x, double xPosition, double y) {
     paint = Paint()

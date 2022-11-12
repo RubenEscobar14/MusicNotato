@@ -1,5 +1,6 @@
 enum NoteLetter { a, b, c, d, e, f, g, r }
 
+/// Represents a note
 class Note {
   // a, b, c, d, e, f, g, r (for rest)
   NoteLetter note;
@@ -7,8 +8,9 @@ class Note {
   // Which octave should be played - Middle C is C4.
   int octave;
 
-  // if duration is x, this note is a 1/2^x note.
-  // The above comment isn't true; should we make it true?
+  // For non-dotted notes, if the duration is x, it is a 1/2^x note
+  // For dotted notes (with the exception of dotted whole notes), the duration is 1.5*x
+  // For dotted whole notes, the duration is 0
   int duration;
 
   // 0 if not dotted, 1 if dotted
@@ -24,13 +26,13 @@ class Note {
   Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
       this.complete);
 
-  /// Creates a rest, only requiring duration and complete to be specified
+  /// Creates a rest, only requiring duration, dotted, and complete to be specified
   Note.rest(this.duration, this.dotted, this.complete)
       : note = NoteLetter.r,
         accidental = 0,
         octave = 0;
 
-  // increases the note value by n, raising octave if necissery
+  /// Increases the note value by n, raising octave if necessary
   void increasePitch(int n) {
     for (int i = n; i > 0; i--) {
       if (note == NoteLetter.a) {
@@ -75,7 +77,9 @@ class Note {
     } else if (oct < 0) {
       octave = 0;
     }
-    octave = oct;
+    else {
+      octave = oct;
+    }
   }
 
   NoteLetter getNote() {
@@ -124,16 +128,6 @@ class Note {
 
   @override
   String toString() {
-    return "[note: " +
-        note.toString() +
-        ", dur: " +
-        duration.toString() +
-        ", oct: " +
-        octave.toString() +
-        ", dot: " +
-        dotted.toString() +
-        ", acc: " +
-        accidental.toString() +
-        "]";
+    return "[note: $note, dur: $duration, oct: $octave, dot: $dotted, acc: $accidental]";
   }
 }

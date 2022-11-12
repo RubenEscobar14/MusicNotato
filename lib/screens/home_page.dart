@@ -9,21 +9,21 @@ import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
 
+/// The main page of the app
 class HomePage extends State<MyHomePage> {
   Score _score = Score(); // current score
 
   double xPosition = 40; // starting x-coordinate for notes
   List<Note> noteList = []; // list of all notes
   List<double> xPositions = []; // list of x-coordinates for the notes
-  int selectedNote = -1;
+  int selectedNote = -1; // currently selected note
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
   int duration = 4; // default length of a note
   int octave = 4; // default octave of a note
   int dotted = 0; // default set to not dotted
-  int accidental =
-      0; // not implemented yet (when it is implemented, will also have to implement keys)
+  int accidental = 0; // not implemented yet (when it is implemented, will also have to implement keys)
 
   String currentClef = 'treble'; // default clef
   String dropdownvalue = '4/4'; // default time signature
@@ -45,12 +45,12 @@ class HomePage extends State<MyHomePage> {
     0: 0,
   };
 
-  var timeSignatures = [
-    '4/4',
-    '3/4',
-    '2/4',
-    '2/2'
-  ]; // list of available time signatures
+  // var timeSignatures = [
+  //   '4/4',
+  //   '3/4',
+  //   '2/4',
+  //   '2/2'
+  // ]; // list of available time signatures
 
   int signature = 4; // default number of beats in a measure
   int signature_ = 4; // default beat unit
@@ -71,8 +71,8 @@ class HomePage extends State<MyHomePage> {
     return signature_;
   }
 
-  // Loads notes by reading the notato data file (if found) and mapping each
-  // property to a "new" note, which is then added to the staff.
+  /// Loads notes by reading the notato data file (if found) and mapping each
+  /// property to a "new" note, which is then added to the staff.
   @override
   void initState() {
     super.initState();
@@ -92,8 +92,8 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  // Adds a note to the staff and list of notes. Will automatically re-save to
-  // the json file by default, but saveOnAdd can be set to false to not do this.
+  /// Adds a note to the staff and list of notes. Will automatically re-save to
+  /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
       if (currentNote.complete <= signature / signature_) {
@@ -111,7 +111,7 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  // Deletes the last note in the list
+  /// Deletes the last note in the list
   Note _deleteNote() {
     Note toRemove = noteList[noteList.length - 1];
     noteList.remove(toRemove);
@@ -120,31 +120,32 @@ class HomePage extends State<MyHomePage> {
     return toRemove;
   }
 
-  // Returns the last note in the current notelist
+  /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (noteList.isEmpty) {
-      return new Note(NoteLetter.a, 4, 4, 0, 0, return_complete());
+      return new Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
     }
     return noteList[noteList.length - 1];
   }
 
+  /// Returns a note with the same characteristics as the previous note but with the given duration
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     if (isRest) {
-      return Note.rest(duration, dotted, return_complete());
+      return Note.rest(duration, dotted, returnComplete());
     }
     return Note(lastNote.getNote(), lastNote.getOctave(), duration, dotted,
-        lastNote.getAccidental(), return_complete());
+        lastNote.getAccidental(), returnComplete());
   }
 
-  // Prints current noteList and xPositions, debugging use only
+  /// Prints the current noteList and xPositions, debugging use only
   void _printNoteInfo() {
     print(noteList);
     print(xPositions);
   }
 
-  // Returns the fraction of the measure that has been completed
-  double return_complete() {
+  /// Returns the fraction of the measure that has been completed
+  double returnComplete() {
     double duration_ = 1 / duration;
     double complete = 0;
     if (noteList.isEmpty) {
@@ -157,13 +158,6 @@ class HomePage extends State<MyHomePage> {
       }
     }
     return complete;
-  }
-
-  void _handleDurationChanged() {
-    setState(() {
-      // ignore: unnecessary_this
-      this.duration = duration;
-    });
   }
 
   @override
@@ -364,7 +358,7 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    isRest = !isRest;
+                    isRest = !isRest; // toggle between notes and rests
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -372,7 +366,7 @@ class HomePage extends State<MyHomePage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    playBack();
+                    playBack(); // plays back the music written on the staff
                   },
                   icon: const Icon(Icons.play_arrow),
                 ),
@@ -397,6 +391,7 @@ class HomePage extends State<MyHomePage> {
     );
   }
 
+  /// Initializes the staff and note widgets
   Widget _paint() {
     return Stack(
       children: <Widget>[
@@ -413,5 +408,6 @@ class HomePage extends State<MyHomePage> {
     );
   }
 
+  /// Plays back the music written on the staff
   void playBack() {}
 }

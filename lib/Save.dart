@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:music_notato/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
-// This class handles the transfer of information between the program and
-// save files.
+/// This class handles the transfer of information between the program and
+/// save files.
 class Save {
   List<Note> _allNotes = List.empty(growable: true);
   final JsonEncoder encoder = JsonEncoder();
@@ -27,8 +27,8 @@ class Save {
     return File('$path/notato_dotata.json');
   }
 
-  // Reads the save file and returns a list of Maps containing the properties
-  // of a Note object. The Map's keys are represented as Strings.
+  /// Reads the save file and returns a list of Maps containing the properties
+  /// of a Note object. The Map's keys are represented as Strings.
   Future<List<dynamic>> readFile() async {
     try {
       final file = await _localFile;
@@ -40,7 +40,7 @@ class Save {
     }
   }
 
-  // Saves notesToSave to the the save file
+  /// Saves notesToSave to the the save file
   Future<File> writeFile(List<Note> notesToSave) async {
     _allNotes = notesToSave;
     final file = await _localFile;

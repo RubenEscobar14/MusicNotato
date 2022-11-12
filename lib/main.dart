@@ -18,7 +18,6 @@ void main() {
 }
 
 Save save = Save();
-// List<Note> _allNotes = List.empty(growable: true);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

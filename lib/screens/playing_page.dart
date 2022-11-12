@@ -4,6 +4,7 @@ import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/home_page.dart';
 
+/// Class responsible for playing back the music written on the staff
 class PlayingPage extends StatelessWidget {
   Score score = HomePage().getScore();
   int tempo = HomePage().getTempo();
@@ -27,6 +28,7 @@ class PlayingPage extends StatelessWidget {
     0: 3/2,
   };
 
+  /// Plays back the music written on the staff
   void playBack() {
     for(Note note in score.getAllNotes()) {
       String noteName = note.getNoteName();
