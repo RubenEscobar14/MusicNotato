@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:music_notato/Save.dart';
-import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/home_page.dart';
 
 /// A page for selecting a save file and opening it in a HomePage
 class SavePage extends StatelessWidget {
+  HomePage homePage;
   Score score = HomePage().getScore();
   int tempo = HomePage().getTempo();
   int signature_ = HomePage().getSignature_();
   Save save = Save();
+
+  SavePage(this.homePage) {
+    score = homePage.getScore();
+    tempo = homePage.getTempo();
+    signature_ = homePage.getSignature_();
+  }
 
   /// Main graphics - contains the top bar and a list of buttons that each
   /// correspond to a save
@@ -24,6 +30,7 @@ class SavePage extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
+              homePage.onLoad(1);
             },
             style: ButtonStyle(
                 backgroundColor:
@@ -33,11 +40,42 @@ class SavePage extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
+              homePage.onLoad(2);
             },
             style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.indigoAccent)),
             child: const Text('Save 2'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              homePage.onLoad(3);
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.indigoAccent)),
+            child: const Text('Save 3'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              homePage.onLoad(4);
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.indigoAccent)),
+            child: const Text('Save 4'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              homePage.onLoad(5);
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.indigoAccent)),
+            child: const Text('Save 5'),
           ),
         ]),
       ),

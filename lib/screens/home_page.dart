@@ -98,6 +98,7 @@ class HomePage extends State<MyHomePage> {
 
   /// Removes every note from the staff and everything that's not a file.
   void clearNotes() {
+    _score.clearScore();
     noteList = [];
     xPosition = 40;
     xPositions = [];
@@ -555,7 +556,7 @@ class HomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SavePage()),
+            MaterialPageRoute(builder: (context) => SavePage(this)),
           );
         },
         tooltip: 'Go to playing page',

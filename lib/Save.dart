@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:music_notato/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
-// This class handles the transfer of information between the program and
-// save files.
+/// This class handles the transfer of information between the program and
+/// save files.
 class Save {
   List<Note> _allNotes = List.empty(growable: true);
   final JsonEncoder encoder = JsonEncoder();
   final JsonDecoder decoder = JsonDecoder();
 
-  // Decides which directory the save file(s) should be in and returns it.
+  /// Decides which directory the save file(s) should be in and returns it.
   Future<String?> get _localPath async {
     // TODO: Change this to be the commented out version. I can't access that
     // to look at the file for testing, which is why it's commented out, but it

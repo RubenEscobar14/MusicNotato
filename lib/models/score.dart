@@ -7,7 +7,7 @@ class Score {
   bool get isEmpty => _allNotes.isEmpty;
   int get length => _allNotes.length;
 
-  Score(): _allNotes = List.empty(growable: true);
+  Score() : _allNotes = List.empty(growable: true);
   Score.fromList(this._allNotes);
 
   // List<Note> getAllNotes() {
@@ -24,5 +24,9 @@ class Score {
 
   void addNote(Note note) {
     _allNotes.add(note);
+  }
+
+  void clearScore() {
+    _allNotes = List.empty(growable: true);
   }
 }
