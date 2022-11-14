@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 /// This class handles the transfer of information between the program and
 /// save files.
 class Save {
-  List<Note> _allNotes = List.empty(growable: true);
   final JsonEncoder encoder = JsonEncoder();
   final JsonDecoder decoder = JsonDecoder();
 
@@ -43,12 +42,7 @@ class Save {
 
   /// Saves notesToSave to the the save file. Which is the file number.
   Future<File> writeFile(List<Note> notesToSave, int which) async {
-    _allNotes = notesToSave;
     final file = await _localFile(which);
-    return file.writeAsString(jsonEncode(_allNotes));
-  }
-
-  List<Note> getAllNotes() {
-    return _allNotes;
+    return file.writeAsString(jsonEncode(notesToSave));
   }
 }
