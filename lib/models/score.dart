@@ -26,4 +26,8 @@ class Score {
   void clearScore() {
     _allNotes = List.empty(growable: true);
   }
+
+  void removeLastNote() {
+    _allNotes.removeLast();
+  }
 }

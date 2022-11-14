@@ -140,6 +140,7 @@ class HomePage extends State<MyHomePage> {
   Note _deleteNote() {
     Note toRemove = noteList[noteList.length - 1];
     noteList.remove(toRemove);
+    _score.removeLastNote();
     xPosition = xPositions[xPositions.length - 1];
     xPositions.remove(xPositions[xPositions.length - 1]);
     return toRemove;
