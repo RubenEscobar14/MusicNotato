@@ -1,5 +1,6 @@
 enum NoteLetter { a, b, c, d, e, f, g, r }
 
+/// Represents a note
 class Note {
   // a, b, c, d, e, f, g, r (for rest)
   NoteLetter note;
@@ -7,8 +8,9 @@ class Note {
   // Which octave should be played - Middle C is C4.
   int octave;
 
-  // if duration is x, this note is a 1/2^x note.
-  // The above comment isn't true; should we make it true?
+  // For non-dotted notes, if the duration is x, it is a 1/2^x note
+  // For dotted notes (with the exception of dotted whole notes), the duration is 1.5*x
+  // For dotted whole notes, the duration is 0
   int duration;
 
   // 0 if not dotted, 1 if dotted
@@ -24,12 +26,61 @@ class Note {
   Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
       this.complete);
 
-  /// Creates a rest, only requiring duration and complete to be specified
-  Note.rest(this.duration, this.complete)
+  /// Creates a rest, only requiring duration, dotted, and complete to be specified
+  Note.rest(this.duration, this.dotted, this.complete)
       : note = NoteLetter.r,
         accidental = 0,
-        octave = 0,
-        dotted = 0;
+        octave = 0;
+
+  /// Increases the note value by n, raising octave if necessary
+  void increasePitch(int n) {
+    for (int i = n; i > 0; i--) {
+      if (note == NoteLetter.a) {
+        setNote(NoteLetter.b);
+      } else if (note == NoteLetter.b) {
+        setNote(NoteLetter.c);
+      } else if (note == NoteLetter.c) {
+        setNote(NoteLetter.d);
+      } else if (note == NoteLetter.d) {
+        setNote(NoteLetter.e);
+      } else if (note == NoteLetter.e) {
+        setNote(NoteLetter.f);
+      } else if (note == NoteLetter.f) {
+        setNote(NoteLetter.g);
+      } else if (note == NoteLetter.g) {
+        setNote(NoteLetter.a);
+      } else {
+        setNote(NoteLetter.r);
+      }
+    }
+  }
+
+  void setNote(NoteLetter letter) {
+    note = letter;
+  }
+
+  void setDuration(int dur) {
+    duration = dur;
+  }
+
+  void setDotted(int dot) {
+    dotted = dot;
+  }
+
+  void setAccidental(int acc) {
+    accidental = acc;
+  }
+
+  void setOctave(int oct) {
+    if (oct > 8) {
+      octave = 8;
+    } else if (oct < 0) {
+      octave = 0;
+    }
+    else {
+      octave = oct;
+    }
+  }
 
   NoteLetter getNote() {
     return note;
@@ -77,16 +128,6 @@ class Note {
 
   @override
   String toString() {
-    return "[note: " +
-        note.toString() +
-        ", dur: " +
-        duration.toString() +
-        ", oct: " +
-        octave.toString() +
-        ", dot: " +
-        dotted.toString() +
-        ", acc: " +
-        accidental.toString() +
-        "]";
+    return "[note: $note, dur: $duration, oct: $octave, dot: $dotted, acc: $accidental]";
   }
 }
