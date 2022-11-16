@@ -167,6 +167,7 @@ class NoteWidget extends CustomPainter {
       }
     }
     if (currentNote.dotted == 1) {
+      paint.style = PaintingStyle.fill;
       // draws the dot for dotted notes
       canvas.drawCircle(Offset(xPosition + (748 / 512) * x * cos(pi / 9), y),
           0.15 * x, paint);
