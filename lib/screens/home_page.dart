@@ -160,7 +160,7 @@ class HomePage extends State<MyHomePage> {
     if (isRest) {
       return Note.rest(duration, dotted, returnComplete());
     }
-    return Note(lastNote.getNote(), lastNote.getOctave(), duration, dotted,
+    return Note(lastNote.getNote() == NoteLetter.r ? NoteLetter.a : lastNote.getNote(), lastNote.getOctave(), duration, dotted,
         lastNote.getAccidental(), returnComplete());
   }
 
@@ -252,7 +252,7 @@ class HomePage extends State<MyHomePage> {
               ]),
             ),
             Expanded(
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(top: 60.h),
               child: _paint(),
