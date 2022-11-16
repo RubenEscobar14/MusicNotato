@@ -19,6 +19,10 @@ class Score {
     return _allNotes[index];
   }
 
+  Note getLastNote() {
+    return _allNotes[_allNotes.length - 1];
+  }
+
   void addNote(Note note) {
     _allNotes.add(note);
   }
