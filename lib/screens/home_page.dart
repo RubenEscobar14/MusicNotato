@@ -445,12 +445,6 @@ class HomePage extends State<MyHomePage> {
   _onTapDown(TapDownDetails details) {
     tappedPositionX = details.localPosition.dx;
     tappedPositionY = details.localPosition.dy;
-    print(details.localPosition);
-    print("tap down " +
-        tappedPositionX.toString() +
-        ", " +
-        tappedPositionY.toString());
-    _printNoteInfo();
     selectNewNote(tappedPositionX, tappedPositionY);
   }
 
