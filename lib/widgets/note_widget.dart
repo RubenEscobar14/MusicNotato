@@ -57,6 +57,9 @@ class NoteWidget extends CustomPainter {
     var paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 2.0;
+    var normalPaint = Paint()
+      ..color = Colors.black
+      ..strokeWidth = 2.0;
     var highlightPaint = Paint()
       ..color = Colors.red
       ..strokeWidth = 2.0;
@@ -65,20 +68,21 @@ class NoteWidget extends CustomPainter {
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition = xPositions[i]; // x-coordinate of the note to be drawn
-      if(i == toHighlight) {
+      if (i == toHighlight) {
         paint = highlightPaint;
+      } else {
+        paint = normalPaint;
       }
-      if(currentNote.note == NoteLetter.r) {
+      if (currentNote.note == NoteLetter.r) {
         drawRest(currentNote, xPosition, canvas, paint, x);
-      }
-      else { 
+      } else {
         drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
 
   /// Draws a note to the staff
-  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, 
+  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,
         currentClef); // position of the current note on the staff
@@ -212,8 +216,8 @@ class NoteWidget extends CustomPainter {
   }
 
   /// Draws a notehead
-  void drawNotehead(Canvas canvas, Paint paint,
-      double x, double xPosition, double y) {
+  void drawNotehead(
+      Canvas canvas, Paint paint, double x, double xPosition, double y) {
     canvas.save();
     canvas.translate(xPosition, y);
     canvas.rotate(-pi / 9);
@@ -226,56 +230,67 @@ class NoteWidget extends CustomPainter {
   }
 
   /// Draws a rest
-  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, 
+  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
       // draws a whole rest
       drawRectRest(canvas, paint, x, xPosition, 0);
-    }
-    else if(currentNote.duration == 2 || currentNote.duration == 3) { // draws a half rest
-      drawRectRest(canvas, paint, x, xPosition, -0.5*x);
-    }
-    else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
-      var center = Offset(xPosition, -(3/4)*x);
+    } else if (currentNote.duration == 2 || currentNote.duration == 3) {
+      // draws a half rest
+      drawRectRest(canvas, paint, x, xPosition, -0.5 * x);
+    } else if (currentNote.duration == 4 || currentNote.duration == 6) {
+      // draws a quarter rest
+      var center = Offset(xPosition, -(3 / 4) * x);
       // draws the top line of rest
-      canvas.drawLine(Offset(center.dx, center.dy), Offset(center.dx-((0.75*x)/sqrt(2)),center.dy-((0.75*x)/sqrt(2))*sqrt(3)), paint);
-      
+      canvas.drawLine(
+          Offset(center.dx, center.dy),
+          Offset(center.dx - ((0.75 * x) / sqrt(2)),
+              center.dy - ((0.75 * x) / sqrt(2)) * sqrt(3)),
+          paint);
+
       // draws the middle line of rest
-      canvas.drawLine(Offset(center.dx, center.dy), Offset(center.dx-0.5*x, center.dy+0.5*x), paint);
-      
-      var lastX = center.dx-0.5*x+((0.75*x)/sqrt(2)); // end x position of bottom line
-      var lastY = center.dy+0.5*x+((0.75*x)/sqrt(2))*sqrt(3); 
+      canvas.drawLine(Offset(center.dx, center.dy),
+          Offset(center.dx - 0.5 * x, center.dy + 0.5 * x), paint);
+
+      var lastX = center.dx -
+          0.5 * x +
+          ((0.75 * x) / sqrt(2)); // end x position of bottom line
+      var lastY = center.dy + 0.5 * x + ((0.75 * x) / sqrt(2)) * sqrt(3);
 
       // draws the bottom line of rest
-      canvas.drawLine(Offset(center.dx-0.5*x, center.dy+0.5*x), Offset(lastX, lastY), paint);
-      
-      paint.style = PaintingStyle.stroke; // to keep arc section of rest unfilled
+      canvas.drawLine(Offset(center.dx - 0.5 * x, center.dy + 0.5 * x),
+          Offset(lastX, lastY), paint);
+
+      paint.style =
+          PaintingStyle.stroke; // to keep arc section of rest unfilled
       canvas.save();
       canvas.translate(xPosition, 0);
-      canvas.rotate(pi/3);
+      canvas.rotate(pi / 3);
       canvas.translate(0, 0);
       // arc section of rest
-      Rect arc = Offset(0.22*x,0.33*x) &
-        Size(x, 0.75*x);
-      canvas.drawArc(arc, 0.4*pi/3, 1.3*pi, false, paint);
+      Rect arc = Offset(0.22 * x, 0.33 * x) & Size(x, 0.75 * x);
+      canvas.drawArc(arc, 0.4 * pi / 3, 1.3 * pi, false, paint);
       canvas.restore();
-    }
-    else {
+    } else {
       // draws an eighth rest
       drawEighthRest(canvas, xPosition, x, paint, 0, 0);
       // draws a sixteenth rest
-      if(currentNote.duration == 16 || currentNote.duration == 24) {
-        drawEighthRest(canvas, xPosition, x, paint, x, -1.1*x*cos(pi/3));
+      if (currentNote.duration == 16 || currentNote.duration == 24) {
+        drawEighthRest(canvas, xPosition, x, paint, x, -1.1 * x * cos(pi / 3));
       }
       // draws a thirtysecond rest
-      if(currentNote.duration == 32 || currentNote.duration == 48) {
-        drawEighthRest(canvas, xPosition, x, paint, x, -1.1*x*cos(pi/3));
-        drawEighthRest(canvas, xPosition, x, paint, -x,1.1*x*cos(pi/3));
+      if (currentNote.duration == 32 || currentNote.duration == 48) {
+        drawEighthRest(canvas, xPosition, x, paint, x, -1.1 * x * cos(pi / 3));
+        drawEighthRest(canvas, xPosition, x, paint, -x, 1.1 * x * cos(pi / 3));
       }
     }
-    if (currentNote.dotted == 1) { // draws the dot for dotted rests
+    if (currentNote.dotted == 1) {
+      // draws the dot for dotted rests
       paint.style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), -0.25*x), 0.15 * x, paint);
+      canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.25 * x),
+          0.15 * x,
+          paint);
     }
     if (currentNote.complete == signature / signature_) {
       // draws the measure lines
@@ -294,13 +309,17 @@ class NoteWidget extends CustomPainter {
   }
 
   /// Draws an eighth rest
-  void drawEighthRest(Canvas canvas, double xPosition, double x, Paint paint, double y, double xOffset) {
+  void drawEighthRest(Canvas canvas, double xPosition, double x, Paint paint,
+      double y, double xOffset) {
     paint.style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(xPosition+xOffset,-0.5*x+y), 0.3*x, paint);
+    canvas.drawCircle(
+        Offset(xPosition + xOffset, -0.5 * x + y), 0.3 * x, paint);
     paint.style = PaintingStyle.stroke;
-    Rect arc = Offset(-0.3*x+xPosition+xOffset,-1.42*x+y) & Size(1.2*x, 1.2*x);
-    canvas.drawArc(arc, pi/6, pi/2, false, paint);
-    canvas.drawLine(Offset(xPosition+0.8*x+xOffset,-0.5*x+y), Offset(xPosition+xOffset,x+y), paint);
+    Rect arc = Offset(-0.3 * x + xPosition + xOffset, -1.42 * x + y) &
+        Size(1.2 * x, 1.2 * x);
+    canvas.drawArc(arc, pi / 6, pi / 2, false, paint);
+    canvas.drawLine(Offset(xPosition + 0.8 * x + xOffset, -0.5 * x + y),
+        Offset(xPosition + xOffset, x + y), paint);
   }
 
   @override
