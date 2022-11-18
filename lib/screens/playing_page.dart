@@ -14,29 +14,30 @@ class PlayingPage extends StatelessWidget {
 
   // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
-    32: 1/32,
-    48: 3/64,
-    16: 1/16,
-    24: 3/32,
-    8: 1/8,
-    12: 3/16,
-    4: 1/4,
-    6: 3/8,
-    2: 1/2,
-    3: 3/4,
+    32: 1 / 32,
+    48: 3 / 64,
+    16: 1 / 16,
+    24: 3 / 32,
+    8: 1 / 8,
+    12: 3 / 16,
+    4: 1 / 4,
+    6: 3 / 8,
+    2: 1 / 2,
+    3: 3 / 4,
     1: 1,
-    0: 3/2,
+    0: 3 / 2,
   };
 
   /// Plays back the music written on the staff
   void playBack() {
-    for(Note note in score.getAllNotes()) {
+    for (Note note in score.getAllNotes()) {
       String noteName = note.getNoteName();
       int octave = note.octave;
       int duration = note.duration;
       int accidental = note.accidental; // not implemented yet
 
-      player.play(AssetSource('audio/Piano.ff.$noteName$octave.aiff'), position: const Duration(seconds: 1));
+      player.play(AssetSource('audio/Piano.ff.$noteName$octave.aiff'),
+          position: const Duration(seconds: 1));
     }
   }
 
@@ -53,21 +54,20 @@ class PlayingPage extends StatelessWidget {
         //   },
         //   child: const Text("Back to writing"),
         // ),
-        child: Column(
-          children: <Widget>[
-            IconButton(
-              onPressed: () {
-                playBack();
-              },
-              icon: const Icon(Icons.play_arrow),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Back to writing"),
-            ),
-          ]),
+        child: Column(children: <Widget>[
+          IconButton(
+            onPressed: () {
+              playBack();
+            },
+            icon: const Icon(Icons.play_arrow),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Back to writing"),
+          ),
+        ]),
       ),
     );
   }

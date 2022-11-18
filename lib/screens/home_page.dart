@@ -9,6 +9,7 @@ import 'package:music_notato/screens/save_page.dart';
 // import 'package:music_notato/widgets/note_duration_button.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
+import 'package:music_notato/widgets/select_note_widget.dart';
 
 /// The main page of the app
 class HomePage extends State<MyHomePage> {
@@ -18,6 +19,8 @@ class HomePage extends State<MyHomePage> {
   List<Note> noteList = []; // list of all notes
   List<double> xPositions = []; // list of x-coordinates for the notes
   int selectedNote = -1; // currently selected note
+  double tappedPositionX = -1;
+  double tappedPositionY = -1;
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
@@ -430,8 +433,48 @@ class HomePage extends State<MyHomePage> {
           painter: NoteWidget(noteList, xPositions, 'treble', signature,
               signature_, selectedNote),
         ),
+        GestureDetector(
+          onTap: () => print('tapped!'),
+          onTapDown: (TapDownDetails details) => _onTapDown(details),
+        ),
       ],
     );
+  }
+
+  _onTapDown(TapDownDetails details) {
+    tappedPositionX = details.localPosition.dx;
+    tappedPositionY = details.localPosition.dy;
+    print(details.localPosition);
+    print("tap down " +
+        tappedPositionX.toString() +
+        ", " +
+        tappedPositionY.toString());
+    _printNoteInfo();
+    selectNewNote(tappedPositionX, tappedPositionY);
+  }
+
+  void selectNewNote(double x, double y) {
+    double min = 1000;
+    int minIndex = -1;
+    for (int i = 0; i < xPositions.length; i++) {
+      if (distance(xPositions[i], x) < min) {
+        minIndex = i;
+        min = distance(xPositions[i], x);
+      }
+    }
+    print("Nearest Note Index is: $minIndex");
+    setState(() {
+      selectedNote = minIndex;
+    });
+  }
+
+  double distance(double x, double y) {
+    double dist = x - y;
+    if (dist < 0) {
+      return dist * -1;
+    } else {
+      return dist;
+    }
   }
 
   /// Plays back the music written on the staff
