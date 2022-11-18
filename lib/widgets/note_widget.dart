@@ -65,24 +65,20 @@ class NoteWidget extends CustomPainter {
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition = xPositions[i]; // x-coordinate of the note to be drawn
-      if (i == toHighlight) {
-        try {
-          drawNote(currentNote, xPosition, canvas, highlightPaint, highlightPaint.color, x);
-        } catch (e) {
-          drawRest(currentNote, xPosition, canvas, highlightPaint, highlightPaint.color, x);
-        }
-      } else {
-        try {
-          drawNote(currentNote, xPosition, canvas, paint, paint.color, x);
-        } catch (e) {
-          drawRest(currentNote, xPosition, canvas, paint, paint.color, x);
-        }
+      if(i == toHighlight) {
+        paint = highlightPaint;
+      }
+      if(currentNote.note == NoteLetter.r) {
+        drawRest(currentNote, xPosition, canvas, paint, x);
+      }
+      else { 
+        drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
 
   /// Draws a note to the staff
-  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, Color paintColor, 
+  void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint, 
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,
         currentClef); // position of the current note on the staff
@@ -92,12 +88,15 @@ class NoteWidget extends CustomPainter {
         currentNote.duration == 2 ||
         currentNote.duration == 0 ||
         currentNote.duration == 3) {
+      paint.style = PaintingStyle.stroke;
       // draws an unfilled notehead (notehead for whole and half notes)
-      drawNotehead(canvas, paint, paintColor, PaintingStyle.stroke, x, xPosition, y);
+      drawNotehead(canvas, paint, x, xPosition, y);
     } else {
       // draws a filled notehead (notehead for all other notes)
-      drawNotehead(canvas, paint, paintColor, PaintingStyle.fill, x, xPosition, y);
-      drawNotehead(canvas, paint, paintColor, PaintingStyle.stroke, x, xPosition, y);
+      paint.style = PaintingStyle.fill;
+      drawNotehead(canvas, paint, x, xPosition, y);
+      paint.style = PaintingStyle.stroke;
+      drawNotehead(canvas, paint, x, xPosition, y);
     }
     if (currentNote.duration != 1 && currentNote.duration != 0) {
       double stemEndX;
@@ -168,6 +167,7 @@ class NoteWidget extends CustomPainter {
       }
     }
     if (currentNote.dotted == 1) {
+      paint.style = PaintingStyle.fill;
       // draws the dot for dotted notes
       canvas.drawCircle(Offset(xPosition + (748 / 512) * x * cos(pi / 9), y),
           0.15 * x, paint);
@@ -212,12 +212,8 @@ class NoteWidget extends CustomPainter {
   }
 
   /// Draws a notehead
-  void drawNotehead(Canvas canvas, Paint paint, Color paintColor, PaintingStyle paintingStyle,
+  void drawNotehead(Canvas canvas, Paint paint,
       double x, double xPosition, double y) {
-    paint = Paint()
-      ..style = paintingStyle
-      ..strokeWidth = 2.0
-      ..color = paintColor;
     canvas.save();
     canvas.translate(xPosition, y);
     canvas.rotate(-pi / 9);
@@ -230,14 +226,14 @@ class NoteWidget extends CustomPainter {
   }
 
   /// Draws a rest
-  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, Color paintColor, 
+  void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint, 
       double x) {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
       // draws a whole rest
-      drawRectRest(canvas, paint, paintColor, x, xPosition, 0);
+      drawRectRest(canvas, paint, x, xPosition, 0);
     }
     else if(currentNote.duration == 2 || currentNote.duration == 3) { // draws a half rest
-      drawRectRest(canvas, paint, paintColor, x, xPosition, -0.5*x);
+      drawRectRest(canvas, paint, x, xPosition, -0.5*x);
     }
     else if(currentNote.duration == 4 || currentNote.duration == 6) { // draws a quarter rest
       var center = Offset(xPosition, -(3/4)*x);
@@ -278,11 +274,9 @@ class NoteWidget extends CustomPainter {
       }
     }
     if (currentNote.dotted == 1) { // draws the dot for dotted rests
+      paint.style = PaintingStyle.fill;
       canvas.drawCircle(Offset(xPosition+(748/512)*x*cos(pi/9), -0.25*x), 0.15 * x, paint);
     }
-    paint = Paint()
-      ..color = Colors.black
-      ..strokeWidth = 2.0;
     if (currentNote.complete == signature / signature_) {
       // draws the measure lines
       canvas.drawLine(
@@ -292,10 +286,7 @@ class NoteWidget extends CustomPainter {
 
   /// Draws a rest rectangular in shape (i.e. whole or half rests)
   void drawRectRest(
-      Canvas canvas, Paint paint, Color paintColor, double x, double xPosition, double y) {
-    paint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = paintColor;
+      Canvas canvas, Paint paint, double x, double xPosition, double y) {
     Rect rectRest = Offset(xPosition - 0.5 * x, y) &
         Size((748 / 512) * cos(pi / 9) * x,
             0.5 * x); // rest has the same width as notes

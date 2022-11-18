@@ -30,7 +30,7 @@ class Note {
   Note.rest(this.duration, this.dotted, this.complete)
       : note = NoteLetter.r,
         accidental = 0,
-        octave = 0;
+        octave = 4;
 
   /// Increases the note value by n, raising octave if necessary
   void increasePitch(int n) {
