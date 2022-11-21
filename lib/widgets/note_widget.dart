@@ -52,6 +52,10 @@ class NoteWidget extends CustomPainter {
     return basePosition + 3.5 * (octave - 4);
   }
 
+  double calculateOctave(double position, double basePosition) {
+    return ((position-basePosition)/3.5) + 4;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
@@ -305,6 +309,7 @@ class NoteWidget extends CustomPainter {
     Rect rectRest = Offset(xPosition - 0.5 * x, y) &
         Size((748 / 512) * cos(pi / 9) * x,
             0.5 * x); // rest has the same width as notes
+    paint.style = PaintingStyle.fill;
     canvas.drawRect(rectRest, paint);
   }
 

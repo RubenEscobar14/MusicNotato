@@ -226,6 +226,7 @@ class HomePage extends State<MyHomePage> {
                     previous.increasePitch(1);
                     if (previous.getNote() == NoteLetter.c) {
                       previous.setOctave(previous.getOctave() + 1);
+                      octave++;
                     }
                     _addNote(previous);
                   },
@@ -246,6 +247,7 @@ class HomePage extends State<MyHomePage> {
                     previous.increasePitch(6);
                     if (previous.getNote() == NoteLetter.b) {
                       previous.setOctave(previous.getOctave() - 1);
+                      octave--;
                     }
                     _addNote(previous);
                   },
@@ -256,11 +258,12 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.blueGrey)),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() + 1);
                     _addNote(previous);
+                    octave++;
                   },
                   child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
@@ -272,11 +275,12 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.blueGrey)),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() - 1);
                     _addNote(previous);
+                    octave--;
                   },
                   child: const Icon(Icons.arrow_drop_down)),
               ]),
@@ -480,7 +484,7 @@ class HomePage extends State<MyHomePage> {
     return Stack(
       children: <Widget>[
         CustomPaint(
-          size: Size(MediaQuery.of(context).size.width - 250, 50),
+          size: Size(xPosition < MediaQuery.of(context).size.width ? MediaQuery.of(context).size.width : xPosition, 50),
           painter: StaffWidget('treble', signature, signature_),
         ),
         CustomPaint(
@@ -488,10 +492,10 @@ class HomePage extends State<MyHomePage> {
           painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
               signature, signature_, selectedNote),
         ),
-        GestureDetector(
-          onTap: () => print('tapped!'),
-          onTapDown: (TapDownDetails details) => _onTapDown(details),
-        ),
+        // GestureDetector(
+        //   onTap: () => print('tapped!'),
+        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        // ),
       ],
     );
   }
