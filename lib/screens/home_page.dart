@@ -140,17 +140,20 @@ class HomePage extends State<MyHomePage> {
 
   /// Deletes the last note in the list
   Note _deleteNote() {
-    Note toRemove = _score.getLastNote();
-    _score.removeLastNote();
-    xPosition = xPositions[xPositions.length - 1];
-    xPositions.remove(xPositions[xPositions.length - 1]);
-    return toRemove;
+    if(!_score.isEmpty) {
+       Note toRemove = _score.getLastNote();
+      _score.removeLastNote();
+      xPosition = xPositions[xPositions.length - 1];
+      xPositions.remove(xPositions[xPositions.length - 1]);
+      return toRemove;
+    }
+    return Note(NoteLetter.a, 4, 4, 0, 0, 0);
   }
 
   /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (_score.getAllNotes().isEmpty) {
-      return new Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
     }
     return _score.getLastNote();
   }
@@ -205,12 +208,14 @@ class HomePage extends State<MyHomePage> {
               width: 70.w,
               child: Column(children: <Widget>[
                 /////////////////// All the buttons ///////////////////
-                ElevatedButton(
+                ElevatedButton( // delete button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
                     _deleteNote();
-                    _addNote(_deleteNote());
+                    if(!_score.isEmpty) {
+                      _addNote(_deleteNote());
+                    }
                     selectedNote = _score.length - 1;
                   },
                   child: const Icon(Icons.delete),
@@ -218,7 +223,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // note up button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
@@ -238,7 +243,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // note down button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
@@ -254,7 +259,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // octave up button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.blueGrey)),
                   onPressed: () {
@@ -270,7 +275,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // octave down button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.blueGrey)),
                   onPressed: () {

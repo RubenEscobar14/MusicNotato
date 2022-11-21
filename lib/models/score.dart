@@ -20,6 +20,9 @@ class Score {
   }
 
   Note getLastNote() {
+    if(isEmpty) {
+      return Note(NoteLetter.a, 4, 4, 0, 0, 0);
+    }
     return _allNotes[_allNotes.length - 1];
   }
 
