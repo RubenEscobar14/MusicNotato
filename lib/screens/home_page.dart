@@ -226,7 +226,6 @@ class HomePage extends State<MyHomePage> {
                     previous.increasePitch(1);
                     if (previous.getNote() == NoteLetter.c) {
                       previous.setOctave(previous.getOctave() + 1);
-                      octave++;
                     }
                     _addNote(previous);
                   },
@@ -247,7 +246,6 @@ class HomePage extends State<MyHomePage> {
                     previous.increasePitch(6);
                     if (previous.getNote() == NoteLetter.b) {
                       previous.setOctave(previous.getOctave() - 1);
-                      octave--;
                     }
                     _addNote(previous);
                   },
@@ -263,13 +261,12 @@ class HomePage extends State<MyHomePage> {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() + 1);
                     _addNote(previous);
-                    octave++;
                   },
                   child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Octave: $octave'),
+                Text('Octave: ${_score.getLastNote().octave}'),
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
@@ -280,7 +277,6 @@ class HomePage extends State<MyHomePage> {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() - 1);
                     _addNote(previous);
-                    octave--;
                   },
                   child: const Icon(Icons.arrow_drop_down)),
               ]),

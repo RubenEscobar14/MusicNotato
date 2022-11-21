@@ -52,10 +52,6 @@ class NoteWidget extends CustomPainter {
     return basePosition + 3.5 * (octave - 4);
   }
 
-  double calculateOctave(double position, double basePosition) {
-    return ((position-basePosition)/3.5) + 4;
-  }
-
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
