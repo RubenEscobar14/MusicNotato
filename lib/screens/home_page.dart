@@ -23,6 +23,7 @@ class HomePage extends State<MyHomePage> {
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
+  String note = 'A';
   int duration = 4; // default length of a note
   int octave = 4; // default octave of a note
   int dotted = 0; // default set to not dotted
@@ -126,6 +127,7 @@ class HomePage extends State<MyHomePage> {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
+        note = currentNote.getNoteName()[11];
         if (saveOnAdd) {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
@@ -155,11 +157,14 @@ class HomePage extends State<MyHomePage> {
 
   /// Deletes the last note in the score
   Note _deleteNote() {
-    Note toRemove = _score.getLastNote();
-    _score.removeLastNote();
-    xPosition = xPositions[xPositions.length - 1];
-    xPositions.remove(xPositions[xPositions.length - 1]);
-    return toRemove;
+    if (!_score.isEmpty) {
+      Note toRemove = _score.getLastNote();
+      _score.removeLastNote();
+      xPosition = xPositions[xPositions.length - 1];
+      xPositions.remove(xPositions[xPositions.length - 1]);
+      return toRemove;
+    }
+    return Note(NoteLetter.a, 4, 4, 0, 0, 0);
   }
 
   //deletes the note at the specified positon from the score
@@ -173,7 +178,7 @@ class HomePage extends State<MyHomePage> {
   /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (_score.getAllNotes().isEmpty) {
-      return new Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
     }
     return _score.getLastNote();
   }
@@ -229,16 +234,25 @@ class HomePage extends State<MyHomePage> {
               child: Column(children: <Widget>[
                 /////////////////// All the buttons ///////////////////
                 ElevatedButton(
+                  // delete button
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
                     _deleteNote();
-                    _addNote(_deleteNote());
+                    if (!_score.isEmpty) {
+                      _addNote(_deleteNote());
+                    }
                     selectedNote = _score.length - 1;
                   },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Delete'),
+                  child: const Icon(Icons.delete),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
+                  // note up button
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
                     Note previous = _deleteNoteAt(selectedNote);
                     previous.increasePitch(1);
@@ -248,11 +262,19 @@ class HomePage extends State<MyHomePage> {
                     _addNoteAt(previous, selectedNote);
                     _printNoteInfo();
                   },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Up'),
+                  child: const Icon(Icons.arrow_drop_up),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                ),
+                Text('Note: $note'),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 ElevatedButton(
+                  // note down button
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.increasePitch(6);
@@ -261,24 +283,40 @@ class HomePage extends State<MyHomePage> {
                     }
                     _addNote(previous);
                   },
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Down'),
+                  child: const Icon(Icons.arrow_drop_down),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
+                    // octave up button
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
                       Note previous = _deleteNote();
                       previous.setOctave(previous.getOctave() + 1);
                       _addNote(previous);
                     },
-                    child: const Text('Octave Up')),
+                    child: const Icon(Icons.arrow_drop_up)),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                ),
+                Text('Octave: ${_score.getLastNote().octave}'),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                ),
                 ElevatedButton(
+                    // octave down button
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
                       Note previous = _deleteNote();
                       previous.setOctave(previous.getOctave() - 1);
                       _addNote(previous);
                     },
-                    child: const Text('Octave Down')),
+                    child: const Icon(Icons.arrow_drop_down)),
               ]),
             ),
             Expanded(
@@ -296,6 +334,9 @@ class HomePage extends State<MyHomePage> {
                 // NoteDurationButton(duration: 4, buttonText: 'Quarter', isSelected: false, onDurationChanged: _handleDurationChanged()),
                 // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
                 // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     if (dotted == 1) {
@@ -308,8 +349,12 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Thirtysecond'),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                  child: const Text('1/32'),
+                  // child: Image.asset('images/32.png'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -323,9 +368,12 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.grey,
                   ),
-                  child: const Text('Sixteenth'),
+                  child: const Text('1/16'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -339,8 +387,11 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Eighth'),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                  child: const Text('1/8'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -354,8 +405,11 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Quarter'),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                  child: const Text('1/4'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -369,8 +423,11 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Half'),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                  child: const Text('1/2'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -384,8 +441,11 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text('Whole'),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                  child: const Text('1'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -408,16 +468,22 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   child: const Text('.'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     isRest = !isRest; // toggle between notes and rests
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   child: const Text('Rest'),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 IconButton(
                   onPressed: () {
@@ -452,7 +518,11 @@ class HomePage extends State<MyHomePage> {
     return Stack(
       children: <Widget>[
         CustomPaint(
-          size: Size(MediaQuery.of(context).size.width - 250, 50),
+          size: Size(
+              xPosition < MediaQuery.of(context).size.width
+                  ? MediaQuery.of(context).size.width
+                  : xPosition,
+              50),
           painter: StaffWidget('treble', signature, signature_),
         ),
         GestureDetector(

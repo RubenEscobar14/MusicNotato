@@ -305,6 +305,7 @@ class NoteWidget extends CustomPainter {
     Rect rectRest = Offset(xPosition - 0.5 * x, y) &
         Size((748 / 512) * cos(pi / 9) * x,
             0.5 * x); // rest has the same width as notes
+    paint.style = PaintingStyle.fill;
     canvas.drawRect(rectRest, paint);
   }
 
