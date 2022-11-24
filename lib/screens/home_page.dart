@@ -136,10 +136,35 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  /// Deletes the last note in the list
+  //like the addnote() function, but adds the note at a specified index instead of the end of the list
+  void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
+    setState(() {
+      if (currentNote.complete <= signature / signature_) {
+        xPositions.add(xPosition);
+        xPosition += 40;
+        _score.getAllNotes().insert(position, currentNote);
+        if (saveOnAdd) {
+          widget.storage.writeFile(_score.getAllNotes(), currentFile);
+        }
+      }
+      if (currentNote.complete == signature / signature_) {
+        xPosition += 20;
+      }
+    });
+  }
+
+  /// Deletes the last note in the score
   Note _deleteNote() {
     Note toRemove = _score.getLastNote();
     _score.removeLastNote();
+    xPosition = xPositions[xPositions.length - 1];
+    xPositions.remove(xPositions[xPositions.length - 1]);
+    return toRemove;
+  }
+
+  //deletes the note at the specified positon from the score
+  Note _deleteNoteAt(int index) {
+    Note toRemove = _score.getNote(index);
     xPosition = xPositions[xPositions.length - 1];
     xPositions.remove(xPositions[xPositions.length - 1]);
     return toRemove;
@@ -215,12 +240,13 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Note previous = _deleteNote();
+                    Note previous = _deleteNoteAt(selectedNote);
                     previous.increasePitch(1);
                     if (previous.getNote() == NoteLetter.c) {
                       previous.setOctave(previous.getOctave() + 1);
                     }
-                    _addNote(previous);
+                    _addNoteAt(previous, selectedNote);
+                    _printNoteInfo();
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.black)),
@@ -429,14 +455,14 @@ class HomePage extends State<MyHomePage> {
           size: Size(MediaQuery.of(context).size.width - 250, 50),
           painter: StaffWidget('treble', signature, signature_),
         ),
-        CustomPaint(
-          size: Size(_score.length * 50, 50),
-          painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-              signature, signature_, selectedNote),
-        ),
         GestureDetector(
           onTap: () => print('tapped!'),
           onTapDown: (TapDownDetails details) => _onTapDown(details),
+          child: CustomPaint(
+            size: Size(_score.length * 50, 50),
+            painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
+                signature, signature_, selectedNote),
+          ),
         ),
       ],
     );
