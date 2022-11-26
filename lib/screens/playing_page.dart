@@ -1,5 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/home_page.dart';
@@ -29,16 +29,17 @@ class PlayingPage extends StatelessWidget {
   };
 
   /// Plays back the music written on the staff
-  void playBack() {
+  Future<void> playBack() async {
     for (Note note in score.getAllNotes()) {
       String noteName = note.getNoteName();
       int octave = note.octave;
       int duration = note.duration;
       int accidental = note.accidental; // not implemented yet
-
-      player.play(AssetSource('audio/Piano.ff.$noteName$octave.aiff'),
-          position: const Duration(seconds: 1));
     }
+    print('test');
+    final whatIsThis = await player.setUrl(// Load a URL
+        'https://upload.wikimedia.org/wikipedia/commons/2/21/%22Into_the_Oceans_and_the_Air%22_%28chorus%29.ogg');
+    await player.play();
   }
 
   @override
