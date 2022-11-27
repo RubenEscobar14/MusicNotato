@@ -38,6 +38,7 @@ class PlayingPage extends StatelessWidget {
       int duration = note.duration;
       int accidental = note.accidental; // not implemented yet
     }
+    // https://www.fluttercampus.com/guide/221/play-soud-from-assets-folder-flutter/
     String a0Location = 'assets/audio/Piano.ff.A0.flac';
     ByteData bytes = await rootBundle.load(a0Location);
     Uint8List soundbytes =
