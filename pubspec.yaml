@@ -181,6 +181,7 @@ flutter:
     - assets/audio/Piano.ff.Gb5.aiff
     - assets/audio/Piano.ff.Gb6.aiff
     - assets/audio/Piano.ff.Gb7.aiff
+    - assets/audio/testAssetRemoveASAP.flac
     - assets/images/32.png
     - assets/images/16.png
     - assets/images/8.png
