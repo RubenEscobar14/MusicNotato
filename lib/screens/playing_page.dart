@@ -38,7 +38,7 @@ class PlayingPage extends StatelessWidget {
       int duration = note.duration;
       int accidental = note.accidental; // not implemented yet
     }
-    String a0Location = 'assets/audio/testAssetRemoveASAP.flac';
+    String a0Location = 'assets/audio/Piano.ff.A0.flac';
     ByteData bytes = await rootBundle.load(a0Location);
     Uint8List soundbytes =
         bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
