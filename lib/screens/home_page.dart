@@ -220,7 +220,8 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.amber[400]),
+                      foregroundColor: MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.increasePitch(1);
@@ -240,7 +241,8 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.amber[400]),
+                      foregroundColor: MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.increasePitch(6);
@@ -256,7 +258,8 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[400]),
+                      foregroundColor: MaterialStateProperty.all(Colors.amber[400])),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() + 1);
@@ -272,7 +275,8 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[400]),
+                      foregroundColor: MaterialStateProperty.all(Colors.amber[400])),
                   onPressed: () {
                     Note previous = _deleteNote();
                     previous.setOctave(previous.getOctave() - 1);
@@ -330,7 +334,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo[200],
+                    backgroundColor: Colors.indigo[200]
                   ),
                   child: const Text('1/16'),
                 ),
