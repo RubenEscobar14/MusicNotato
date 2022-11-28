@@ -50,12 +50,12 @@ class HomePage extends State<MyHomePage> {
     0: 0,
   };
 
-  // var timeSignatures = [
-  //   '4/4',
-  //   '3/4',
-  //   '2/4',
-  //   '2/2'
-  // ]; // list of available time signatures
+  var timeSignatures = [
+    '4/4',
+    '3/4',
+    '2/4',
+    '2/2'
+  ]; // list of available time signatures
 
   int signature = 4; // default number of beats in a measure
   int signature_ = 4; // default beat unit
@@ -207,7 +207,7 @@ class HomePage extends State<MyHomePage> {
                 /////////////////// All the buttons ///////////////////
                 ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.red[800])),
                   onPressed: () {
                     _deleteNote();
                     _addNote(_deleteNote());
@@ -311,7 +311,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[100])),
                   child: const Text('1/32'),
                   // child: Image.asset('images/32.png'),
                 ),
@@ -330,7 +330,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.indigo[200],
                   ),
                   child: const Text('1/16'),
                 ),
@@ -349,7 +349,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[300])),
                   child: const Text('1/8'),
                 ),
                 const Padding(
@@ -367,7 +367,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[400])),
                   child: const Text('1/4'),
                 ),
                 const Padding(
@@ -385,7 +385,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[500])),
                   child: const Text('1/2'),
                 ),
                 const Padding(
@@ -403,7 +403,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNote = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: MaterialStateProperty.all(Colors.indigo[600])),
                   child: const Text('1'),
                 ),
                 const Padding(
@@ -488,43 +488,43 @@ class HomePage extends State<MyHomePage> {
           painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
               signature, signature_, selectedNote),
         ),
-        GestureDetector(
-          onTap: () => print('tapped!'),
-          onTapDown: (TapDownDetails details) => _onTapDown(details),
-        ),
+        // GestureDetector(
+        //   onTap: () => print('tapped!'),
+        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        // ),
       ],
     );
   }
 
-  _onTapDown(TapDownDetails details) {
-    tappedPositionX = details.localPosition.dx;
-    tappedPositionY = details.localPosition.dy;
-    selectNewNote(tappedPositionX, tappedPositionY);
-  }
+  // _onTapDown(TapDownDetails details) {
+  //   tappedPositionX = details.localPosition.dx;
+  //   tappedPositionY = details.localPosition.dy;
+  //   selectNewNote(tappedPositionX, tappedPositionY);
+  // }
 
-  void selectNewNote(double x, double y) {
-    double min = 1000;
-    int minIndex = -1;
-    for (int i = 0; i < xPositions.length; i++) {
-      if (distance(xPositions[i], x) < min) {
-        minIndex = i;
-        min = distance(xPositions[i], x);
-      }
-    }
-    print("Nearest Note Index is: $minIndex");
-    setState(() {
-      selectedNote = minIndex;
-    });
-  }
+  // void selectNewNote(double x, double y) {
+  //   double min = 1000;
+  //   int minIndex = -1;
+  //   for (int i = 0; i < xPositions.length; i++) {
+  //     if (distance(xPositions[i], x) < min) {
+  //       minIndex = i;
+  //       min = distance(xPositions[i], x);
+  //     }
+  //   }
+  //   print("Nearest Note Index is: $minIndex");
+  //   setState(() {
+  //     selectedNote = minIndex;
+  //   });
+  // }
 
-  double distance(double x, double y) {
-    double dist = x - y;
-    if (dist < 0) {
-      return dist * -1;
-    } else {
-      return dist;
-    }
-  }
+  // double distance(double x, double y) {
+  //   double dist = x - y;
+  //   if (dist < 0) {
+  //     return dist * -1;
+  //   } else {
+  //     return dist;
+  //   }
+  // }
 
   /// Plays back the music written on the staff
   void playBack() {}
