@@ -57,8 +57,8 @@ class HomePage extends State<MyHomePage> {
     '2/2'
   ]; // list of available time signatures
 
-  int signature = 4; // default number of beats in a measure
-  int signature_ = 4; // default beat unit
+  int signatureTop = 4; // default number of beats in a measure
+  int signatureBottom = 4; // default beat unit
 
   bool isRest = false;
 
@@ -74,7 +74,7 @@ class HomePage extends State<MyHomePage> {
   }
 
   int getSignature_() {
-    return signature_;
+    return signatureBottom;
   }
 
   /// Loads a save on startup
@@ -123,7 +123,7 @@ class HomePage extends State<MyHomePage> {
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signature / signature_) {
+      if (currentNote.complete <= signatureTop / signatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
@@ -132,7 +132,7 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signature / signature_) {
+      if (currentNote.complete == signatureTop / signatureBottom) {
         xPosition += 20;
       }
     });
@@ -141,7 +141,7 @@ class HomePage extends State<MyHomePage> {
   //like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signature / signature_) {
+      if (currentNote.complete <= signatureTop / signatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().insert(position, currentNote);
@@ -149,7 +149,7 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signature / signature_) {
+      if (currentNote.complete == signatureTop / signatureBottom) {
         xPosition += 20;
       }
     });
@@ -212,7 +212,7 @@ class HomePage extends State<MyHomePage> {
     if (_score.isEmpty) {
       complete = duration_;
     } else {
-      if (_score.getLastNote().complete == signature / signature_) {
+      if (_score.getLastNote().complete == signatureTop / signatureBottom) {
         complete = duration_;
       } else {
         complete = duration_ + _score.getLastNote().complete;
@@ -534,7 +534,7 @@ class HomePage extends State<MyHomePage> {
                   ? MediaQuery.of(context).size.width
                   : xPosition,
               50),
-          painter: StaffWidget('treble', signature, signature_),
+          painter: StaffWidget('treble', signatureTop, signatureBottom),
         ),
         GestureDetector(
           onTap: () => print('tapped!'),
@@ -542,7 +542,7 @@ class HomePage extends State<MyHomePage> {
           child: CustomPaint(
             size: Size(_score.length * 50, 50),
             painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-                signature, signature_, selectedNoteIndex),
+                signatureTop, signatureBottom, selectedNoteIndex),
           ),
         ),
         // GestureDetector(
