@@ -138,10 +138,38 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  /// Deletes the last note in the list
+  //like the addnote() function, but adds the note at a specified index instead of the end of the list
+  void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
+    setState(() {
+      if (currentNote.complete <= signature / signature_) {
+        xPositions.add(xPosition);
+        xPosition += 40;
+        _score.getAllNotes().insert(position, currentNote);
+        if (saveOnAdd) {
+          widget.storage.writeFile(_score.getAllNotes(), currentFile);
+        }
+      }
+      if (currentNote.complete == signature / signature_) {
+        xPosition += 20;
+      }
+    });
+  }
+
+  /// Deletes the last note in the score
   Note _deleteNote() {
-    Note toRemove = _score.getLastNote();
-    _score.removeLastNote();
+    if (!_score.isEmpty) {
+      Note toRemove = _score.getLastNote();
+      _score.removeLastNote();
+      xPosition = xPositions[xPositions.length - 1];
+      xPositions.remove(xPositions[xPositions.length - 1]);
+      return toRemove;
+    }
+    return Note(NoteLetter.a, 4, 4, 0, 0, 0);
+  }
+
+  //deletes the note at the specified positon from the score
+  Note _deleteNoteAt(int index) {
+    Note toRemove = _score.getNote(index);
     xPosition = xPositions[xPositions.length - 1];
     xPositions.remove(xPositions[xPositions.length - 1]);
     return toRemove;
@@ -150,7 +178,7 @@ class HomePage extends State<MyHomePage> {
   /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (_score.getAllNotes().isEmpty) {
-      return new Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
     }
     return _score.getLastNote();
   }
@@ -206,40 +234,46 @@ class HomePage extends State<MyHomePage> {
               child: Column(children: <Widget>[
                 /////////////////// All the buttons ///////////////////
                 ElevatedButton(
+                  // delete button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red[800])),
                   onPressed: () {
                     _deleteNote();
-                    _addNote(_deleteNote());
+                    if (!_score.isEmpty) {
+                      _addNote(_deleteNote());
+                    }
                     selectedNote = _score.length - 1;
                   },
                   child: const Icon(Icons.delete),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
+                  // note up button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.amber[400]),
                       foregroundColor: MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
-                    Note previous = _deleteNote();
+                    Note previous = _deleteNoteAt(selectedNote);
                     previous.increasePitch(1);
                     if (previous.getNote() == NoteLetter.c) {
                       previous.setOctave(previous.getOctave() + 1);
                     }
-                    _addNote(previous);
+                    _addNoteAt(previous, selectedNote);
+                    _printNoteInfo();
                   },
                   child: const Icon(Icons.arrow_drop_up),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 Text('Note: $note'),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 ElevatedButton(
+                  // note down button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.amber[400]),
                       foregroundColor: MaterialStateProperty.all(Colors.indigo[400])),
@@ -254,7 +288,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Icon(Icons.arrow_drop_down),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -267,11 +301,11 @@ class HomePage extends State<MyHomePage> {
                   },
                   child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Octave: $octave'),
+                Text('Octave: ${_score.getLastNote().octave}'),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
@@ -301,7 +335,7 @@ class HomePage extends State<MyHomePage> {
                 // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
                 // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -320,7 +354,7 @@ class HomePage extends State<MyHomePage> {
                   // child: Image.asset('images/32.png'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -339,7 +373,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('1/16'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -357,7 +391,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('1/8'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -375,7 +409,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('1/4'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -393,7 +427,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('1/2'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -411,7 +445,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('1'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -438,7 +472,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('.'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -449,7 +483,7 @@ class HomePage extends State<MyHomePage> {
                   child: const Text('Rest'),
                 ),
                 const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 IconButton(
                   onPressed: () {
@@ -469,8 +503,8 @@ class HomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SavePage(this)),
-            //MaterialPageRoute(builder: (context) => PlayingPage()),
+            //MaterialPageRoute(builder: (context) => SavePage(this)),
+            MaterialPageRoute(builder: (context) => PlayingPage()),
           );
         },
         tooltip: 'Go to playing page',
@@ -484,7 +518,11 @@ class HomePage extends State<MyHomePage> {
     return Stack(
       children: <Widget>[
         CustomPaint(
-          size: Size(MediaQuery.of(context).size.width - 250, 50),
+          size: Size(
+              xPosition < MediaQuery.of(context).size.width
+                  ? MediaQuery.of(context).size.width
+                  : xPosition,
+              50),
           painter: StaffWidget('treble', signature, signature_),
         ),
         CustomPaint(
@@ -495,6 +533,15 @@ class HomePage extends State<MyHomePage> {
         // GestureDetector(
         //   onTap: () => print('tapped!'),
         //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        // ),
+        // GestureDetector(
+        //   onTap: () => print('tapped!'),
+        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        //   child: CustomPaint(
+        //     size: Size(_score.length * 50, 50),
+        //     painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
+        //         signature, signature_, selectedNote),
+        //   ),
         // ),
       ],
     );
