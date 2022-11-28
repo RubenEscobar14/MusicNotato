@@ -20,7 +20,7 @@ class Score {
   }
 
   Note getLastNote() {
-    if(isEmpty) {
+    if (isEmpty) {
       return Note(NoteLetter.a, 4, 4, 0, 0, 0);
     }
     return _allNotes[_allNotes.length - 1];
@@ -36,5 +36,9 @@ class Score {
 
   void removeLastNote() {
     _allNotes.removeLast();
+  }
+
+  void removeNoteAt(int index) {
+    _allNotes.removeAt(index);
   }
 }

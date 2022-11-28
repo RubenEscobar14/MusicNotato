@@ -17,7 +17,7 @@ class HomePage extends State<MyHomePage> {
 
   double xPosition = 40; // starting x-coordinate for notes
   List<double> xPositions = []; // list of x-coordinates for the notes
-  int selectedNote = -1; // currently selected note
+  int selectedNoteIndex = -1; // currently selected note
   double tappedPositionX = -1;
   double tappedPositionY = -1;
 
@@ -170,6 +170,7 @@ class HomePage extends State<MyHomePage> {
   //deletes the note at the specified positon from the score
   Note _deleteNoteAt(int index) {
     Note toRemove = _score.getNote(index);
+    _score.removeNoteAt(index);
     xPosition = xPositions[xPositions.length - 1];
     xPositions.remove(xPositions[xPositions.length - 1]);
     return toRemove;
@@ -242,7 +243,7 @@ class HomePage extends State<MyHomePage> {
                     if (!_score.isEmpty) {
                       _addNote(_deleteNote());
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   child: const Icon(Icons.delete),
                 ),
@@ -254,13 +255,12 @@ class HomePage extends State<MyHomePage> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
-                    Note previous = _deleteNoteAt(selectedNote);
+                    Note previous = _deleteNoteAt(selectedNoteIndex);
                     previous.increasePitch(1);
                     if (previous.getNote() == NoteLetter.c) {
                       previous.setOctave(previous.getOctave() + 1);
                     }
-                    _addNoteAt(previous, selectedNote);
-                    _printNoteInfo();
+                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_up),
                 ),
@@ -276,12 +276,12 @@ class HomePage extends State<MyHomePage> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
                   onPressed: () {
-                    Note previous = _deleteNote();
+                    Note previous = _deleteNoteAt(selectedNoteIndex);
                     previous.increasePitch(6);
                     if (previous.getNote() == NoteLetter.b) {
                       previous.setOctave(previous.getOctave() - 1);
                     }
-                    _addNote(previous);
+                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_down),
                 ),
@@ -294,9 +294,9 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNote();
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.setOctave(previous.getOctave() + 1);
-                      _addNote(previous);
+                      _addNoteAt(previous, selectedNoteIndex);
                     },
                     child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
@@ -312,9 +312,9 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNote();
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.setOctave(previous.getOctave() - 1);
-                      _addNote(previous);
+                      _addNoteAt(previous, selectedNoteIndex);
                     },
                     child: const Icon(Icons.arrow_drop_down)),
               ]),
@@ -346,7 +346,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 32;
                       _addNote(nextNoteWithNewDuration(32));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -365,7 +365,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 16;
                       _addNote(nextNoteWithNewDuration(16));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
@@ -384,7 +384,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 8;
                       _addNote(nextNoteWithNewDuration(8));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -402,7 +402,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 4;
                       _addNote(nextNoteWithNewDuration(4));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -420,7 +420,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 2;
                       _addNote(nextNoteWithNewDuration(2));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -438,7 +438,7 @@ class HomePage extends State<MyHomePage> {
                       duration = 1;
                       _addNote(nextNoteWithNewDuration(1));
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -465,7 +465,7 @@ class HomePage extends State<MyHomePage> {
                         duration = (duration / 1.5).round();
                       }
                     }
-                    selectedNote = _score.length - 1;
+                    selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -531,7 +531,7 @@ class HomePage extends State<MyHomePage> {
           child: CustomPaint(
             size: Size(_score.length * 50, 50),
             painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-                signature, signature_, selectedNote),
+                signature, signature_, selectedNoteIndex),
           ),
         ),
       ],
@@ -555,7 +555,7 @@ class HomePage extends State<MyHomePage> {
     }
     print("Nearest Note Index is: $minIndex");
     setState(() {
-      selectedNote = minIndex;
+      selectedNoteIndex = minIndex;
     });
   }
 
