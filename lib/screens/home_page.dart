@@ -50,12 +50,12 @@ class HomePage extends State<MyHomePage> {
     0: 0,
   };
 
-  // var timeSignatures = [
-  //   '4/4',
-  //   '3/4',
-  //   '2/4',
-  //   '2/2'
-  // ]; // list of available time signatures
+  var timeSignatures = [
+    '4/4',
+    '3/4',
+    '2/4',
+    '2/2'
+  ]; // list of available time signatures
 
   int signature = 4; // default number of beats in a measure
   int signature_ = 4; // default beat unit
@@ -237,7 +237,8 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // delete button
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.red[800])),
                   onPressed: () {
                     _deleteNote();
                     if (!_score.isEmpty) {
@@ -253,7 +254,10 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // note up button
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.amber[400]),
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
                     Note previous = _deleteNoteAt(selectedNoteIndex);
                     previous.increasePitch(1);
@@ -274,7 +278,10 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // note down button
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.amber[400]),
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
                     Note previous = _deleteNoteAt(selectedNoteIndex);
                     previous.increasePitch(6);
@@ -349,7 +356,8 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo[100])),
                   child: const Text('1/32'),
                   // child: Image.asset('images/32.png'),
                 ),
@@ -368,8 +376,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                  ),
+                      backgroundColor: Colors.indigo[200]),
                   child: const Text('1/16'),
                 ),
                 const Padding(
@@ -387,7 +394,8 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo[300])),
                   child: const Text('1/8'),
                 ),
                 const Padding(
@@ -405,7 +413,8 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo[400])),
                   child: const Text('1/4'),
                 ),
                 const Padding(
@@ -423,7 +432,8 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo[500])),
                   child: const Text('1/2'),
                 ),
                 const Padding(
@@ -441,7 +451,8 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo[600])),
                   child: const Text('1'),
                 ),
                 const Padding(
@@ -503,8 +514,8 @@ class HomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SavePage(this)),
-            //MaterialPageRoute(builder: (context) => PlayingPage()),
+            //MaterialPageRoute(builder: (context) => SavePage(this)),
+            MaterialPageRoute(builder: (context) => PlayingPage()),
           );
         },
         tooltip: 'Go to playing page',
@@ -534,6 +545,19 @@ class HomePage extends State<MyHomePage> {
                 signature, signature_, selectedNoteIndex),
           ),
         ),
+        // GestureDetector(
+        //   onTap: () => print('tapped!'),
+        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        // ),
+        // GestureDetector(
+        //   onTap: () => print('tapped!'),
+        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
+        //   child: CustomPaint(
+        //     size: Size(_score.length * 50, 50),
+        //     painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
+        //         signature, signature_, selectedNote),
+        //   ),
+        // ),
       ],
     );
   }

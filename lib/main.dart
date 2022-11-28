@@ -5,6 +5,7 @@ import 'package:music_notato/screens/home_page.dart';
 import 'save.dart';
 
 // Music Library: https://theremin.music.uiowa.edu/MISpiano.html
+// Converted to flac with https://cloudconvert.com/
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -26,14 +27,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(375, 650),
-      builder: ((context, child) => MaterialApp(
-        title: 'Music Notato',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(title: 'Music Notato', storage: Save()),
-      )));
+        designSize: Size(375, 650),
+        builder: ((context, child) => MaterialApp(
+              title: 'Music Notato',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: MyHomePage(title: 'Music Notato', storage: Save()),
+            )));
   }
 }
 
