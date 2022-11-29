@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class StaffWidget extends CustomPainter {
   String currentClef;
 
-  int signature; // number of beats per measure
-  int signature_; // unit of beat
+  int timeSignatureTop; // number of beats per measure
+  int timeSignatureBottom; // unit of beat
 
   /// Constructor
-  StaffWidget(this.currentClef, this.signature, this.signature_);
+  StaffWidget(this.currentClef, this.timeSignatureTop, this.timeSignatureBottom);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -74,7 +74,7 @@ class StaffWidget extends CustomPainter {
     // draws the time signature graphic
     var textPainter = TextPainter(
         text: TextSpan(
-          text: '${signature}\n${signature_}',
+          text: '${timeSignatureTop}\n${timeSignatureBottom}',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
