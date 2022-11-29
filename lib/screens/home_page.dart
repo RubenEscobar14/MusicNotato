@@ -47,7 +47,7 @@ class HomePage extends State<MyHomePage> {
     2: 1 / 2,
     3: 3 / 4,
     1: 1,
-    0: 0,
+    0: 3 / 2,
   };
 
   var timeSignatures = [
@@ -210,6 +210,9 @@ class HomePage extends State<MyHomePage> {
     double noteLength;
     try {
       noteLength = durationRatios[duration]!.toDouble(); // percentage of
+      if(duration == 0) {
+        noteLength = 3 / 2;
+      }
     }
     catch (e) {
       noteLength = 4;
@@ -466,7 +469,8 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (dotted == 0) {
+                    setState(() {
+                      if (dotted == 0) {
                       // toggle between dotted and not-dotted
                       dotted = 1;
                       if (duration == 1) {
@@ -483,9 +487,10 @@ class HomePage extends State<MyHomePage> {
                       }
                     }
                     selectedNoteIndex = _score.length - 1;
+                    });
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: dotted == 0 ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty.all(Colors.black)),
                   child: const Text('.'),
                 ),
                 const Padding(
@@ -493,10 +498,12 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    isRest = !isRest; // toggle between notes and rests
+                    setState(() {
+                      isRest = !isRest; // toggle between notes and rests
+                    });
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: !isRest ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty.all(Colors.black)),
                   child: const Text('Rest'),
                 ),
                 const Padding(

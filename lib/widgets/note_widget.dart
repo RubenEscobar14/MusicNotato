@@ -287,10 +287,24 @@ class NoteWidget extends CustomPainter {
     if (currentNote.dotted == 1) {
       // draws the dot for dotted rests
       paint.style = PaintingStyle.fill;
-      canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.25 * x),
+      if(currentNote.duration == 0) {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9), 0.35 * x),
           0.15 * x,
           paint);
+      }
+      else if(currentNote.duration == 6 ) {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9) - 0.75 * x, -0.35 * x),
+          0.15 * x,
+          paint);
+      }
+      else {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.35 * x),
+          0.15 * x,
+          paint);
+      }
     }
     if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
