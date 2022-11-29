@@ -309,7 +309,7 @@ class NoteWidget extends CustomPainter {
     if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
       canvas.drawLine(
-          Offset(xPosition, -2 * x), Offset(xPosition, 2 * x), paint);
+          Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
     }
   }
 
