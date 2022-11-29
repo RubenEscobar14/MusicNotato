@@ -16,12 +16,12 @@ class NoteWidget extends CustomPainter {
   List<double> altoBasePositions = [0, 0.5, 1, 1.5, 2, 2.5, 3];
   List<double> bassBasePositions = [3, 3.5, 4, 4.5, 5, 5.5, 6];
 
-  int signature; // number of beats per measure
-  int signature_; // unit of beat
+  int timeSignatureTop; // number of beats per measure
+  int timeSignatureBottom; // unit of beat
 
   /// Constructor
-  NoteWidget(this.noteList, this.xPositions, this.currentClef, this.signature,
-      this.signature_, this.toHighlight);
+  NoteWidget(this.noteList, this.xPositions, this.currentClef, this.timeSignatureTop,
+      this.timeSignatureBottom, this.toHighlight);
 
   // Map of base positions for each note depending on the clef
   Map<String, Map<String, double>> noteToClefBasePositions =
@@ -208,7 +208,7 @@ class NoteWidget extends CustomPainter {
     paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 2.0;
-    if (currentNote.complete == signature / signature_) {
+    if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
       canvas.drawLine(
           Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
@@ -292,7 +292,7 @@ class NoteWidget extends CustomPainter {
           0.15 * x,
           paint);
     }
-    if (currentNote.complete == signature / signature_) {
+    if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
       canvas.drawLine(
           Offset(xPosition, -2 * x), Offset(xPosition, 2 * x), paint);

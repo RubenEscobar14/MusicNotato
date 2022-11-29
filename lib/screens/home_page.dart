@@ -57,8 +57,8 @@ class HomePage extends State<MyHomePage> {
     '2/2'
   ]; // list of available time signatures
 
-  int signatureTop = 4; // default number of beats in a measure
-  int signatureBottom = 4; // default beat unit
+  int timeSignatureTop = 4; // default number of beats in a measure
+  int timeSignatureBottom = 4; // default beat unit
 
   bool isRest = false;
 
@@ -74,7 +74,7 @@ class HomePage extends State<MyHomePage> {
   }
 
   int getSignature_() {
-    return signatureBottom;
+    return timeSignatureBottom;
   }
 
   /// Loads a save on startup
@@ -123,7 +123,7 @@ class HomePage extends State<MyHomePage> {
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signatureTop / signatureBottom) {
+      if (currentNote.measureProgress <= timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
@@ -132,7 +132,7 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signatureTop / signatureBottom) {
+      if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
         xPosition += 10;
       }
     });
@@ -141,7 +141,7 @@ class HomePage extends State<MyHomePage> {
   //like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signatureTop / signatureBottom) {
+      if (currentNote.measureProgress <= timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().insert(position, currentNote);
@@ -149,7 +149,7 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signatureTop / signatureBottom) {
+      if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
         xPosition += 20;
       }
     });
@@ -179,7 +179,7 @@ class HomePage extends State<MyHomePage> {
   /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (_score.getAllNotes().isEmpty) {
-      return Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnMeasureProgress());
     }
     return _score.getLastNote();
   }
@@ -188,7 +188,7 @@ class HomePage extends State<MyHomePage> {
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     if (isRest) {
-      return Note.rest(duration, dotted, returnComplete());
+      return Note.rest(duration, dotted, returnMeasureProgress());
     }
     return Note(
         lastNote.getNote() == NoteLetter.r ? NoteLetter.a : lastNote.getNote(),
@@ -196,7 +196,7 @@ class HomePage extends State<MyHomePage> {
         duration,
         dotted,
         lastNote.getAccidental(),
-        returnComplete());
+        returnMeasureProgress());
   }
 
   /// Prints the current noteList and xPositions, debugging use only
@@ -206,19 +206,19 @@ class HomePage extends State<MyHomePage> {
   }
 
   /// Returns the fraction of the measure that has been completed
-  double returnComplete() {
-    double duration_ = 1 / duration;
-    double complete = 0;
+  double returnMeasureProgress() {
+    double noteLength = durationRatios[duration]!.toDouble(); // percentage of
+    double measureProgress = 0;
     if (_score.isEmpty) {
-      complete = duration_;
+      measureProgress = noteLength;
     } else {
-      if (_score.getLastNote().complete == signatureTop / signatureBottom) {
-        complete = duration_;
+      if (_score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom) {
+        measureProgress = noteLength;
       } else {
-        complete = duration_ + _score.getLastNote().complete;
+        measureProgress = noteLength + _score.getLastNote().measureProgress;
       }
     }
-    return complete;
+    return measureProgress;
   }
 
   @override
@@ -534,7 +534,7 @@ class HomePage extends State<MyHomePage> {
                   ? MediaQuery.of(context).size.width
                   : xPosition,
               50),
-          painter: StaffWidget('treble', signatureTop, signatureBottom),
+          painter: StaffWidget('treble', timeSignatureTop, timeSignatureBottom),
         ),
         GestureDetector(
           onTap: () => print('tapped!'),
@@ -542,7 +542,7 @@ class HomePage extends State<MyHomePage> {
           child: CustomPaint(
             size: Size(_score.length * 50, 50),
             painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-                signatureTop, signatureBottom, selectedNoteIndex),
+                timeSignatureTop, timeSignatureBottom, selectedNoteIndex),
           ),
         ),
         // GestureDetector(
