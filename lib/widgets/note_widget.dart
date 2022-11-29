@@ -64,7 +64,6 @@ class NoteWidget extends CustomPainter {
       ..color = Colors.red
       ..strokeWidth = 2.0;
     double x = size.height / 4; // Distance between two lines of the staff
-
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition = xPositions[i]; // x-coordinate of the note to be drawn

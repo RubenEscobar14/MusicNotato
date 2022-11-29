@@ -249,11 +249,13 @@ class HomePage extends State<MyHomePage> {
                       backgroundColor:
                           MaterialStateProperty.all(Colors.red[800])),
                   onPressed: () {
-                    _deleteNote();
+                    setState(() {
+                      _deleteNote();
                     if (!_score.isEmpty) {
                       _addNote(_deleteNote());
                     }
                     selectedNoteIndex = _score.length - 1;
+                    });
                   },
                   child: const Icon(Icons.delete),
                 ),
