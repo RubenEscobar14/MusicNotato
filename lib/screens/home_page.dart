@@ -136,8 +136,7 @@ class HomePage extends State<MyHomePage> {
         xPosition += 10;
       }
     });
-    print(xPositions)
-;  }
+  }
 
   //like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
@@ -330,7 +329,7 @@ class HomePage extends State<MyHomePage> {
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(top: 60.h),
+              padding: EdgeInsets.only(top: 200.h, bottom: 165.h),
               child: _paint(),
             )),
             SizedBox(
