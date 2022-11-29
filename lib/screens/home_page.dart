@@ -15,7 +15,7 @@ import 'package:music_notato/widgets/select_note_widget.dart';
 class HomePage extends State<MyHomePage> {
   Score _score = Score(); // current score
 
-  double xPosition = 40; // starting x-coordinate for notes
+  double xPosition = 60; // starting x-coordinate for notes
   List<double> xPositions = []; // list of x-coordinates for the notes
   int selectedNoteIndex = -1; // currently selected note
   double tappedPositionX = -1;
@@ -133,10 +133,11 @@ class HomePage extends State<MyHomePage> {
         }
       }
       if (currentNote.complete == signatureTop / signatureBottom) {
-        xPosition += 20;
+        xPosition += 10;
       }
     });
-  }
+    print(xPositions)
+;  }
 
   //like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {

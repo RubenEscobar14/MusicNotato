@@ -295,7 +295,7 @@ class NoteWidget extends CustomPainter {
     if (currentNote.complete == signature / signature_) {
       // draws the measure lines
       canvas.drawLine(
-          Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
+          Offset(xPosition, -2 * x), Offset(xPosition, 2 * x), paint);
     }
   }
 
