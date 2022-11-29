@@ -138,7 +138,7 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  //like the addnote() function, but adds the note at a specified index instead of the end of the list
+  // Like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
     setState(() {
       if (currentNote.measureProgress <= timeSignatureTop / timeSignatureBottom) {
@@ -276,6 +276,7 @@ class HomePage extends State<MyHomePage> {
                         previous.setOctave(previous.getOctave() + 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
+                      note = previous.getNoteName()[11];
                     }
                   },
                   child: const Icon(Icons.arrow_drop_up),
@@ -301,6 +302,7 @@ class HomePage extends State<MyHomePage> {
                         previous.setOctave(previous.getOctave() - 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
+                      note = previous.getNoteName()[11];
                     }
                   },
                   child: const Icon(Icons.arrow_drop_down),
