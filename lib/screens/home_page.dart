@@ -247,7 +247,7 @@ class HomePage extends State<MyHomePage> {
                   // delete button
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.red[800])),
+                          MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
                       _deleteNote();
@@ -266,9 +266,8 @@ class HomePage extends State<MyHomePage> {
                   // note up button
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.amber[400]),
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                          MaterialStateProperty.all(Colors.grey[400]),
+                  ),
                   onPressed: () {
                     if(!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
@@ -292,9 +291,8 @@ class HomePage extends State<MyHomePage> {
                   // note down button
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.amber[400]),
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                          MaterialStateProperty.all(Colors.grey[400]),
+                  ),
                   onPressed: () {
                     if(!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
@@ -376,7 +374,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[100])),
+                          dotted == 1 ? (_score.getLastNote().measureProgress + (3/64)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/32'),
                   // child: Image.asset('images/32.png'),
                 ),
@@ -394,8 +392,8 @@ class HomePage extends State<MyHomePage> {
                     }
                     selectedNoteIndex = _score.length - 1;
                   },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo[200]),
+                  style: ButtonStyle(
+                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/16'),
                 ),
                 const Padding(
@@ -413,8 +411,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[300])),
+                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/8'),
                 ),
                 const Padding(
@@ -432,8 +429,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/4'),
                 ),
                 const Padding(
@@ -451,8 +447,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[500])),
+                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/2'),
                 ),
                 const Padding(
@@ -470,8 +465,7 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[600])),
+                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + 1) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1'),
                 ),
                 const Padding(
