@@ -270,12 +270,14 @@ class HomePage extends State<MyHomePage> {
                       foregroundColor:
                           MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
-                    Note previous = _deleteNoteAt(selectedNoteIndex);
-                    previous.increasePitch(1);
-                    if (previous.getNote() == NoteLetter.c) {
-                      previous.setOctave(previous.getOctave() + 1);
+                    if(!isRest && !_score.isEmpty) {
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
+                      previous.increasePitch(1);
+                      if (previous.getNote() == NoteLetter.c) {
+                        previous.setOctave(previous.getOctave() + 1);
+                      }
+                      _addNoteAt(previous, selectedNoteIndex);
                     }
-                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_up),
                 ),
@@ -294,12 +296,14 @@ class HomePage extends State<MyHomePage> {
                       foregroundColor:
                           MaterialStateProperty.all(Colors.indigo[400])),
                   onPressed: () {
-                    Note previous = _deleteNoteAt(selectedNoteIndex);
-                    previous.increasePitch(6);
-                    if (previous.getNote() == NoteLetter.b) {
-                      previous.setOctave(previous.getOctave() - 1);
+                    if(!isRest && !_score.isEmpty) {
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
+                      previous.increasePitch(6);
+                      if (previous.getNote() == NoteLetter.b) {
+                        previous.setOctave(previous.getOctave() - 1);
+                      }
+                      _addNoteAt(previous, selectedNoteIndex);
                     }
-                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_down),
                 ),
@@ -312,9 +316,11 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.setOctave(previous.getOctave() + 1);
-                      _addNoteAt(previous, selectedNoteIndex);
+                      if(!isRest && !_score.isEmpty) {
+                        Note previous = _deleteNoteAt(selectedNoteIndex);
+                        previous.setOctave(previous.getOctave() + 1);
+                        _addNoteAt(previous, selectedNoteIndex);
+                      }
                     },
                     child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
@@ -330,9 +336,11 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.setOctave(previous.getOctave() - 1);
-                      _addNoteAt(previous, selectedNoteIndex);
+                      if(!isRest && !_score.isEmpty) {
+                        Note previous = _deleteNoteAt(selectedNoteIndex);
+                        previous.setOctave(previous.getOctave() - 1);
+                        _addNoteAt(previous, selectedNoteIndex);
+                      }
                     },
                     child: const Icon(Icons.arrow_drop_down)),
               ]),
