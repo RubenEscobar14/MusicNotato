@@ -80,7 +80,7 @@ class NoteWidget extends CustomPainter {
     }
   }
 
-  /// Draws a note to the staff
+  /// Draws a singular note to the staff (not barred to other notes); always used 
   void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,

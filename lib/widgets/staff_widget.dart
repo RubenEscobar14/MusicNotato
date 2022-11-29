@@ -77,7 +77,7 @@ class StaffWidget extends CustomPainter {
           text: '${timeSignatureTop}\n${timeSignatureBottom}',
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 24,
           ),
         ),
         textDirection: TextDirection.ltr,
