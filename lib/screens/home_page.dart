@@ -207,7 +207,13 @@ class HomePage extends State<MyHomePage> {
 
   /// Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
-    double noteLength = durationRatios[duration]!.toDouble(); // percentage of
+    double noteLength;
+    try {
+      noteLength = durationRatios[duration]!.toDouble(); // percentage of
+    }
+    catch (e) {
+      noteLength = 4;
+    }
     double measureProgress = 0;
     if (_score.isEmpty) {
       measureProgress = noteLength;
