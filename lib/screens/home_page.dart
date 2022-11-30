@@ -371,8 +371,8 @@ class HomePage extends State<MyHomePage> {
                   style: ButtonStyle(
                       backgroundColor:
                           dotted == 1 ? (_score.getLastNote().measureProgress + (3/64)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/32'),
-                  // child: Image.asset('images/32.png'),
+                  // child: const Text('1/32'),
+                  child: Image.asset('assets/images/32.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -390,7 +390,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/16'),
+                  child: Image.asset('assets/images/16.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -408,7 +408,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/8'),
+                  child: Image.asset('assets/images/8.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -426,7 +426,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/4'),
+                  child: Image.asset('assets/images/4.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -444,7 +444,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/2'),
+                  child: Image.asset('assets/images/2.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -462,7 +462,7 @@ class HomePage extends State<MyHomePage> {
                   },
                   style: ButtonStyle(
                       backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + 1) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1'),
+                  child: Image.asset('assets/images/1.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
