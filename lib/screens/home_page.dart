@@ -59,6 +59,7 @@ class HomePage extends State<MyHomePage> {
 
   int timeSignatureTop = 4; // default number of beats in a measure
   int timeSignatureBottom = 4; // default beat unit
+  double noteLength = 0;
 
   bool isRest = false;
 
@@ -204,10 +205,11 @@ class HomePage extends State<MyHomePage> {
     print(_score.getAllNotes());
     print(xPositions);
   }
-
+  
+  
   /// Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
-    double noteLength;
+    
     try {
       noteLength = durationRatios[duration]!.toDouble(); // percentage of
       if(duration == 0) {
@@ -259,6 +261,35 @@ class HomePage extends State<MyHomePage> {
                   },
                   child: const Icon(Icons.delete),
                 ),
+                DropdownButton(
+                  // Initial Value
+                  value: dropdownvalue,
+                  // Down Arrow Icon
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  // Array list of items
+                  items: timeSignatures.map((String items) {
+                    return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                    );
+                  }).toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    if (noteLength==0) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                        var str_li = dropdownvalue.split('/');
+                        print(str_li);
+                          setState(() {
+                            timeSignatureTop = int.parse(str_li[0]);
+                            timeSignatureBottom = int.parse(str_li[1]);
+                          });
+                      });
+                    }
+                  },
+                ),
+      
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
