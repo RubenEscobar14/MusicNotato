@@ -75,9 +75,37 @@ class NoteWidget extends CustomPainter {
       if (currentNote.note == NoteLetter.r) {
         drawRest(currentNote, xPosition, canvas, paint, x);
       } else {
+        print(isBarredToNextNote(i));
         drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
+  }
+  
+  // use while loop to find bar end (while noteList[i].duration <= 6)
+  void handleEigthBarring(int i) {
+    int currentDuration = noteList[i].duration;
+    int j = 0;
+    while(currentDuration > 6) {
+      if(i <= noteList.length - 2) {
+        j++;
+        currentDuration = noteList[i+j].duration;
+      }
+    }
+    if(j == 0) {
+      
+    }
+  }
+
+  bool isBarredToNextNote(int i) {
+    try {
+      if(noteList[i].duration == 0 || noteList[i].duration == 1 || noteList[i].duration == 2 || noteList[i].duration == 3 || noteList[i].duration == 4 || noteList[i].duration == 6 || i == noteList.length - 1 || noteList[i+1].duration == 0 || noteList[i+1].duration == 1 || noteList[i+1].duration == 2 || noteList[i+1].duration == 3 || noteList[i+1].duration == 4 || noteList[i+1].duration == 6 || noteList[i+1].measureProgress == noteList[i+1].duration) {
+        return false;
+      }
+    }
+    // ignore: empty_catches
+    catch (e) {
+    }
+    return true;
   }
 
   /// Draws a singular note to the staff (not barred to other notes); always used 
