@@ -6,6 +6,7 @@ import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/screens/save_page.dart';
+import 'package:music_notato/widgets/music_painter_widget.dart';
 // import 'package:music_notato/widgets/note_duration_button.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
@@ -124,7 +125,8 @@ class HomePage extends State<MyHomePage> {
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.measureProgress <= timeSignatureTop / timeSignatureBottom) {
+      if (currentNote.measureProgress <=
+          timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
@@ -133,7 +135,8 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
+      if (currentNote.measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
         xPosition += 10;
       }
     });
@@ -142,7 +145,8 @@ class HomePage extends State<MyHomePage> {
   // Like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.measureProgress <= timeSignatureTop / timeSignatureBottom) {
+      if (currentNote.measureProgress <=
+          timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().insert(position, currentNote);
@@ -150,7 +154,8 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
+      if (currentNote.measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
         xPosition += 20;
       }
     });
@@ -205,31 +210,55 @@ class HomePage extends State<MyHomePage> {
     print(_score.getAllNotes());
     print(xPositions);
   }
-  
-  
+
   /// Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
-    
     try {
       noteLength = durationRatios[duration]!.toDouble(); // percentage of
-      if(duration == 0) {
+      if (duration == 0) {
         noteLength = 3 / 2;
       }
-    }
-    catch (e) {
+    } catch (e) {
       noteLength = 4;
     }
     double measureProgress = 0;
     if (_score.isEmpty) {
       measureProgress = noteLength;
     } else {
-      if (_score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom) {
+      if (_score.getLastNote().measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
         measureProgress = noteLength;
       } else {
         measureProgress = noteLength + _score.getLastNote().measureProgress;
       }
     }
     return measureProgress;
+  }
+
+  //updates the currently selected note to the nearest note to the input coordinates
+  void selectNewNote(double x) {
+    double min = 1000;
+    int minIndex = -1;
+    for (int i = 0; i < xPositions.length; i++) {
+      if (distance(xPositions[i], x) < min) {
+        minIndex = i;
+        min = distance(xPositions[i], x);
+      }
+    }
+    print("Nearest Note Index is: $minIndex");
+    setState(() {
+      selectedNoteIndex = minIndex;
+    });
+  }
+
+  //returns the distance between two points in 1 dimension
+  double distance(double x, double y) {
+    double dist = x - y;
+    if (dist < 0) {
+      return dist * -1;
+    } else {
+      return dist;
+    }
   }
 
   @override
@@ -248,15 +277,14 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // delete button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.red)),
+                      backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
                       _deleteNote();
-                    if (!_score.isEmpty) {
-                      _addNote(_deleteNote());
-                    }
-                    selectedNoteIndex = _score.length - 1;
+                      if (!_score.isEmpty) {
+                        _addNote(_deleteNote());
+                      }
+                      selectedNoteIndex = _score.length - 1;
                     });
                   },
                   child: const Icon(Icons.delete),
@@ -269,38 +297,38 @@ class HomePage extends State<MyHomePage> {
                   // Array list of items
                   items: timeSignatures.map((String items) {
                     return DropdownMenuItem(
-                    value: items,
-                    child: Text(items),
+                      value: items,
+                      child: Text(items),
                     );
                   }).toList(),
                   // After selecting the desired option,it will
                   // change button value to selected value
                   onChanged: (String? newValue) {
-                    if (noteLength==0) {
+                    if (noteLength == 0) {
                       setState(() {
                         dropdownvalue = newValue!;
                         var str_li = dropdownvalue.split('/');
                         print(str_li);
-                          setState(() {
-                            timeSignatureTop = int.parse(str_li[0]);
-                            timeSignatureBottom = int.parse(str_li[1]);
-                          });
+                        setState(() {
+                          timeSignatureTop = int.parse(str_li[0]);
+                          timeSignatureBottom = int.parse(str_li[1]);
+                        });
                       });
                     }
                   },
                 ),
-      
+
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   // note up button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.grey[400]),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.grey[400]),
                   ),
                   onPressed: () {
-                    if(!isRest && !_score.isEmpty) {
+                    if (!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.increasePitch(1);
                       if (previous.getNote() == NoteLetter.c) {
@@ -322,11 +350,11 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // note down button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.grey[400]),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.grey[400]),
                   ),
                   onPressed: () {
-                    if(!isRest && !_score.isEmpty) {
+                    if (!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.increasePitch(6);
                       if (previous.getNote() == NoteLetter.b) {
@@ -347,7 +375,7 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      if(!isRest && !_score.isEmpty) {
+                      if (!isRest && !_score.isEmpty) {
                         Note previous = _deleteNoteAt(selectedNoteIndex);
                         previous.setOctave(previous.getOctave() + 1);
                         _addNoteAt(previous, selectedNoteIndex);
@@ -367,7 +395,7 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      if(!isRest && !_score.isEmpty) {
+                      if (!isRest && !_score.isEmpty) {
                         Note previous = _deleteNoteAt(selectedNoteIndex);
                         previous.setOctave(previous.getOctave() - 1);
                         _addNoteAt(previous, selectedNoteIndex);
@@ -380,7 +408,14 @@ class HomePage extends State<MyHomePage> {
                 child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(top: 200.h, bottom: 165.h),
-              child: _paint(),
+              child: MusicPainterWidget(
+                  xPosition,
+                  xPositions,
+                  timeSignatureTop,
+                  timeSignatureBottom,
+                  _score,
+                  selectedNoteIndex,
+                  selectNewNote),
             )),
             SizedBox(
               width: 70.w,
@@ -400,8 +435,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          dotted == 1 ? (_score.getLastNote().measureProgress + (3/64)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 64)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 32)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/32'),
                   // child: Image.asset('images/32.png'),
                 ),
@@ -420,7 +462,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 32)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 16)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/16'),
                 ),
                 const Padding(
@@ -438,7 +488,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/16)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 16)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 8)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/8'),
                 ),
                 const Padding(
@@ -456,7 +514,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/8)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 8)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 4)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/4'),
                 ),
                 const Padding(
@@ -474,7 +540,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/4)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 4)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 2)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/2'),
                 ),
                 const Padding(
@@ -492,7 +566,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1 ? (_score.getLastNote().measureProgress + (3/2)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + 1) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 2)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + 1) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1'),
                 ),
                 const Padding(
@@ -502,26 +584,28 @@ class HomePage extends State<MyHomePage> {
                   onPressed: () {
                     setState(() {
                       if (dotted == 0) {
-                      // toggle between dotted and not-dotted
-                      dotted = 1;
-                      if (duration == 1) {
-                        duration = 0;
+                        // toggle between dotted and not-dotted
+                        dotted = 1;
+                        if (duration == 1) {
+                          duration = 0;
+                        } else {
+                          duration = (duration * 1.5).round();
+                        }
                       } else {
-                        duration = (duration * 1.5).round();
+                        dotted = 0;
+                        if (duration == 0) {
+                          duration = 1;
+                        } else {
+                          duration = (duration / 1.5).round();
+                        }
                       }
-                    } else {
-                      dotted = 0;
-                      if (duration == 0) {
-                        duration = 1;
-                      } else {
-                        duration = (duration / 1.5).round();
-                      }
-                    }
-                    selectedNoteIndex = _score.length - 1;
+                      selectedNoteIndex = _score.length - 1;
                     });
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 0 ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty.all(Colors.black)),
+                      backgroundColor: dotted == 0
+                          ? MaterialStateProperty.all(Colors.grey)
+                          : MaterialStateProperty.all(Colors.black)),
                   child: const Text('.'),
                 ),
                 const Padding(
@@ -534,7 +618,9 @@ class HomePage extends State<MyHomePage> {
                     });
                   },
                   style: ButtonStyle(
-                      backgroundColor: !isRest ? MaterialStateProperty.all(Colors.grey) : MaterialStateProperty.all(Colors.black)),
+                      backgroundColor: !isRest
+                          ? MaterialStateProperty.all(Colors.grey)
+                          : MaterialStateProperty.all(Colors.black)),
                   child: const Text('Rest'),
                 ),
                 const Padding(
@@ -566,74 +652,6 @@ class HomePage extends State<MyHomePage> {
         child: const Icon(Icons.arrow_forward),
       ),
     );
-  }
-
-  /// Initializes the staff and note widgets
-  Widget _paint() {
-    return Stack(
-      children: <Widget>[
-        CustomPaint(
-          size: Size(
-              xPosition < MediaQuery.of(context).size.width
-                  ? MediaQuery.of(context).size.width
-                  : xPosition,
-              50),
-          painter: StaffWidget('treble', timeSignatureTop, timeSignatureBottom),
-        ),
-        GestureDetector(
-          onTap: () => print('tapped!'),
-          onTapDown: (TapDownDetails details) => _onTapDown(details),
-          child: CustomPaint(
-            size: Size(_score.length * 50, 50),
-            painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-                timeSignatureTop, timeSignatureBottom, selectedNoteIndex),
-          ),
-        ),
-        // GestureDetector(
-        //   onTap: () => print('tapped!'),
-        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
-        // ),
-        // GestureDetector(
-        //   onTap: () => print('tapped!'),
-        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
-        //   child: CustomPaint(
-        //     size: Size(_score.length * 50, 50),
-        //     painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-        //         signature, signature_, selectedNote),
-        //   ),
-        // ),
-      ],
-    );
-  }
-
-  _onTapDown(TapDownDetails details) {
-    tappedPositionX = details.localPosition.dx;
-    tappedPositionY = details.localPosition.dy;
-    selectNewNote(tappedPositionX, tappedPositionY);
-  }
-
-  void selectNewNote(double x, double y) {
-    double min = 1000;
-    int minIndex = -1;
-    for (int i = 0; i < xPositions.length; i++) {
-      if (distance(xPositions[i], x) < min) {
-        minIndex = i;
-        min = distance(xPositions[i], x);
-      }
-    }
-    print("Nearest Note Index is: $minIndex");
-    setState(() {
-      selectedNoteIndex = minIndex;
-    });
-  }
-
-  double distance(double x, double y) {
-    double dist = x - y;
-    if (dist < 0) {
-      return dist * -1;
-    } else {
-      return dist;
-    }
   }
 
   /// Plays back the music written on the staff
