@@ -16,7 +16,7 @@ import 'package:music_notato/widgets/select_note_widget.dart';
 class HomePage extends State<MyHomePage> {
   Score _score = Score(); // current score
 
-  double xPosition = 40; // starting x-coordinate for notes
+  double xPosition = 60; // starting x-coordinate for notes
   List<double> xPositions = []; // list of x-coordinates for the notes
   int selectedNoteIndex = -1; // currently selected note
   double tappedPositionX = -1;
@@ -48,7 +48,7 @@ class HomePage extends State<MyHomePage> {
     2: 1 / 2,
     3: 3 / 4,
     1: 1,
-    0: 0,
+    0: 3 / 2,
   };
 
   var timeSignatures = [
@@ -58,8 +58,9 @@ class HomePage extends State<MyHomePage> {
     '2/2'
   ]; // list of available time signatures
 
-  int signatureTop = 4; // default number of beats in a measure
-  int signatureBottom = 4; // default beat unit
+  int timeSignatureTop = 4; // default number of beats in a measure
+  int timeSignatureBottom = 4; // default beat unit
+  double noteLength = 0;
 
   bool isRest = false;
 
@@ -75,7 +76,7 @@ class HomePage extends State<MyHomePage> {
   }
 
   int getSignature_() {
-    return signatureBottom;
+    return timeSignatureBottom;
   }
 
   /// Loads a save on startup
@@ -124,7 +125,8 @@ class HomePage extends State<MyHomePage> {
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signatureTop / signatureBottom) {
+      if (currentNote.measureProgress <=
+          timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
@@ -133,16 +135,18 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signatureTop / signatureBottom) {
-        xPosition += 20;
+      if (currentNote.measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
+        xPosition += 10;
       }
     });
   }
 
-  //like the addnote() function, but adds the note at a specified index instead of the end of the list
+  // Like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
     setState(() {
-      if (currentNote.complete <= signatureTop / signatureBottom) {
+      if (currentNote.measureProgress <=
+          timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().insert(position, currentNote);
@@ -150,7 +154,8 @@ class HomePage extends State<MyHomePage> {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
       }
-      if (currentNote.complete == signatureTop / signatureBottom) {
+      if (currentNote.measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
         xPosition += 20;
       }
     });
@@ -180,7 +185,7 @@ class HomePage extends State<MyHomePage> {
   /// Returns the last note in the current notelist
   Note _getLastNote() {
     if (_score.getAllNotes().isEmpty) {
-      return Note(NoteLetter.a, 4, 4, 0, 0, returnComplete());
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnMeasureProgress());
     }
     return _score.getLastNote();
   }
@@ -189,7 +194,7 @@ class HomePage extends State<MyHomePage> {
   Note nextNoteWithNewDuration(int duration) {
     Note lastNote = _getLastNote();
     if (isRest) {
-      return Note.rest(duration, dotted, returnComplete());
+      return Note.rest(duration, dotted, returnMeasureProgress());
     }
     return Note(
         lastNote.getNote() == NoteLetter.r ? NoteLetter.a : lastNote.getNote(),
@@ -197,7 +202,7 @@ class HomePage extends State<MyHomePage> {
         duration,
         dotted,
         lastNote.getAccidental(),
-        returnComplete());
+        returnMeasureProgress());
   }
 
   /// Prints the current noteList and xPositions, debugging use only
@@ -207,19 +212,27 @@ class HomePage extends State<MyHomePage> {
   }
 
   /// Returns the fraction of the measure that has been completed
-  double returnComplete() {
-    double duration_ = 1 / duration;
-    double complete = 0;
+  double returnMeasureProgress() {
+    try {
+      noteLength = durationRatios[duration]!.toDouble(); // percentage of
+      if (duration == 0) {
+        noteLength = 3 / 2;
+      }
+    } catch (e) {
+      noteLength = 4;
+    }
+    double measureProgress = 0;
     if (_score.isEmpty) {
-      complete = duration_;
+      measureProgress = noteLength;
     } else {
-      if (_score.getLastNote().complete == signatureTop / signatureBottom) {
-        complete = duration_;
+      if (_score.getLastNote().measureProgress ==
+          timeSignatureTop / timeSignatureBottom) {
+        measureProgress = noteLength;
       } else {
-        complete = duration_ + _score.getLastNote().complete;
+        measureProgress = noteLength + _score.getLastNote().measureProgress;
       }
     }
-    return complete;
+    return measureProgress;
   }
 
   //updates the currently selected note to the nearest note to the input coordinates
@@ -264,34 +277,66 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // delete button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.red[800])),
+                      backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
-                    _deleteNote();
-                    if (!_score.isEmpty) {
-                      _addNote(_deleteNote());
-                    }
-                    selectedNoteIndex = _score.length - 1;
+                    setState(() {
+                      _deleteNote();
+                      if (!_score.isEmpty) {
+                        _addNote(_deleteNote());
+                      }
+                      selectedNoteIndex = _score.length - 1;
+                    });
                   },
                   child: const Icon(Icons.delete),
                 ),
+                DropdownButton(
+                  // Initial Value
+                  value: dropdownvalue,
+                  // Down Arrow Icon
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  // Array list of items
+                  items: timeSignatures.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    if (noteLength == 0) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                        var str_li = dropdownvalue.split('/');
+                        print(str_li);
+                        setState(() {
+                          timeSignatureTop = int.parse(str_li[0]);
+                          timeSignatureBottom = int.parse(str_li[1]);
+                        });
+                      });
+                    }
+                  },
+                ),
+
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 ElevatedButton(
                   // note up button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.amber[400]),
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.grey[400]),
+                  ),
                   onPressed: () {
-                    Note previous = _deleteNoteAt(selectedNoteIndex);
-                    previous.increasePitch(1);
-                    if (previous.getNote() == NoteLetter.c) {
-                      previous.setOctave(previous.getOctave() + 1);
+                    if (!isRest && !_score.isEmpty) {
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
+                      previous.increasePitch(1);
+                      if (previous.getNote() == NoteLetter.c) {
+                        previous.setOctave(previous.getOctave() + 1);
+                      }
+                      _addNoteAt(previous, selectedNoteIndex);
+                      note = previous.getNoteName()[11];
                     }
-                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_up),
                 ),
@@ -305,17 +350,19 @@ class HomePage extends State<MyHomePage> {
                 ElevatedButton(
                   // note down button
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.amber[400]),
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.grey[400]),
+                  ),
                   onPressed: () {
-                    Note previous = _deleteNoteAt(selectedNoteIndex);
-                    previous.increasePitch(6);
-                    if (previous.getNote() == NoteLetter.b) {
-                      previous.setOctave(previous.getOctave() - 1);
+                    if (!isRest && !_score.isEmpty) {
+                      Note previous = _deleteNoteAt(selectedNoteIndex);
+                      previous.increasePitch(6);
+                      if (previous.getNote() == NoteLetter.b) {
+                        previous.setOctave(previous.getOctave() - 1);
+                      }
+                      _addNoteAt(previous, selectedNoteIndex);
+                      note = previous.getNoteName()[11];
                     }
-                    _addNoteAt(previous, selectedNoteIndex);
                   },
                   child: const Icon(Icons.arrow_drop_down),
                 ),
@@ -328,9 +375,11 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.setOctave(previous.getOctave() + 1);
-                      _addNoteAt(previous, selectedNoteIndex);
+                      if (!isRest && !_score.isEmpty) {
+                        Note previous = _deleteNoteAt(selectedNoteIndex);
+                        previous.setOctave(previous.getOctave() + 1);
+                        _addNoteAt(previous, selectedNoteIndex);
+                      }
                     },
                     child: const Icon(Icons.arrow_drop_up)),
                 const Padding(
@@ -346,9 +395,11 @@ class HomePage extends State<MyHomePage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blueGrey)),
                     onPressed: () {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.setOctave(previous.getOctave() - 1);
-                      _addNoteAt(previous, selectedNoteIndex);
+                      if (!isRest && !_score.isEmpty) {
+                        Note previous = _deleteNoteAt(selectedNoteIndex);
+                        previous.setOctave(previous.getOctave() - 1);
+                        _addNoteAt(previous, selectedNoteIndex);
+                      }
                     },
                     child: const Icon(Icons.arrow_drop_down)),
               ]),
@@ -356,19 +407,19 @@ class HomePage extends State<MyHomePage> {
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(top: 60.h),
-              child: MusicPainterWidget(xPosition, xPositions, signatureTop,
-                  signatureBottom, _score, selectedNoteIndex, selectNewNote),
+              padding: EdgeInsets.only(top: 200.h, bottom: 165.h),
+              child: MusicPainterWidget(
+                  xPosition,
+                  xPositions,
+                  timeSignatureTop,
+                  timeSignatureBottom,
+                  _score,
+                  selectedNoteIndex,
+                  selectNewNote),
             )),
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
-                // NoteDurationButton(duration: 32, buttonText: 'Thirtysecond', isSelected: false, onDurationChanged: _handleDurationChanged()),
-                // NoteDurationButton(duration: 16, buttonText: 'Sixteenth', isSelected: false, onDurationChanged: _handleDurationChanged()),
-                // NoteDurationButton(duration: 8, buttonText: 'Eigth', isSelected: false, onDurationChanged: _handleDurationChanged()),
-                // NoteDurationButton(duration: 4, buttonText: 'Quarter', isSelected: false, onDurationChanged: _handleDurationChanged()),
-                // NoteDurationButton(duration: 2, buttonText: 'Half', isSelected: false, onDurationChanged: _handleDurationChanged()),
-                // NoteDurationButton(duration: 1, buttonText: 'Whole', isSelected: false, onDurationChanged: _handleDurationChanged()),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
@@ -384,8 +435,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[100])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 64)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 32)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/32'),
                   // child: Image.asset('images/32.png'),
                 ),
@@ -403,8 +461,16 @@ class HomePage extends State<MyHomePage> {
                     }
                     selectedNoteIndex = _score.length - 1;
                   },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo[200]),
+                  style: ButtonStyle(
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 32)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 16)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/16'),
                 ),
                 const Padding(
@@ -422,8 +488,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[300])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 16)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 8)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/8'),
                 ),
                 const Padding(
@@ -441,8 +514,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[400])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 8)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 4)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/4'),
                 ),
                 const Padding(
@@ -460,8 +540,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[500])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 4)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + (1 / 2)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1/2'),
                 ),
                 const Padding(
@@ -479,8 +566,15 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo[600])),
+                      backgroundColor: dotted == 1
+                          ? (_score.getLastNote().measureProgress + (3 / 2)) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])
+                          : (_score.getLastNote().measureProgress + 1) <=
+                                  timeSignatureTop / timeSignatureBottom
+                              ? MaterialStateProperty.all(Colors.indigo[400])
+                              : MaterialStateProperty.all(Colors.indigo[200])),
                   child: const Text('1'),
                 ),
                 const Padding(
@@ -488,26 +582,30 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (dotted == 0) {
-                      // toggle between dotted and not-dotted
-                      dotted = 1;
-                      if (duration == 1) {
-                        duration = 0;
+                    setState(() {
+                      if (dotted == 0) {
+                        // toggle between dotted and not-dotted
+                        dotted = 1;
+                        if (duration == 1) {
+                          duration = 0;
+                        } else {
+                          duration = (duration * 1.5).round();
+                        }
                       } else {
-                        duration = (duration * 1.5).round();
+                        dotted = 0;
+                        if (duration == 0) {
+                          duration = 1;
+                        } else {
+                          duration = (duration / 1.5).round();
+                        }
                       }
-                    } else {
-                      dotted = 0;
-                      if (duration == 0) {
-                        duration = 1;
-                      } else {
-                        duration = (duration / 1.5).round();
-                      }
-                    }
-                    selectedNoteIndex = _score.length - 1;
+                      selectedNoteIndex = _score.length - 1;
+                    });
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: dotted == 0
+                          ? MaterialStateProperty.all(Colors.grey)
+                          : MaterialStateProperty.all(Colors.black)),
                   child: const Text('.'),
                 ),
                 const Padding(
@@ -515,10 +613,14 @@ class HomePage extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    isRest = !isRest; // toggle between notes and rests
+                    setState(() {
+                      isRest = !isRest; // toggle between notes and rests
+                    });
                   },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey)),
+                      backgroundColor: !isRest
+                          ? MaterialStateProperty.all(Colors.grey)
+                          : MaterialStateProperty.all(Colors.black)),
                   child: const Text('Rest'),
                 ),
                 const Padding(

@@ -16,12 +16,12 @@ class NoteWidget extends CustomPainter {
   List<double> altoBasePositions = [0, 0.5, 1, 1.5, 2, 2.5, 3];
   List<double> bassBasePositions = [3, 3.5, 4, 4.5, 5, 5.5, 6];
 
-  int signature; // number of beats per measure
-  int signature_; // unit of beat
+  int timeSignatureTop; // number of beats per measure
+  int timeSignatureBottom; // unit of beat
 
   /// Constructor
-  NoteWidget(this.noteList, this.xPositions, this.currentClef, this.signature,
-      this.signature_, this.toHighlight);
+  NoteWidget(this.noteList, this.xPositions, this.currentClef, this.timeSignatureTop,
+      this.timeSignatureBottom, this.toHighlight);
 
   // Map of base positions for each note depending on the clef
   Map<String, Map<String, double>> noteToClefBasePositions =
@@ -64,7 +64,6 @@ class NoteWidget extends CustomPainter {
       ..color = Colors.red
       ..strokeWidth = 2.0;
     double x = size.height / 4; // Distance between two lines of the staff
-
     for (int i = 0; i < noteList.length; i++) {
       Note currentNote = noteList[i];
       double xPosition = xPositions[i]; // x-coordinate of the note to be drawn
@@ -81,7 +80,7 @@ class NoteWidget extends CustomPainter {
     }
   }
 
-  /// Draws a note to the staff
+  /// Draws a singular note to the staff (not barred to other notes); always used 
   void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,
@@ -208,7 +207,7 @@ class NoteWidget extends CustomPainter {
     paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 2.0;
-    if (currentNote.complete == signature / signature_) {
+    if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
       canvas.drawLine(
           Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);
@@ -287,12 +286,26 @@ class NoteWidget extends CustomPainter {
     if (currentNote.dotted == 1) {
       // draws the dot for dotted rests
       paint.style = PaintingStyle.fill;
-      canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.25 * x),
+      if(currentNote.duration == 0) {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9), 0.35 * x),
           0.15 * x,
           paint);
+      }
+      else if(currentNote.duration == 6 ) {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9) - 0.75 * x, -0.35 * x),
+          0.15 * x,
+          paint);
+      }
+      else {
+        canvas.drawCircle(
+          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.35 * x),
+          0.15 * x,
+          paint);
+      }
     }
-    if (currentNote.complete == signature / signature_) {
+    if (currentNote.measureProgress == timeSignatureTop / timeSignatureBottom) {
       // draws the measure lines
       canvas.drawLine(
           Offset(xPosition + 20, -2 * x), Offset(xPosition + 20, 2 * x), paint);

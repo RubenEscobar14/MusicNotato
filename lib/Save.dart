@@ -11,12 +11,9 @@ class Save {
 
   /// Decides which directory the save file(s) should be in and returns it.
   Future<String?> get _localPath async {
-    // TODO: Change this to be the commented out version. I can't access that
-    // to look at the file for testing, which is why it's commented out, but it
-    // straight up won't work on iOS. Also remove the question marks
-    // final directory = await getApplicationDocumentsDirectory();
-    final directory = await getExternalStorageDirectory();
-    return directory?.path;
+    final directory = await getApplicationDocumentsDirectory();
+    //final directory = await getExternalStorageDirectory();
+    return directory.path;
   }
 
   /// Decides, based on the already chosen directory, which file should be used
