@@ -32,7 +32,7 @@ class StaffWidget extends CustomPainter {
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
-            fontFamily: 'BravuraText'
+            // fontFamily: 'Bravura'
           ),
         ),
         textDirection: TextDirection.ltr,
