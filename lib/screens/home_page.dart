@@ -6,6 +6,7 @@ import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/screens/save_page.dart';
+import 'package:music_notato/widgets/music_painter_widget.dart';
 // import 'package:music_notato/widgets/note_duration_button.dart';
 import 'package:music_notato/widgets/note_widget.dart';
 import 'package:music_notato/widgets/staff_widget.dart';
@@ -221,6 +222,32 @@ class HomePage extends State<MyHomePage> {
     return complete;
   }
 
+  //updates the currently selected note to the nearest note to the input coordinates
+  void selectNewNote(double x) {
+    double min = 1000;
+    int minIndex = -1;
+    for (int i = 0; i < xPositions.length; i++) {
+      if (distance(xPositions[i], x) < min) {
+        minIndex = i;
+        min = distance(xPositions[i], x);
+      }
+    }
+    print("Nearest Note Index is: $minIndex");
+    setState(() {
+      selectedNoteIndex = minIndex;
+    });
+  }
+
+  //returns the distance between two points in 1 dimension
+  double distance(double x, double y) {
+    double dist = x - y;
+    if (dist < 0) {
+      return dist * -1;
+    } else {
+      return dist;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -330,7 +357,8 @@ class HomePage extends State<MyHomePage> {
                 child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(top: 60.h),
-              child: _paint(),
+              child: MusicPainterWidget(xPosition, xPositions, signatureTop,
+                  signatureBottom, _score, selectedNoteIndex, selectNewNote),
             )),
             SizedBox(
               width: 70.w,
@@ -522,74 +550,6 @@ class HomePage extends State<MyHomePage> {
         child: const Icon(Icons.arrow_forward),
       ),
     );
-  }
-
-  /// Initializes the staff and note widgets
-  Widget _paint() {
-    return Stack(
-      children: <Widget>[
-        CustomPaint(
-          size: Size(
-              xPosition < MediaQuery.of(context).size.width
-                  ? MediaQuery.of(context).size.width
-                  : xPosition,
-              50),
-          painter: StaffWidget('treble', signatureTop, signatureBottom),
-        ),
-        GestureDetector(
-          onTap: () => print('tapped!'),
-          onTapDown: (TapDownDetails details) => _onTapDown(details),
-          child: CustomPaint(
-            size: Size(_score.length * 50, 50),
-            painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-                signatureTop, signatureBottom, selectedNoteIndex),
-          ),
-        ),
-        // GestureDetector(
-        //   onTap: () => print('tapped!'),
-        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
-        // ),
-        // GestureDetector(
-        //   onTap: () => print('tapped!'),
-        //   onTapDown: (TapDownDetails details) => _onTapDown(details),
-        //   child: CustomPaint(
-        //     size: Size(_score.length * 50, 50),
-        //     painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
-        //         signature, signature_, selectedNote),
-        //   ),
-        // ),
-      ],
-    );
-  }
-
-  _onTapDown(TapDownDetails details) {
-    tappedPositionX = details.localPosition.dx;
-    tappedPositionY = details.localPosition.dy;
-    selectNewNote(tappedPositionX, tappedPositionY);
-  }
-
-  void selectNewNote(double x, double y) {
-    double min = 1000;
-    int minIndex = -1;
-    for (int i = 0; i < xPositions.length; i++) {
-      if (distance(xPositions[i], x) < min) {
-        minIndex = i;
-        min = distance(xPositions[i], x);
-      }
-    }
-    print("Nearest Note Index is: $minIndex");
-    setState(() {
-      selectedNoteIndex = minIndex;
-    });
-  }
-
-  double distance(double x, double y) {
-    double dist = x - y;
-    if (dist < 0) {
-      return dist * -1;
-    } else {
-      return dist;
-    }
   }
 
   /// Plays back the music written on the staff
