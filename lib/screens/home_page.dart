@@ -371,7 +371,6 @@ class HomePage extends State<MyHomePage> {
                   style: ButtonStyle(
                       backgroundColor:
                           dotted == 1 ? (_score.getLastNote().measureProgress + (3/64)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200]) : (_score.getLastNote().measureProgress + (1/32)) <= timeSignatureTop/timeSignatureBottom ? MaterialStateProperty.all(Colors.indigo[400]) : MaterialStateProperty.all(Colors.indigo[200])),
-                  // child: const Text('1/32'),
                   child: Image.asset('assets/images/32.png', width: 20, height: 20),
                 ),
                 const Padding(
