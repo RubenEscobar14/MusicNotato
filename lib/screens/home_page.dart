@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:music_notato/helper.dart';
 import 'package:music_notato/main.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
@@ -13,6 +15,7 @@ import 'package:music_notato/widgets/select_note_widget.dart';
 
 /// The main page of the app
 class HomePage extends State<MyHomePage> {
+  late Map<String, Uint8List> audioFiles;
   Score _score = Score(); // current score
 
   double xPosition = 40; // starting x-coordinate for notes
@@ -77,11 +80,20 @@ class HomePage extends State<MyHomePage> {
     return signatureBottom;
   }
 
+  Map<String, Uint8List> getAudio() {
+    return audioFiles;
+  }
+
   /// Loads a save on startup
   @override
   void initState() {
     super.initState();
     loadSave();
+    loadNotes();
+  }
+
+  void loadNotes() async {
+    audioFiles = await Helper.loadAudioFiles();
   }
 
   /// Loads notes by reading the notato data file (if found) that corresponds to
@@ -512,11 +524,13 @@ class HomePage extends State<MyHomePage> {
             borderRadius: BorderRadius.circular(3),
             side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
         onPressed: () {
-          Navigator.push(
-            context,
-            //MaterialPageRoute(builder: (context) => SavePage(this)),
-            MaterialPageRoute(builder: (context) => PlayingPage()),
-          );
+          if (audioFiles != null) {
+            Navigator.push(
+              context,
+              //MaterialPageRoute(builder: (context) => SavePage(this)),
+              MaterialPageRoute(builder: (context) => PlayingPage(this)),
+            );
+          }
         },
         tooltip: 'Go to playing page',
         child: const Icon(Icons.arrow_forward),
