@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class StaffWidget extends CustomPainter {
   String currentClef;
 
-  int signature; // number of beats per measure
-  int signature_; // unit of beat
+  int timeSignatureTop; // number of beats per measure
+  int timeSignatureBottom; // unit of beat
 
   /// Constructor
-  StaffWidget(this.currentClef, this.signature, this.signature_);
+  StaffWidget(this.currentClef, this.timeSignatureTop, this.timeSignatureBottom);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -25,59 +25,14 @@ class StaffWidget extends CustomPainter {
     canvas.drawLine(Offset(0, x), Offset(size.width, x), paint);
     canvas.drawLine(Offset(0, 2 * x), Offset(size.width, 2 * x), paint);
 
-    // time signature graphic frame
-    var points = [
-      // upper line
-      Offset(10, -2 * x - 5),
-      Offset(15, -2 * x - 5),
-      Offset(20, -2 * x - 5),
-      Offset(25, -2 * x - 5),
-      Offset(30, -2 * x - 5),
-      // left line
-      Offset(5, -2 * x - 5),
-      Offset(5, -2 * x),
-      Offset(5, -2 * x + 5),
-      Offset(5, -2 * x + 10),
-      Offset(5, -2 * x + 15),
-      Offset(5, -2 * x + 20),
-      Offset(5, 2 * x - 20),
-      Offset(5, 2 * x - 15),
-      Offset(5, 2 * x - 5),
-      Offset(5, 2 * x),
-      Offset(5, 2 * x + 5),
-      // bottom line
-      Offset(10, 2 * x + 5),
-      Offset(15, 2 * x + 5),
-      Offset(20, 2 * x + 5),
-      Offset(25, 2 * x + 5),
-      Offset(30, 2 * x + 5),
-      // right line
-      Offset(35, -2 * x - 5),
-      Offset(35, -2 * x),
-      Offset(35, -2 * x + 5),
-      Offset(35, -2 * x + 10),
-      Offset(35, -2 * x + 15),
-      Offset(35, -2 * x + 20),
-      Offset(35, 2 * x - 20),
-      Offset(35, 2 * x - 15),
-      Offset(35, 2 * x - 5),
-      Offset(35, 2 * x),
-      Offset(35, 2 * x + 5),
-    ];
-
-    // draws the time signature graphic frame
-    paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
-    canvas.drawPoints(PointMode.points, points, paint);
-
     // draws the time signature graphic
     var textPainter = TextPainter(
         text: TextSpan(
-          text: '${signature}\n${signature_}',
+          text: '${timeSignatureTop}\n${timeSignatureBottom}',
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 24,
+            // fontFamily: 'Bravura'
           ),
         ),
         textDirection: TextDirection.ltr,

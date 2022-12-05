@@ -20,14 +20,14 @@ class Note {
   int accidental;
 
   // Tracks how far this note is in its measure
-  double complete;
+  double measureProgress;
 
   /// Creates a Note object with all properties specified
   Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
-      this.complete);
+      this.measureProgress);
 
   /// Creates a rest, only requiring duration, dotted, and complete to be specified
-  Note.rest(this.duration, this.dotted, this.complete)
+  Note.rest(this.duration, this.dotted, this.measureProgress)
       : note = NoteLetter.r,
         accidental = 0,
         octave = 4;
@@ -114,7 +114,7 @@ class Note {
         duration = json['duration'],
         accidental = json['accidental'],
         dotted = json['dotted'],
-        complete = json['complete'];
+        measureProgress = json['complete'];
 
   /// Tells the json encoder how to store note properties in the save file.
   Map<String, dynamic> toJson() => {
@@ -123,7 +123,7 @@ class Note {
         'duration': duration,
         'accidental': accidental,
         'dotted': dotted,
-        'complete': complete,
+        'complete': measureProgress,
       };
 
   @override
