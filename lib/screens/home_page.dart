@@ -444,7 +444,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/32'),
+                  child: Image.asset('assets/images/32.png', width: 20, height: 20),
                   // child: Image.asset('images/32.png'),
                 ),
                 const Padding(
@@ -471,7 +471,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/16'),
+                  child: Image.asset('assets/images/16.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -497,7 +497,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/8'),
+                  child: Image.asset('assets/images/8.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -523,7 +523,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/4'),
+                  child: Image.asset('assets/images/4.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -549,7 +549,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1/2'),
+                  child: Image.asset('assets/images/2.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -575,7 +575,7 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: const Text('1'),
+                  child: Image.asset('assets/images/1.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
