@@ -447,7 +447,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) : 
+                      dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 64)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
@@ -474,7 +476,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) :  
+                      dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 32)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
@@ -500,7 +504,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) :  
+                      dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 16)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
@@ -526,7 +532,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) : 
+                      dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 8)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
@@ -552,7 +560,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) : 
+                        dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 4)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
@@ -578,7 +588,9 @@ class HomePage extends State<MyHomePage> {
                     selectedNoteIndex = _score.length - 1;
                   },
                   style: ButtonStyle(
-                      backgroundColor: dotted == 1
+                      backgroundColor: _score.getLastNote().measureProgress == timeSignatureTop / timeSignatureBottom ? 
+                        MaterialStateProperty.all(Colors.indigo[400]) : 
+                      dotted == 1
                           ? (_score.getLastNote().measureProgress + (3 / 2)) <=
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
