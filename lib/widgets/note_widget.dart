@@ -75,14 +75,14 @@ class NoteWidget extends CustomPainter {
       if (currentNote.note == NoteLetter.r) {
         drawRest(currentNote, xPosition, canvas, paint, x);
       } else {
-        print(handleEigthBarring(i));
+        print(isBarredToNextNote(i));
         drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
   
   // use while loop to find bar end (while noteList[i].duration <= 6)
-  int handleEigthBarring(int i) {
+  void handleEigthBarring(int i) {
     int currentDuration = noteList[i].duration;
     int j = 0;
     while(currentDuration > 6) {
@@ -91,7 +91,9 @@ class NoteWidget extends CustomPainter {
         currentDuration = noteList[i+j].duration;
       }
     }
-    return j;
+    if(j == 0) {
+      
+    }
   }
 
   bool isBarredToNextNote(int i) {
