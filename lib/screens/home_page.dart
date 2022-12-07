@@ -37,6 +37,8 @@ class HomePage extends State<MyHomePage> {
   String currentClef = 'treble'; // default clef
   String dropdownvalue = '4/4'; // default time signature
   int _tempo = 100; // default tempo
+  String numBeatsString = '4';
+  String beatUnitString = '4';
 
   // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
@@ -60,6 +62,28 @@ class HomePage extends State<MyHomePage> {
     '2/4',
     '2/2'
   ]; // list of available time signatures
+
+  var numBeats = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12'
+  ];
+
+  var beatUnits = [
+    '2',
+    '4',
+    '8',
+    '16'
+  ];
 
   int timeSignatureTop = 4; // default number of beats in a measure
   int timeSignatureBottom = 4; // default beat unit
@@ -301,35 +325,67 @@ class HomePage extends State<MyHomePage> {
                   },
                   child: const Icon(Icons.delete),
                 ),
-                DropdownButton(
-                  // Initial Value
-                  value: dropdownvalue,
-                  // Down Arrow Icon
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  // Array list of items
-                  items: timeSignatures.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-                    if (noteLength == 0) {
-                      setState(() {
-                        dropdownvalue = newValue!;
-                        var str_li = dropdownvalue.split('/');
-                        print(str_li);
-                        setState(() {
-                          timeSignatureTop = int.parse(str_li[0]);
-                          timeSignatureBottom = int.parse(str_li[1]);
-                        });
-                      });
-                    }
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    DropdownButton(
+                      // Initial Value
+                      value: numBeatsString,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      // Array list of items
+                      items: numBeats.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      // After selecting the desired option, it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        if (noteLength == 0) {
+                          setState(() {
+                            numBeatsString = newValue!;
+                            setState(() {
+                              timeSignatureTop = int.parse(numBeatsString);
+                            });
+                          });
+                        }
+                      },
+                      isDense: true,
+                    ),
+                    const Text('/'),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
+                    ),
+                    DropdownButton(
+                      // Initial Value
+                      value: beatUnitString,
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      // Array list of items
+                      items: beatUnits.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      // After selecting the desired option, it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        if (noteLength == 0) {
+                          setState(() {
+                            beatUnitString = newValue!;
+                            setState(() {
+                              timeSignatureBottom = int.parse(beatUnitString);
+                            });
+                          });
+                        }
+                      },
+                      isDense: true,
+                    ),
+                  ],
                 ),
-
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
