@@ -43,6 +43,7 @@ class Helper {
     ByteData bbBytes =
         await rootBundle.load("${pathBeginning}Piano.ff.Bb0.flac");
     ByteData cBytes = await rootBundle.load("${pathBeginning}Piano.ff.C8.flac");
+    ByteData rBytes = await rootBundle.load("${pathBeginning}rest.mp3");
     Uint8List aSoundbytes =
         aBytes.buffer.asUint8List(aBytes.offsetInBytes, aBytes.lengthInBytes);
     Uint8List bSoundbytes =
@@ -51,10 +52,13 @@ class Helper {
         .asUint8List(bbBytes.offsetInBytes, bbBytes.lengthInBytes);
     Uint8List cSoundbytes =
         cBytes.buffer.asUint8List(cBytes.offsetInBytes, cBytes.lengthInBytes);
+    Uint8List rSoundbytes =
+        rBytes.buffer.asUint8List(rBytes.offsetInBytes, rBytes.lengthInBytes);
     toReturn["A0"] = aSoundbytes;
     toReturn["B0"] = bSoundbytes;
     toReturn["Bb0"] = bbSoundbytes;
     toReturn["C8"] = cSoundbytes;
+    toReturn["R"] = rSoundbytes;
 
     return toReturn;
   }

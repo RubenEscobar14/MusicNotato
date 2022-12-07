@@ -16,7 +16,7 @@ import 'package:music_notato/widgets/select_note_widget.dart';
 
 /// The main page of the app
 class HomePage extends State<MyHomePage> {
-  late Map<String, Uint8List> audioFiles;
+  Map<String, Uint8List> audioFiles = <String, Uint8List>{};
   Score _score = Score(); // current score
 
   double xPosition = 60; // starting x-coordinate for notes
@@ -166,7 +166,7 @@ class HomePage extends State<MyHomePage> {
         xPositions.add(xPosition);
         xPosition += 40;
         _score.getAllNotes().add(currentNote);
-        note = currentNote.getNoteName()[11];
+        note = currentNote.getNoteName();
         if (saveOnAdd) {
           widget.storage.writeFile(_score.getAllNotes(), currentFile);
         }
@@ -403,7 +403,7 @@ class HomePage extends State<MyHomePage> {
                         previous.setOctave(previous.getOctave() + 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
-                      note = previous.getNoteName()[11];
+                      note = previous.getNoteName();
                     }
                   },
                   child: const Icon(Icons.arrow_drop_up),
@@ -429,7 +429,7 @@ class HomePage extends State<MyHomePage> {
                         previous.setOctave(previous.getOctave() - 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
-                      note = previous.getNoteName()[11];
+                      note = previous.getNoteName();
                     }
                   },
                   child: const Icon(Icons.arrow_drop_down),
@@ -514,7 +514,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/32.png', width: 20, height: 20),
+                  child: Image.asset('assets/images/32.png',
+                      width: 20, height: 20),
                   // child: Image.asset('images/32.png'),
                 ),
                 const Padding(
@@ -543,7 +544,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/16.png', width: 20, height: 20),
+                  child: Image.asset('assets/images/16.png',
+                      width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -571,7 +573,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/8.png', width: 20, height: 20),
+                  child:
+                      Image.asset('assets/images/8.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -599,7 +602,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/4.png', width: 20, height: 20),
+                  child:
+                      Image.asset('assets/images/4.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -627,7 +631,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/2.png', width: 20, height: 20),
+                  child:
+                      Image.asset('assets/images/2.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -655,7 +660,8 @@ class HomePage extends State<MyHomePage> {
                                   timeSignatureTop / timeSignatureBottom
                               ? MaterialStateProperty.all(Colors.indigo[400])
                               : MaterialStateProperty.all(Colors.indigo[200])),
-                  child: Image.asset('assets/images/1.png', width: 20, height: 20),
+                  child:
+                      Image.asset('assets/images/1.png', width: 20, height: 20),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
@@ -722,13 +728,11 @@ class HomePage extends State<MyHomePage> {
             borderRadius: BorderRadius.circular(3),
             side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
         onPressed: () {
-          if (audioFiles != null) {
-            Navigator.push(
-              context,
-              //MaterialPageRoute(builder: (context) => SavePage(this)),
-              MaterialPageRoute(builder: (context) => PlayingPage(this)),
-            );
-          }
+          Navigator.push(
+            context,
+            //MaterialPageRoute(builder: (context) => SavePage(this)),
+            MaterialPageRoute(builder: (context) => PlayingPage(this)),
+          );
         },
         tooltip: 'Go to playing page',
         child: const Icon(Icons.arrow_forward),
@@ -737,5 +741,8 @@ class HomePage extends State<MyHomePage> {
   }
 
   /// Plays back the music written on the staff
-  void playBack() {}
+  void playBack() {
+    PlayingPage musicRender = PlayingPage(this);
+    musicRender.playBack();
+  }
 }
