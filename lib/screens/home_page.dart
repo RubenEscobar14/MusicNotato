@@ -16,7 +16,7 @@ import 'package:music_notato/widgets/select_note_widget.dart';
 
 /// The main page of the app
 class HomePage extends State<MyHomePage> {
-  late Map<String, Uint8List> audioFiles;
+  Map<String, Uint8List> audioFiles = <String, Uint8List>{};
   Score _score = Score(); // current score
 
   double xPosition = 60; // starting x-coordinate for notes
@@ -660,7 +660,7 @@ class HomePage extends State<MyHomePage> {
             borderRadius: BorderRadius.circular(3),
             side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
         onPressed: () {
-          if (audioFiles != null) {
+          if (audioFiles.isNotEmpty) {
             Navigator.push(
               context,
               //MaterialPageRoute(builder: (context) => SavePage(this)),
@@ -675,5 +675,8 @@ class HomePage extends State<MyHomePage> {
   }
 
   /// Plays back the music written on the staff
-  void playBack() {}
+  void playBack() {
+    PlayingPage musicRender = PlayingPage(this);
+    musicRender.playBack();
+  }
 }

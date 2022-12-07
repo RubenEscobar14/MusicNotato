@@ -16,7 +16,7 @@ class PlayingPage extends StatelessWidget {
   late Map<String, Uint8List> audioFiles;
   ConcatenatingAudioSource playlist = ConcatenatingAudioSource(children: []);
 
-  final player = AudioPlayer();
+  late AudioPlayer player;
 
   PlayingPage(this.homePage) {
     score = homePage.getScore();
@@ -35,7 +35,6 @@ class PlayingPage extends StatelessWidget {
         playlist.add(bytesToData(noteData, 0.5));
       }
     }
-    await player.setAudioSource(playlist);
   }
 
   // Map of duration values to fraction of a measure using whole note = 1
@@ -56,7 +55,8 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
-    await player.load();
+    player = AudioPlayer();
+    await player.setAudioSource(playlist);
     await player.play();
     player.dispose();
   }
