@@ -13,7 +13,7 @@ class PlayingPage extends StatelessWidget {
   late Score score;
   late int tempo;
   late int signature_;
-  late Map<String, Uint8List> audioFiles;
+  Map<String, Uint8List> audioFiles = <String, Uint8List>{};
   ConcatenatingAudioSource playlist = ConcatenatingAudioSource(children: []);
 
   late AudioPlayer player;
@@ -27,6 +27,8 @@ class PlayingPage extends StatelessWidget {
   }
 
   void renderAudio() async {
+    // No point in trying to add loaded data if the data's not loaded
+    if (audioFiles.isEmpty) return;
     for (Note note in score.getAllNotes()) {
       if (note.getNoteName() == "R") {
         playlist.add(bytesToData(note.getNoteName(), 0.5));
@@ -55,6 +57,11 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
+    // Try fetching the audio again if this page was loaded before the audio files
+    if (audioFiles.isEmpty) {
+      audioFiles = homePage.getAudio();
+      renderAudio();
+    }
     player = AudioPlayer();
     await player.setAudioSource(playlist);
     await player.play();

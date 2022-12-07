@@ -660,13 +660,11 @@ class HomePage extends State<MyHomePage> {
             borderRadius: BorderRadius.circular(3),
             side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
         onPressed: () {
-          if (audioFiles.isNotEmpty) {
-            Navigator.push(
-              context,
-              //MaterialPageRoute(builder: (context) => SavePage(this)),
-              MaterialPageRoute(builder: (context) => PlayingPage(this)),
-            );
-          }
+          Navigator.push(
+            context,
+            //MaterialPageRoute(builder: (context) => SavePage(this)),
+            MaterialPageRoute(builder: (context) => PlayingPage(this)),
+          );
         },
         tooltip: 'Go to playing page',
         child: const Icon(Icons.arrow_forward),
