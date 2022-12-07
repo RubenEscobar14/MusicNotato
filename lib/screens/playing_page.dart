@@ -14,6 +14,7 @@ class PlayingPage extends StatelessWidget {
   late int tempo;
   late int signature_;
   late Map<String, Uint8List> audioFiles;
+  ConcatenatingAudioSource playlist = ConcatenatingAudioSource(children: []);
 
   final player = AudioPlayer();
 
@@ -22,6 +23,19 @@ class PlayingPage extends StatelessWidget {
     tempo = homePage.getTempo();
     signature_ = homePage.getSignature_();
     audioFiles = homePage.getAudio();
+    renderAudio();
+  }
+
+  void renderAudio() async {
+    for (Note note in score.getAllNotes()) {
+      if (note.getNoteName() == "R") {
+        playlist.add(bytesToData(note.getNoteName(), 0.5));
+      } else {
+        String noteData = "${note.getNoteName()}${note.getOctave()}";
+        playlist.add(bytesToData(noteData, 0.5));
+      }
+    }
+    await player.setAudioSource(playlist);
   }
 
   // Map of duration values to fraction of a measure using whole note = 1
@@ -42,25 +56,16 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
-    for (Note note in score.getAllNotes()) {
-      String noteName = note.getNoteName();
-      int octave = note.octave;
-      int duration = note.duration;
-      int accidental = note.accidental; // not implemented yet
-    }
-    final playlist = ConcatenatingAudioSource(children: [
-      bytesToData("C4", 1),
-      bytesToData("A0", 3),
-    ]);
-    await player.setAudioSource(playlist);
+    await player.load();
     await player.play();
+    player.dispose();
   }
 
   /// Returns an AudioSource of length seconds corresponding to the given note.
   ClippingAudioSource bytesToData(String note, double length) {
     return ClippingAudioSource(
         child: AudioSource.uri(Uri.dataFromBytes(audioFiles[note]!)),
-        end: Duration(seconds: length.floor()));
+        end: Duration(milliseconds: (length * 1000).floor()));
   }
 
   @override
