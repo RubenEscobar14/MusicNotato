@@ -19,6 +19,15 @@ class NoteWidget extends CustomPainter {
   int timeSignatureTop; // number of beats per measure
   int timeSignatureBottom; // unit of beat
 
+  final double ellipseWidth = 748 / 512; // scaling factor for the length of the major axis of the notehead
+  final double halfEllipseWidth = 748 / 1024; // scaling factor for the length of the semimajor axis of the notehead
+  final double noteWidth = (748 / 512) * cos(pi / 9); // scaling factor for the width of the note
+  final double halfNoteWidth = (748 / 1024) * cos(pi / 9); // scaling factor for half the width of the note
+  final double noteHeight = (748 / 512) * sin(pi / 9); // scaling factor for the height of the note
+  final double halfNoteHeight = (748 / 1024) * sin(pi / 9); // scaling factor for half the height of the note
+  final double rotationAngle = pi / 9; // number of radians the notehead is rotated counterclockwise
+
+
   /// Constructor
   NoteWidget(this.noteList, this.xPositions, this.currentClef, this.timeSignatureTop,
       this.timeSignatureBottom, this.toHighlight);
@@ -75,14 +84,14 @@ class NoteWidget extends CustomPainter {
       if (currentNote.note == NoteLetter.r) {
         drawRest(currentNote, xPosition, canvas, paint, x);
       } else {
-        print(handleEigthBarring(i));
+        // print(isBarredToNextNote(i));
         drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
   
   // use while loop to find bar end (while noteList[i].duration <= 6)
-  int handleEigthBarring(int i) {
+  void handleEigthBarring(int i) {
     int currentDuration = noteList[i].duration;
     int j = 0;
     while(currentDuration > 6) {
@@ -91,7 +100,9 @@ class NoteWidget extends CustomPainter {
         currentDuration = noteList[i+j].duration;
       }
     }
-    return j;
+    if(j == 0) {
+      
+    }
   }
 
   bool isBarredToNextNote(int i) {
@@ -133,26 +144,26 @@ class NoteWidget extends CustomPainter {
       if (position >= 0) {
         // draws a stem going down
         stemEndX = xPosition -
-            (748 / 1024) * x * cos(pi / 9) +
+            halfNoteWidth * x +
             0.15 * paint.strokeWidth;
         if (position > 3) {
           stemEndY = 0;
         } else {
           stemEndY = y + 3.5 * x;
         }
-        canvas.drawLine(Offset(stemEndX, y + (748 / 1024) * x * sin(pi / 9)),
+        canvas.drawLine(Offset(stemEndX, y + halfNoteHeight * x),
             Offset(stemEndX, stemEndY), paint);
       } else {
         // draws a stem going up
         stemEndX = xPosition +
-            (748 / 1024) * x * cos(pi / 9) +
+            halfNoteWidth * x +
             0.5 * paint.strokeWidth;
         if (position < -3) {
           stemEndY = 0;
         } else {
           stemEndY = y - 3.5 * x;
         }
-        canvas.drawLine(Offset(stemEndX, y - (748 / 1024) * x * sin(pi / 9)),
+        canvas.drawLine(Offset(stemEndX, y - halfNoteHeight * x),
             Offset(stemEndX, stemEndY), paint);
       }
       // draws the first flag on shorter notes
@@ -198,34 +209,24 @@ class NoteWidget extends CustomPainter {
     if (currentNote.dotted == 1) {
       paint.style = PaintingStyle.fill;
       // draws the dot for dotted notes
-      canvas.drawCircle(Offset(xPosition + (748 / 512) * x * cos(pi / 9), y),
+      canvas.drawCircle(Offset(xPosition + noteWidth * x, y),
           0.15 * x, paint);
     }
-    if (position > 2.5) {
-      // draws ledger lines for notes above the middle staff line
-      int counter = position.floor();
+    if(position > 2.5 || position < -2.5) {
+      int counter = position.abs().floor();
       while (counter > 2.5) {
-        double ledgerLineY = -counter * x;
+        double ledgerLineY;
+        if(position > 2.5) {
+          ledgerLineY = -counter * x; // draws ledger lines for notes above the middle staff line
+        }
+        else {
+          ledgerLineY = counter * x; // draws ledger lines for notes below the middle staff line
+        }
         canvas.drawLine(
             Offset(
-                xPosition - 0.75 * (748 / 512) * x * cos(pi / 9), ledgerLineY),
+                xPosition - 0.75 * noteWidth * x, ledgerLineY),
             Offset(
-                xPosition + 0.75 * (748 / 512) * x * cos(pi / 9), ledgerLineY),
-            paint);
-        counter--;
-      }
-    }
-    if (position < -2.5) {
-      // draws ledger lines for notes below the middle staff line
-      double positivePosition = -position;
-      int counter = positivePosition.floor();
-      while (counter > 2.5) {
-        double ledgerLineY = counter * x;
-        canvas.drawLine(
-            Offset(
-                xPosition - 0.75 * (748 / 512) * x * cos(pi / 9), ledgerLineY),
-            Offset(
-                xPosition + 0.75 * (748 / 512) * x * cos(pi / 9), ledgerLineY),
+                xPosition + 0.75 * noteWidth * x, ledgerLineY),
             paint);
         counter--;
       }
@@ -245,11 +246,11 @@ class NoteWidget extends CustomPainter {
       Canvas canvas, Paint paint, double x, double xPosition, double y) {
     canvas.save();
     canvas.translate(xPosition, y);
-    canvas.rotate(-pi / 9);
+    canvas.rotate(-rotationAngle);
     canvas.translate(0, -y);
-    Rect noteHead = Offset(-(748 / 1024) * x * cos(pi / 9),
-            y - (748 / 512) * x * sin(pi / 9)) &
-        Size((748 / 512) * x, x);
+    Rect noteHead = Offset(-halfNoteWidth * x,
+            y - noteHeight * x) &
+        Size(ellipseWidth * x, x);
     canvas.drawOval(noteHead, paint);
     canvas.restore();
   }
@@ -314,19 +315,19 @@ class NoteWidget extends CustomPainter {
       paint.style = PaintingStyle.fill;
       if(currentNote.duration == 0) {
         canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9), 0.35 * x),
+          Offset(xPosition + noteWidth * x, 0.35 * x),
           0.15 * x,
           paint);
       }
       else if(currentNote.duration == 6 ) {
         canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9) - 0.75 * x, -0.35 * x),
+          Offset(xPosition + noteWidth * x - 0.75 * x, -0.35 * x),
           0.15 * x,
           paint);
       }
       else {
         canvas.drawCircle(
-          Offset(xPosition + (748 / 512) * x * cos(pi / 9), -0.35 * x),
+          Offset(xPosition + noteWidth * x, -0.35 * x),
           0.15 * x,
           paint);
       }
@@ -342,7 +343,7 @@ class NoteWidget extends CustomPainter {
   void drawRectRest(
       Canvas canvas, Paint paint, double x, double xPosition, double y) {
     Rect rectRest = Offset(xPosition - 0.5 * x, y) &
-        Size((748 / 512) * cos(pi / 9) * x,
+        Size(noteWidth * x,
             0.5 * x); // rest has the same width as notes
     paint.style = PaintingStyle.fill;
     canvas.drawRect(rectRest, paint);
