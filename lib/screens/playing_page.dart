@@ -13,15 +13,30 @@ class PlayingPage extends StatelessWidget {
   late Score score;
   late int tempo;
   late int signature_;
-  late Map<String, Uint8List> audioFiles;
+  Map<String, Uint8List> audioFiles = <String, Uint8List>{};
+  ConcatenatingAudioSource playlist = ConcatenatingAudioSource(children: []);
 
-  final player = AudioPlayer();
+  late AudioPlayer player;
 
   PlayingPage(this.homePage) {
     score = homePage.getScore();
     tempo = homePage.getTempo();
     signature_ = homePage.getSignature_();
     audioFiles = homePage.getAudio();
+    renderAudio();
+  }
+
+  void renderAudio() async {
+    // No point in trying to add loaded data if the data's not loaded
+    if (audioFiles.isEmpty) return;
+    for (Note note in score.getAllNotes()) {
+      if (note.getNoteName() == "R") {
+        playlist.add(bytesToData(note.getNoteName(), 0.5));
+      } else {
+        String noteData = "${note.getNoteName()}${note.getOctave()}";
+        playlist.add(bytesToData(noteData, 0.5));
+      }
+    }
   }
 
   // Map of duration values to fraction of a measure using whole note = 1
@@ -42,25 +57,22 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
-    for (Note note in score.getAllNotes()) {
-      String noteName = note.getNoteName();
-      int octave = note.octave;
-      int duration = note.duration;
-      int accidental = note.accidental; // not implemented yet
+    // Try fetching the audio again if this page was loaded before the audio files
+    if (audioFiles.isEmpty) {
+      audioFiles = homePage.getAudio();
+      renderAudio();
     }
-    final playlist = ConcatenatingAudioSource(children: [
-      bytesToData("C4", 1),
-      bytesToData("A0", 3),
-    ]);
+    player = AudioPlayer();
     await player.setAudioSource(playlist);
     await player.play();
+    player.dispose();
   }
 
   /// Returns an AudioSource of length seconds corresponding to the given note.
   ClippingAudioSource bytesToData(String note, double length) {
     return ClippingAudioSource(
         child: AudioSource.uri(Uri.dataFromBytes(audioFiles[note]!)),
-        end: Duration(seconds: length.floor()));
+        end: Duration(milliseconds: (length * 1000).floor()));
   }
 
   @override
