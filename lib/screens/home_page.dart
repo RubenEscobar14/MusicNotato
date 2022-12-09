@@ -157,13 +157,14 @@ class HomePage extends State<MyHomePage> {
   }
 
   void selectLastNote() {
-    selectedNoteIndex = _score.length;
+    selectedNoteIndex = _score.length - 1;
   }
 
   /// Adds a note to the staff at the end of the list of notes. Will automatically re-save to
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     _addNoteAt(currentNote, _score.length);
+    selectLastNote();
   }
 
   // Like the addnote() function, but adds the note at a specified index instead of the end of the list
