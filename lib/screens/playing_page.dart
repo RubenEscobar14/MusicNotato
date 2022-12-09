@@ -68,7 +68,7 @@ class PlayingPage extends StatelessWidget {
     // If there's no matching value in durationRatios, use 1/4 instead (as if
     // there's a quarter note)
     double ratio = durationRatios[noteDuration] ??= 1 / 4;
-    return (bpm * 4.0 * ratio) / 60;
+    return (bpm * ratio) / 60;
   }
 
   /// Plays back the music written on the staff
