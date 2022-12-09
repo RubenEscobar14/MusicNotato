@@ -319,10 +319,7 @@ class HomePage extends State<MyHomePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
-                      _deleteNote();
-                      if (!_score.isEmpty) {
-                        _addNote(_deleteNote());
-                      }
+                      _deleteNoteAt(selectedNoteIndex);
                       selectedNoteIndex = _score.length - 1;
                       if (selectedNoteIndex == -1) {
                         setState(() {

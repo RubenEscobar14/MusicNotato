@@ -130,12 +130,10 @@ class NoteWidget extends CustomPainter {
         currentNote.duration == 3) {
       paint.style = PaintingStyle.stroke;
       // draws an unfilled notehead (notehead for whole and half notes)
-      drawNotehead(canvas, paint, x, xPosition, y);
+      drawNotehead(canvas, paint, 0.92*x, xPosition, y);
     } else {
       // draws a filled notehead (notehead for all other notes)
       paint.style = PaintingStyle.fill;
-      drawNotehead(canvas, paint, x, xPosition, y);
-      paint.style = PaintingStyle.stroke;
       drawNotehead(canvas, paint, x, xPosition, y);
     }
     if (currentNote.duration != 1 && currentNote.duration != 0) {
@@ -145,7 +143,7 @@ class NoteWidget extends CustomPainter {
         // draws a stem going down
         stemEndX = xPosition -
             halfNoteWidth * x +
-            0.15 * paint.strokeWidth;
+            0.6 * paint.strokeWidth;
         if (position > 3) {
           stemEndY = 0;
         } else {
@@ -156,8 +154,7 @@ class NoteWidget extends CustomPainter {
       } else {
         // draws a stem going up
         stemEndX = xPosition +
-            halfNoteWidth * x +
-            0.5 * paint.strokeWidth;
+            halfNoteWidth * x;
         if (position < -3) {
           stemEndY = 0;
         } else {
