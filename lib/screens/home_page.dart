@@ -114,6 +114,7 @@ class HomePage extends State<MyHomePage> {
     loadNotes();
   }
 
+  /// Loads audio files
   void loadNotes() async {
     audioFiles = await Helper.loadAudioFiles();
   }
@@ -190,6 +191,15 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
+  /// Deletes every note and adds the passed list to the staff
+  void renderList(List<Note> newNoteList) {
+    clearNotes();
+    for (Note note in newNoteList) {
+      _addNote(note, saveOnAdd: false);
+    }
+    widget.storage.writeFile(_score.getAllNotes(), currentFile);
+  }
+
   /// Deletes the last note in the score
   Note _deleteNote() {
     return _deleteNoteAt(_score.length - 1);
@@ -200,8 +210,9 @@ class HomePage extends State<MyHomePage> {
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
-      xPosition = xPositions[xPositions.length - 1];
-      xPositions.remove(xPositions[xPositions.length - 1]);
+      renderList(_score.getAllNotes());
+      //xPosition = xPositions[xPositions.length - 1];
+      //xPositions.remove(xPositions[xPositions.length - 1]);
       return toRemove;
     }
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
