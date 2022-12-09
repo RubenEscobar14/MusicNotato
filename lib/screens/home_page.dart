@@ -206,11 +206,13 @@ class HomePage extends State<MyHomePage> {
   }
 
   //deletes the note at the specified positon from the score
-  Note _deleteNoteAt(int index) {
+  Note _deleteNoteAt(int index, {bool rerender = false}) {
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
-      renderList(_score.getAllNotes());
+      if (rerender) {
+        renderList(_score.getAllNotes());
+      }
       //xPosition = xPositions[xPositions.length - 1];
       //xPositions.remove(xPositions[xPositions.length - 1]);
       return toRemove;
@@ -321,7 +323,7 @@ class HomePage extends State<MyHomePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
-                      _deleteNoteAt(selectedNoteIndex);
+                      _deleteNoteAt(selectedNoteIndex, rerender: true);
                       selectedNoteIndex -= 1;
                       if (selectedNoteIndex < 0) {
                         selectLastNote();
