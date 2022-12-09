@@ -202,7 +202,6 @@ class HomePage extends State<MyHomePage> {
       _score.removeNoteAt(index);
       xPosition = xPositions[xPositions.length - 1];
       xPositions.remove(xPositions[xPositions.length - 1]);
-      selectedNoteIndex = index - 1;
       return toRemove;
     }
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
@@ -312,7 +311,10 @@ class HomePage extends State<MyHomePage> {
                   onPressed: () {
                     setState(() {
                       _deleteNoteAt(selectedNoteIndex);
-                      selectedNoteIndex = _score.length - 1;
+                      selectedNoteIndex -= 1;
+                      if (selectedNoteIndex < 0) {
+                        selectLastNote();
+                      }
                       if (selectedNoteIndex == -1) {
                         setState(() {
                           noteLength = 0.0;
