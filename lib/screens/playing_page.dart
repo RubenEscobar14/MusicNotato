@@ -30,11 +30,13 @@ class PlayingPage extends StatelessWidget {
     // No point in trying to add loaded data if the data's not loaded
     if (audioFiles.isEmpty) return;
     for (Note note in score.getAllNotes()) {
+      double duration =
+          calculateDuration(note.getDuration(), dotted: note.getDotted());
       if (note.getNoteName() == "R") {
-        playlist.add(bytesToData(note.getNoteName(), 0.5));
+        playlist.add(bytesToData(note.getNoteName(), duration));
       } else {
         String noteData = "${note.getNoteName()}${note.getOctave()}";
-        playlist.add(bytesToData(noteData, 0.5));
+        playlist.add(bytesToData(noteData, duration));
       }
     }
   }
@@ -54,6 +56,20 @@ class PlayingPage extends StatelessWidget {
     1: 1,
     0: 3 / 2,
   };
+
+  /// Calculates the length in seconds that a note should play given the tempo
+  /// (theoretically - tempo is not yet a feature) and duration. Dotted is currently
+  /// unused, as duration contains all the duration information, so it can be passed
+  /// in with or without dotted.
+  double calculateDuration(int noteDuration, {int dotted = 0}) {
+    // Two quarter notes per second. This'll use math so that tempo can be easy to change
+    double bpm = 120;
+    //https://flutterigniter.com/checking-null-aware-operators-dart/
+    // If there's no matching value in durationRatios, use 1/4 instead (as if
+    // there's a quarter note)
+    double ratio = durationRatios[noteDuration] ??= 1 / 4;
+    return (bpm * 4.0 * ratio) / 60;
+  }
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
