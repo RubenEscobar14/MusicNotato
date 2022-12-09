@@ -1,18 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_notato/helper.dart';
 import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/home_page.dart';
 
 /// Class responsible for playing back the music written on the staff
 class PlayingPage extends StatelessWidget {
-  // Setting these variables like this is useless; they'll all have null values
-  Score score = HomePage().getScore();
-  int tempo = HomePage().getTempo();
-  int signature_ = HomePage().getSignature_();
+  // This homePage variable could be worth deleting
+  late HomePage homePage;
+  late Score score;
+  late int tempo;
+  late int signature_;
+  Map<String, Uint8List> audioFiles = <String, Uint8List>{};
+  ConcatenatingAudioSource playlist = ConcatenatingAudioSource(children: []);
 
-  final player = AudioPlayer();
+  late AudioPlayer player;
+
+  PlayingPage(this.homePage) {
+    score = homePage.getScore();
+    tempo = homePage.getTempo();
+    signature_ = homePage.getSignature_();
+    audioFiles = homePage.getAudio();
+    renderAudio();
+  }
+
+  void renderAudio() async {
+    // No point in trying to add loaded data if the data's not loaded
+    if (audioFiles.isEmpty) return;
+    for (Note note in score.getAllNotes()) {
+      if (note.getNoteName() == "R") {
+        playlist.add(bytesToData(note.getNoteName(), 0.5));
+      } else {
+        String noteData = "${note.getNoteName()}${note.getOctave()}";
+        playlist.add(bytesToData(noteData, 0.5));
+      }
+    }
+  }
 
   // Map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
@@ -32,20 +57,22 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
-    for (Note note in score.getAllNotes()) {
-      String noteName = note.getNoteName();
-      int octave = note.octave;
-      int duration = note.duration;
-      int accidental = note.accidental; // not implemented yet
+    // Try fetching the audio again if this page was loaded before the audio files
+    if (audioFiles.isEmpty) {
+      audioFiles = homePage.getAudio();
+      renderAudio();
     }
-    // https://www.fluttercampus.com/guide/221/play-soud-from-assets-folder-flutter/
-    String a0Location = 'assets/audio/Piano.ff.A0.flac';
-    ByteData bytes = await rootBundle.load(a0Location);
-    Uint8List soundbytes =
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
-    final audioSource = await player
-        .setAudioSource(AudioSource.uri(Uri.dataFromBytes(soundbytes)));
+    player = AudioPlayer();
+    await player.setAudioSource(playlist);
     await player.play();
+    player.dispose();
+  }
+
+  /// Returns an AudioSource of length seconds corresponding to the given note.
+  ClippingAudioSource bytesToData(String note, double length) {
+    return ClippingAudioSource(
+        child: AudioSource.uri(Uri.dataFromBytes(audioFiles[note]!)),
+        end: Duration(milliseconds: (length * 1000).floor()));
   }
 
   @override

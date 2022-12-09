@@ -6,6 +6,7 @@ import 'save.dart';
 
 // Music Library: https://theremin.music.uiowa.edu/MISpiano.html
 // Converted to flac with https://cloudconvert.com/
+// Rest taken from https://github.com/anars/blank-audio
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 

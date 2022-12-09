@@ -76,8 +76,7 @@ class Note {
       octave = 8;
     } else if (oct < 0) {
       octave = 0;
-    }
-    else {
+    } else {
       octave = oct;
     }
   }
@@ -86,8 +85,12 @@ class Note {
     return note;
   }
 
+  /// Returns the capitalized letter note, and just the letter
   String getNoteName() {
-    return note.toString().toUpperCase();
+    String unprocessed = note.toString();
+    return unprocessed
+        .toUpperCase()
+        .substring(unprocessed.length - 1, unprocessed.length);
   }
 
   int getDotted() {
