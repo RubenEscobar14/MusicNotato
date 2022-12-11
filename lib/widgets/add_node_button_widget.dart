@@ -42,7 +42,9 @@ class AddNoteButtonWidget extends StatelessWidget {
         selectLastNote();
       },
       style: ButtonStyle(
-          backgroundColor: dotted == 1
+          backgroundColor: 
+            previous.measureProgress == timeSignatureTop / timeSignatureBottom ?
+              MaterialStateProperty.all(Colors.indigo[400]) : dotted == 1
               ? (previous.measureProgress + (3 / (duration * 1.5).round())) <=
                       timeSignatureTop / timeSignatureBottom
                   ? MaterialStateProperty.all(Colors.indigo[400])

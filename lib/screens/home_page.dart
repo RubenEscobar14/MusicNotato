@@ -115,6 +115,7 @@ class HomePage extends State<MyHomePage> {
     loadNotes();
   }
 
+  /// Loads audio files
   void loadNotes() async {
     audioFiles = await Helper.loadAudioFiles();
   }
@@ -191,18 +192,30 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
+  /// Deletes every note and adds the passed list to the staff
+  void renderList(List<Note> newNoteList) {
+    clearNotes();
+    for (Note note in newNoteList) {
+      _addNote(note, saveOnAdd: false);
+    }
+    widget.storage.writeFile(_score.getAllNotes(), currentFile);
+  }
+
   /// Deletes the last note in the score
   Note _deleteNote() {
     return _deleteNoteAt(_score.length - 1);
   }
 
   //deletes the note at the specified positon from the score
-  Note _deleteNoteAt(int index) {
+  Note _deleteNoteAt(int index, {bool rerender = false}) {
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
-      xPosition = xPositions[xPositions.length - 1];
-      xPositions.remove(xPositions[xPositions.length - 1]);
+      if (rerender) {
+        renderList(_score.getAllNotes());
+      }
+      //xPosition = xPositions[xPositions.length - 1];
+      //xPositions.remove(xPositions[xPositions.length - 1]);
       return toRemove;
     }
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
@@ -311,7 +324,7 @@ class HomePage extends State<MyHomePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
-                      _deleteNoteAt(selectedNoteIndex);
+                      _deleteNoteAt(selectedNoteIndex, rerender: true);
                       selectedNoteIndex -= 1;
                       if (selectedNoteIndex < 0) {
                         selectLastNote();

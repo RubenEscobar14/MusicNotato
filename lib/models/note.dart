@@ -13,7 +13,7 @@ class Note {
   // For dotted whole notes, the duration is 0
   int duration;
 
-  // 0 if not dotted, 1 if dotted
+  // 0 if not dotted, 1 if dotted. An integer for "when" notes with more than 1 dot are added.
   int dotted;
 
   // -2 is double flat, -1 is flat, 0 is natural, 1 is sharp, 2 is double sharp
