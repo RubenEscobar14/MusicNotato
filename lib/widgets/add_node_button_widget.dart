@@ -7,7 +7,7 @@ typedef AddNote = void Function(Note note);
 typedef SelectLastNote = void Function();
 typedef SetDuration = void Function(int duration);
 
-class addNoteButtonWidget extends StatelessWidget {
+class AddNoteButtonWidget extends StatelessWidget {
   int dotted;
   int duration;
   int timeSignatureTop;
@@ -19,7 +19,7 @@ class addNoteButtonWidget extends StatelessWidget {
   final SelectLastNote selectLastNote;
   final SetDuration setDuration;
 
-  addNoteButtonWidget(
+  AddNoteButtonWidget(
       this.dotted,
       this.duration,
       this.timeSignatureTop,
