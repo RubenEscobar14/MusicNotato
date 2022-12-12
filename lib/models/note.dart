@@ -35,13 +35,19 @@ class Note {
         accidental = 0,
         octave = 4;
 
-  /// Increases the note value by n, raising octave if necessary
-  void increasePitch(int n) {
+  /// Increases the note value by n, wrapping around at the top of an octave, returns the change in octaves as a int
+  int increasePitch(int n) {
+    int octChange = 0;
+    while (n < 0) {
+      n += 7;
+      octChange--;
+    }
     for (int i = n; i > 0; i--) {
       if (note == NoteLetter.a) {
         setNote(NoteLetter.b);
       } else if (note == NoteLetter.b) {
         setNote(NoteLetter.c);
+        octChange++;
       } else if (note == NoteLetter.c) {
         setNote(NoteLetter.d);
       } else if (note == NoteLetter.d) {
@@ -56,6 +62,7 @@ class Note {
         setNote(NoteLetter.r);
       }
     }
+    return octChange;
   }
 
   void setNote(NoteLetter letter) {

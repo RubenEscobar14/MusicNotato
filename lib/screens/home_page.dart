@@ -9,6 +9,7 @@ import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/screens/save_page.dart';
 import 'package:music_notato/widgets/add_node_button_widget.dart';
+import 'package:music_notato/widgets/edit_note_widgets.dart';
 import 'package:music_notato/widgets/music_painter_widget.dart';
 // import 'package:music_notato/widgets/note_duration_button.dart';
 import 'package:music_notato/widgets/note_widget.dart';
@@ -391,25 +392,9 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
-                  // note up button
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.grey[400]),
-                  ),
-                  onPressed: () {
-                    if (!isRest && !_score.isEmpty) {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.increasePitch(1);
-                      if (previous.note == NoteLetter.c) {
-                        previous.setOctave(previous.octave + 1);
-                      }
-                      _addNoteAt(previous, selectedNoteIndex);
-                      note = previous.getNoteName();
-                    }
-                  },
-                  child: const Icon(Icons.arrow_drop_up),
-                ),
+                // note up button
+                EditNoteButton(1, 0, Icons.arrow_drop_up, selectedNoteIndex,
+                    _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
@@ -417,41 +402,15 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                ElevatedButton(
-                  // note down button
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.grey[400]),
-                  ),
-                  onPressed: () {
-                    if (!isRest && !_score.isEmpty) {
-                      Note previous = _deleteNoteAt(selectedNoteIndex);
-                      previous.increasePitch(6);
-                      if (previous.note == NoteLetter.b) {
-                        previous.setOctave(previous.octave - 1);
-                      }
-                      _addNoteAt(previous, selectedNoteIndex);
-                      note = previous.getNoteName();
-                    }
-                  },
-                  child: const Icon(Icons.arrow_drop_down),
-                ),
+                // note down button
+                EditNoteButton(-1, 0, Icons.arrow_drop_down, selectedNoteIndex,
+                    _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
-                    // octave up button
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey)),
-                    onPressed: () {
-                      if (!isRest && !_score.isEmpty) {
-                        Note previous = _deleteNoteAt(selectedNoteIndex);
-                        previous.setOctave(previous.octave + 1);
-                        _addNoteAt(previous, selectedNoteIndex);
-                      }
-                    },
-                    child: const Icon(Icons.arrow_drop_up)),
+                // octave up button
+                EditNoteButton(0, 1, Icons.arrow_drop_up, selectedNoteIndex,
+                    _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
@@ -459,19 +418,9 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                ElevatedButton(
-                    // octave down button
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey)),
-                    onPressed: () {
-                      if (!isRest && !_score.isEmpty) {
-                        Note previous = _deleteNoteAt(selectedNoteIndex);
-                        previous.setOctave(previous.octave - 1);
-                        _addNoteAt(previous, selectedNoteIndex);
-                      }
-                    },
-                    child: const Icon(Icons.arrow_drop_down)),
+                // octave down button
+                EditNoteButton(0, -1, Icons.arrow_drop_down, selectedNoteIndex,
+                    _addNoteAt, _deleteNoteAt),
               ]),
             ),
             Expanded(
@@ -493,7 +442,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     32,
                     timeSignatureTop,
@@ -506,7 +455,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     16,
                     timeSignatureTop,
@@ -519,7 +468,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     8,
                     timeSignatureTop,
@@ -532,7 +481,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     4,
                     timeSignatureTop,
@@ -545,7 +494,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     2,
                     timeSignatureTop,
@@ -558,7 +507,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                addNoteButtonWidget(
+                AddNoteButtonWidget(
                     dotted,
                     1,
                     timeSignatureTop,
