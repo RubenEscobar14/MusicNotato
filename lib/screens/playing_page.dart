@@ -19,10 +19,10 @@ class PlayingPage extends StatelessWidget {
   late AudioPlayer player;
 
   PlayingPage(this.homePage) {
-    score = homePage.getScore();
-    tempo = homePage.getTempo();
-    signature_ = homePage.getSignature_();
-    audioFiles = homePage.getAudio();
+    score = homePage.score;
+    tempo = homePage.tempo;
+    signature_ = homePage.signatureBottom;
+    audioFiles = homePage.audio;
     renderAudio();
   }
 
@@ -30,12 +30,11 @@ class PlayingPage extends StatelessWidget {
     // No point in trying to add loaded data if the data's not loaded
     if (audioFiles.isEmpty) return;
     for (Note note in score.getAllNotes()) {
-      double duration =
-          calculateDuration(note.getDuration(), dotted: note.getDotted());
+      double duration = calculateDuration(note.duration, dotted: note.dotted);
       if (note.getNoteName() == "R") {
         playlist.add(bytesToData(note.getNoteName(), duration));
       } else {
-        String noteData = "${note.getNoteName()}${note.getOctave()}";
+        String noteData = "${note.getNoteName()}${note.octave}";
         playlist.add(bytesToData(noteData, duration));
       }
     }
@@ -75,7 +74,7 @@ class PlayingPage extends StatelessWidget {
   Future<void> playBack() async {
     // Try fetching the audio again if this page was loaded before the audio files
     if (audioFiles.isEmpty) {
-      audioFiles = homePage.getAudio();
+      audioFiles = homePage.audio;
       renderAudio();
     }
     player = AudioPlayer();

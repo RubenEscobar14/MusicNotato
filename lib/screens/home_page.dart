@@ -90,21 +90,11 @@ class HomePage extends State<MyHomePage> {
   final player = AudioPlayer();
   int currentFile = 1;
 
-  Score getScore() {
-    return _score;
-  }
-
-  int getTempo() {
-    return _tempo;
-  }
-
-  int getSignature_() {
-    return timeSignatureBottom;
-  }
-
-  Map<String, Uint8List> getAudio() {
-    return audioFiles;
-  }
+  // Getters
+  Score get score => _score;
+  int get tempo => _tempo;
+  int get signatureBottom => timeSignatureBottom;
+  Map<String, Uint8List> get audio => audioFiles;
 
   /// Loads a save on startup
   @override
@@ -235,11 +225,11 @@ class HomePage extends State<MyHomePage> {
       return Note.rest(duration, dotted, returnMeasureProgress());
     }
     return Note(
-        lastNote.getNote() == NoteLetter.r ? NoteLetter.a : lastNote.getNote(),
-        lastNote.getOctave(),
+        lastNote.note == NoteLetter.r ? NoteLetter.a : lastNote.note,
+        lastNote.octave,
         duration,
         dotted,
-        lastNote.getAccidental(),
+        lastNote.accidental,
         returnMeasureProgress());
   }
 
@@ -411,8 +401,8 @@ class HomePage extends State<MyHomePage> {
                     if (!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.increasePitch(1);
-                      if (previous.getNote() == NoteLetter.c) {
-                        previous.setOctave(previous.getOctave() + 1);
+                      if (previous.note == NoteLetter.c) {
+                        previous.setOctave(previous.octave + 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
                       note = previous.getNoteName();
@@ -437,8 +427,8 @@ class HomePage extends State<MyHomePage> {
                     if (!isRest && !_score.isEmpty) {
                       Note previous = _deleteNoteAt(selectedNoteIndex);
                       previous.increasePitch(6);
-                      if (previous.getNote() == NoteLetter.b) {
-                        previous.setOctave(previous.getOctave() - 1);
+                      if (previous.note == NoteLetter.b) {
+                        previous.setOctave(previous.octave - 1);
                       }
                       _addNoteAt(previous, selectedNoteIndex);
                       note = previous.getNoteName();
@@ -457,7 +447,7 @@ class HomePage extends State<MyHomePage> {
                     onPressed: () {
                       if (!isRest && !_score.isEmpty) {
                         Note previous = _deleteNoteAt(selectedNoteIndex);
-                        previous.setOctave(previous.getOctave() + 1);
+                        previous.setOctave(previous.octave + 1);
                         _addNoteAt(previous, selectedNoteIndex);
                       }
                     },
@@ -477,7 +467,7 @@ class HomePage extends State<MyHomePage> {
                     onPressed: () {
                       if (!isRest && !_score.isEmpty) {
                         Note previous = _deleteNoteAt(selectedNoteIndex);
-                        previous.setOctave(previous.getOctave() - 1);
+                        previous.setOctave(previous.octave - 1);
                         _addNoteAt(previous, selectedNoteIndex);
                       }
                     },

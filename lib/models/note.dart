@@ -22,6 +22,9 @@ class Note {
   // Tracks how far this note is in its measure
   double measureProgress;
 
+  // Getters (some things, like dotted, have no getters and are meant to be directly accessed)
+  NoteLetter get noteLetter => note;
+
   /// Creates a Note object with all properties specified
   Note(this.note, this.octave, this.duration, this.dotted, this.accidental,
       this.measureProgress);
@@ -81,32 +84,12 @@ class Note {
     }
   }
 
-  NoteLetter getNote() {
-    return note;
-  }
-
   /// Returns the capitalized letter note, and just the letter
   String getNoteName() {
     String unprocessed = note.toString();
     return unprocessed
         .toUpperCase()
         .substring(unprocessed.length - 1, unprocessed.length);
-  }
-
-  int getDotted() {
-    return dotted;
-  }
-
-  int getOctave() {
-    return octave;
-  }
-
-  int getDuration() {
-    return duration;
-  }
-
-  int getAccidental() {
-    return accidental;
   }
 
   /// I think I've used this method wrong. I can't really give it a helpful description

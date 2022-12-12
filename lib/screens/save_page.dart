@@ -6,15 +6,15 @@ import 'package:music_notato/screens/home_page.dart';
 /// A page for selecting a save file and opening it in a HomePage
 class SavePage extends StatelessWidget {
   HomePage homePage;
-  Score score = HomePage().getScore();
-  int tempo = HomePage().getTempo();
-  int signature_ = HomePage().getSignature_();
+  late Score score;
+  late int tempo;
+  late int signature_;
   Save save = Save();
 
   SavePage(this.homePage) {
-    score = homePage.getScore();
-    tempo = homePage.getTempo();
-    signature_ = homePage.getSignature_();
+    score = homePage.score;
+    tempo = homePage.tempo;
+    signature_ = homePage.signatureBottom;
   }
 
   /// Main graphics - contains the top bar and a list of buttons that each

@@ -42,17 +42,19 @@ class addNoteButtonWidget extends StatelessWidget {
         selectLastNote();
       },
       style: ButtonStyle(
-          backgroundColor: 
-            previous.measureProgress == timeSignatureTop / timeSignatureBottom ?
-              MaterialStateProperty.all(Colors.indigo[400]) : dotted == 1
-              ? (previous.measureProgress + (3 / (duration * 1.5).round())) <=
-                      timeSignatureTop / timeSignatureBottom
+          backgroundColor:
+              previous.measureProgress == timeSignatureTop / timeSignatureBottom
                   ? MaterialStateProperty.all(Colors.indigo[400])
-                  : MaterialStateProperty.all(Colors.indigo[200])
-              : (previous.measureProgress + (1 / duration)) <=
-                      timeSignatureTop / timeSignatureBottom
-                  ? MaterialStateProperty.all(Colors.indigo[400])
-                  : MaterialStateProperty.all(Colors.indigo[200])),
+                  : dotted == 1
+                      ? (previous.measureProgress +
+                                  (3 / (duration * 1.5).round())) <=
+                              timeSignatureTop / timeSignatureBottom
+                          ? MaterialStateProperty.all(Colors.indigo[400])
+                          : MaterialStateProperty.all(Colors.indigo[200])
+                      : (previous.measureProgress + (1 / duration)) <=
+                              timeSignatureTop / timeSignatureBottom
+                          ? MaterialStateProperty.all(Colors.indigo[400])
+                          : MaterialStateProperty.all(Colors.indigo[200])),
       child: Text(returnDurationText()),
     );
   }
@@ -66,15 +68,10 @@ class addNoteButtonWidget extends StatelessWidget {
 
   /// Returns a note with the same characteristics as the previous note but with the given duration
   Note nextNoteWithNewDuration(int duration) {
-    if (previous.getNote() == NoteLetter.r) {
+    if (previous.note == NoteLetter.r) {
       return Note.rest(duration, dotted, previous.measureProgress + duration);
     }
-    return Note(
-        previous.getNote() == NoteLetter.r ? NoteLetter.a : previous.getNote(),
-        previous.getOctave(),
-        duration,
-        dotted,
-        previous.getAccidental(),
-        -1);
+    return Note(previous.note == NoteLetter.r ? NoteLetter.a : previous.note,
+        previous.octave, duration, dotted, previous.accidental, -1);
   }
 }
