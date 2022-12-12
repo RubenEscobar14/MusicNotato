@@ -38,10 +38,10 @@ class EditNoteButton extends StatelessWidget {
 
   void changeNoteBy(int change, Note changing) {
     int octChange = changing.increasePitch(change);
-    changing.setOctave(changing.getOctave() + octChange);
+    changing.setOctave(changing.octave + octChange);
   }
 
   void changeOctaveBy(int change, Note changing) {
-    changing.setOctave(changing.getOctave() + change);
+    changing.setOctave(changing.octave + change);
   }
 }

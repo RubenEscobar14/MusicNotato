@@ -96,6 +96,12 @@ class HomePage extends State<MyHomePage> {
   int get tempo => _tempo;
   int get signatureBottom => timeSignatureBottom;
   Map<String, Uint8List> get audio => audioFiles;
+  Note get lastNote {
+    if (_score.isEmpty) {
+      return Note(NoteLetter.a, 4, 4, 0, 0, returnMeasureProgress());
+    }
+    return _score.lastNote;
+  }
 
   /// Loads a save on startup
   @override
@@ -170,9 +176,9 @@ class HomePage extends State<MyHomePage> {
           timeSignatureTop / timeSignatureBottom) {
         xPositions.add(xPosition);
         xPosition += 40;
-        _score.getAllNotes().insert(position, currentNote);
+        _score.allNotes.insert(position, currentNote);
         if (saveOnAdd) {
-          widget.storage.writeFile(_score.getAllNotes(), currentFile);
+          widget.storage.writeFile(_score.allNotes, currentFile);
         }
       }
       if (currentNote.measureProgress ==
@@ -188,7 +194,7 @@ class HomePage extends State<MyHomePage> {
     for (Note note in newNoteList) {
       _addNote(note, saveOnAdd: false);
     }
-    widget.storage.writeFile(_score.getAllNotes(), currentFile);
+    widget.storage.writeFile(_score.allNotes, currentFile);
   }
 
   /// Deletes the last note in the score
@@ -202,7 +208,7 @@ class HomePage extends State<MyHomePage> {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
       if (rerender) {
-        renderList(_score.getAllNotes());
+        renderList(_score.allNotes);
       }
       //xPosition = xPositions[xPositions.length - 1];
       //xPositions.remove(xPositions[xPositions.length - 1]);
@@ -211,17 +217,9 @@ class HomePage extends State<MyHomePage> {
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
   }
 
-  /// Returns the last note in the current notelist
-  Note _getLastNote() {
-    if (_score.getAllNotes().isEmpty) {
-      return Note(NoteLetter.a, 4, 4, 0, 0, returnMeasureProgress());
-    }
-    return _score.getLastNote();
-  }
-
   /// Returns a note with the same characteristics as the previous note but with the given duration
   Note nextNoteWithNewDuration(int duration) {
-    Note lastNote = _getLastNote();
+    Note lastNote = this.lastNote;
     if (isRest) {
       return Note.rest(duration, dotted, returnMeasureProgress());
     }
@@ -236,7 +234,7 @@ class HomePage extends State<MyHomePage> {
 
   /// Prints the current noteList and xPositions, debugging use only
   void _printNoteInfo() {
-    print(_score.getAllNotes());
+    print(_score.allNotes);
     print(xPositions);
   }
 
@@ -254,11 +252,11 @@ class HomePage extends State<MyHomePage> {
     if (_score.isEmpty) {
       measureProgress = noteLength;
     } else {
-      if (_score.getLastNote().measureProgress ==
+      if (_score.lastNote.measureProgress ==
           timeSignatureTop / timeSignatureBottom) {
         measureProgress = noteLength;
       } else {
-        measureProgress = noteLength + _score.getLastNote().measureProgress;
+        measureProgress = noteLength + _score.lastNote.measureProgress;
       }
     }
     return measureProgress;
@@ -414,7 +412,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Octave: ${_score.getLastNote().octave}'),
+                Text('Octave: ${_score.lastNote.octave}'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
@@ -448,7 +446,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),
@@ -461,7 +459,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),
@@ -474,7 +472,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),
@@ -487,7 +485,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),
@@ -500,7 +498,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),
@@ -513,7 +511,7 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
-                    _getLastNote(),
+                    lastNote,
                     _addNote,
                     selectLastNote,
                     setDuration),

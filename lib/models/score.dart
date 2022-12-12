@@ -7,23 +7,19 @@ class Score {
 
   bool get isEmpty => _allNotes.isEmpty;
   int get length => _allNotes.length;
-
-  Score() : _allNotes = List.empty(growable: true);
-  Score.fromList(this._allNotes);
-
-  List<Note> getAllNotes() {
-    return _allNotes;
-  }
-
-  Note getNote(int index) {
-    return _allNotes[index];
-  }
-
-  Note getLastNote() {
+  List<Note> get allNotes => _allNotes;
+  Note get lastNote {
     if (isEmpty) {
       return Note(NoteLetter.a, 4, 4, 0, 0, 0);
     }
     return _allNotes[_allNotes.length - 1];
+  }
+
+  Score() : _allNotes = List.empty(growable: true);
+  Score.fromList(this._allNotes);
+
+  Note getNote(int index) {
+    return _allNotes[index];
   }
 
   void addNote(Note note) {

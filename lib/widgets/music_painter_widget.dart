@@ -46,7 +46,7 @@ class MusicPainterWidget extends StatelessWidget {
           onTapDown: (TapDownDetails details) => _onTapDown(details),
           child: CustomPaint(
             size: Size(_score.length * 50, 50),
-            painter: NoteWidget(_score.getAllNotes(), xPositions, 'treble',
+            painter: NoteWidget(_score.allNotes, xPositions, 'treble',
                 signatureTop, signatureBottom, selectedNoteIndex),
           ),
         ),

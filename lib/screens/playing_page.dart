@@ -29,7 +29,7 @@ class PlayingPage extends StatelessWidget {
   void renderAudio() async {
     // No point in trying to add loaded data if the data's not loaded
     if (audioFiles.isEmpty) return;
-    for (Note note in score.getAllNotes()) {
+    for (Note note in score.allNotes) {
       double duration = calculateDuration(note.duration, dotted: note.dotted);
       if (note.getNoteName() == "R") {
         playlist.add(bytesToData(note.getNoteName(), duration));
