@@ -331,14 +331,12 @@ class HomePage extends State<MyHomePage> {
                       // After selecting the desired option, it will
                       // change button value to selected value
                       onChanged: (String? newValue) {
-                        if (noteLength == 0) {
+                        setState(() {
+                          numBeatsString = newValue!;
                           setState(() {
-                            numBeatsString = newValue!;
-                            setState(() {
-                              timeSignatureTop = int.parse(numBeatsString);
-                            });
+                            timeSignatureTop = int.parse(numBeatsString);
                           });
-                        }
+                        });
                       },
                       isDense: true,
                     ),
@@ -361,14 +359,12 @@ class HomePage extends State<MyHomePage> {
                       // After selecting the desired option, it will
                       // change button value to selected value
                       onChanged: (String? newValue) {
-                        if (noteLength == 0) {
+                        setState(() {
+                          beatUnitString = newValue!;
                           setState(() {
-                            beatUnitString = newValue!;
-                            setState(() {
-                              timeSignatureBottom = int.parse(beatUnitString);
-                            });
+                            timeSignatureBottom = int.parse(beatUnitString);
                           });
-                        }
+                        });
                       },
                       isDense: true,
                     ),
