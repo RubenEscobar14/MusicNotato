@@ -7,6 +7,7 @@ typedef SetDuration = void Function(int duration);
 
 class AddNoteButtonWidget extends StatelessWidget {
   int dotted;
+  bool isRest;
   int duration;
   int timeSignatureTop;
   int timeSignatureBottom;
@@ -19,6 +20,7 @@ class AddNoteButtonWidget extends StatelessWidget {
 
   AddNoteButtonWidget(
       this.dotted,
+      this.isRest,
       this.duration,
       this.timeSignatureTop,
       this.timeSignatureBottom,
@@ -66,7 +68,7 @@ class AddNoteButtonWidget extends StatelessWidget {
 
   /// Returns a note with the same characteristics as the previous note but with the given duration
   Note nextNoteWithNewDuration(int duration) {
-    if (previous.note == NoteLetter.r) {
+    if (isRest) {
       return Note.rest(duration, dotted, previous.measureProgress + duration);
     }
     return Note(previous.note == NoteLetter.r ? NoteLetter.a : previous.note,

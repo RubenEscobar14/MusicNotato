@@ -461,6 +461,7 @@ class HomePage extends State<MyHomePage> {
                   ),
                   AddNoteButtonWidget(
                     dotted,
+                    isRest,
                     i,
                     timeSignatureTop,
                     timeSignatureBottom,
