@@ -162,7 +162,6 @@ class HomePage extends State<MyHomePage> {
   /// the json file by default, but saveOnAdd can be set to false to not do this.
   void _addNote(Note currentNote, {bool saveOnAdd = true}) {
     _addNoteAt(currentNote, _score.length);
-    selectLastNote();
   }
 
   // Like the addnote() function, but adds the note at a specified index instead of the end of the list
@@ -204,14 +203,13 @@ class HomePage extends State<MyHomePage> {
 
   //deletes the note at the specified positon from the score
   Note _deleteNoteAt(int index, {bool rerender = false}) {
+    print("del method start:$selectedNoteIndex");
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
       if (rerender) {
         renderList(_score.allNotes);
       }
-      //xPosition = xPositions[xPositions.length - 1];
-      //xPositions.remove(xPositions[xPositions.length - 1]);
       return toRemove;
     }
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
@@ -272,7 +270,6 @@ class HomePage extends State<MyHomePage> {
         min = distance(xPositions[i], x);
       }
     }
-    print("Nearest Note Index is: $minIndex");
     setState(() {
       selectedNoteIndex = minIndex;
     });
@@ -312,15 +309,12 @@ class HomePage extends State<MyHomePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
+                      print(selectedNoteIndex);
                       _deleteNoteAt(selectedNoteIndex, rerender: true);
-                      selectedNoteIndex -= 1;
+                      print(selectedNoteIndex);
+                      selectedNoteIndex = selectedNoteIndex - 1;
                       if (selectedNoteIndex < 0) {
-                        selectLastNote();
-                      }
-                      if (selectedNoteIndex == -1) {
-                        setState(() {
-                          noteLength = 0.0;
-                        });
+                        selectedNoteIndex = 0;
                       }
                     });
                   },
