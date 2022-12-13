@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 /// Class that draws the staff and semi-permanent elements (e.g. clef, time signature) to the canvas
@@ -9,7 +8,8 @@ class StaffWidget extends CustomPainter {
   int timeSignatureBottom; // unit of beat
 
   /// Constructor
-  StaffWidget(this.currentClef, this.timeSignatureTop, this.timeSignatureBottom);
+  StaffWidget(
+      this.currentClef, this.timeSignatureTop, this.timeSignatureBottom);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -38,7 +38,8 @@ class StaffWidget extends CustomPainter {
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center);
     textPainter.layout();
-    textPainter.paint(canvas, Offset(20 - (textPainter.width / 2), 0 - (textPainter.height / 2)));
+    textPainter.paint(canvas,
+        Offset(20 - (textPainter.width / 2), 0 - (textPainter.height / 2)));
   }
 
   @override

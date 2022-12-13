@@ -11,10 +11,6 @@ import 'package:music_notato/screens/save_page.dart';
 import 'package:music_notato/widgets/add_node_button_widget.dart';
 import 'package:music_notato/widgets/edit_note_widgets.dart';
 import 'package:music_notato/widgets/music_painter_widget.dart';
-// import 'package:music_notato/widgets/note_duration_button.dart';
-import 'package:music_notato/widgets/note_widget.dart';
-import 'package:music_notato/widgets/staff_widget.dart';
-import 'package:music_notato/widgets/select_note_widget.dart';
 
 /// The main page of the app
 class HomePage extends State<MyHomePage> {
@@ -203,7 +199,6 @@ class HomePage extends State<MyHomePage> {
 
   //deletes the note at the specified positon from the score
   Note _deleteNoteAt(int index, {bool rerender = false}) {
-    print("del method start:$selectedNoteIndex");
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
@@ -230,13 +225,13 @@ class HomePage extends State<MyHomePage> {
         returnMeasureProgress());
   }
 
-  /// Prints the current noteList and xPositions, debugging use only
+  // Prints the current noteList and xPositions, debugging use only
   void _printNoteInfo() {
     print(_score.allNotes);
     print(xPositions);
   }
 
-  /// Returns the fraction of the measure that has been completed
+  // Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
     try {
       noteLength = durationRatios[duration]!.toDouble(); // percentage of
@@ -302,16 +297,14 @@ class HomePage extends State<MyHomePage> {
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
-                /////////////////// All the buttons ///////////////////
+                /////////////////// left hand side buttons ///////////////////
                 ElevatedButton(
                   // delete button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
-                      print(selectedNoteIndex);
                       _deleteNoteAt(selectedNoteIndex, rerender: true);
-                      print(selectedNoteIndex);
                       selectedNoteIndex = selectedNoteIndex - 1;
                       if (selectedNoteIndex < 0) {
                         selectedNoteIndex = 0;
@@ -415,19 +408,51 @@ class HomePage extends State<MyHomePage> {
                     _addNoteAt, _deleteNoteAt),
               ]),
             ),
-            Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(top: 200.h, bottom: 165.h),
-              child: MusicPainterWidget(
-                  xPosition,
-                  xPositions,
-                  timeSignatureTop,
-                  timeSignatureBottom,
-                  _score,
-                  selectedNoteIndex,
-                  selectNewNote),
-            )),
+            Column(children: [
+              SizedBox(
+                width: 500,
+                // height: 500,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
+                    child: MusicPainterWidget(
+                        xPosition,
+                        xPositions,
+                        timeSignatureTop,
+                        timeSignatureBottom,
+                        _score,
+                        selectedNoteIndex,
+                        selectNewNote),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayingPage(this)),
+                      );
+                    },
+                    child: const Icon(Icons.play_arrow),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SavePage(this)));
+                      },
+                      child: const Text("Switch Save")),
+                ],
+              ),
+            ]),
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
@@ -561,30 +586,10 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                IconButton(
-                  onPressed: () {
-                    playBack(); // plays back the music written on the staff
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                ),
               ]),
             )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
-            side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
-        onPressed: () {
-          Navigator.push(
-            context,
-            //MaterialPageRoute(builder: (context) => SavePage(this)),
-            MaterialPageRoute(builder: (context) => PlayingPage(this)),
-          );
-        },
-        tooltip: 'Go to playing page',
-        child: const Icon(Icons.arrow_forward),
       ),
     );
   }
