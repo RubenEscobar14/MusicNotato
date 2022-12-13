@@ -19,6 +19,9 @@ class Score {
   Score.fromList(this._allNotes);
 
   Note getNote(int index) {
+    if(index < 0) {
+      return Note(NoteLetter.a, 4, 4, 0, 0, 0);
+    }
     return _allNotes[index];
   }
 

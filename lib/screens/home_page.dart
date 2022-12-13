@@ -383,7 +383,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Note: ${lastNote.note.name.toUpperCase()}'),
+                Text('Note: ${_score.getNote(selectedNoteIndex).getNoteName()}'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
@@ -399,7 +399,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Octave: ${_score.lastNote.octave}'),
+                Text('Octave: ${_score.getNote(selectedNoteIndex).octave}'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
