@@ -203,7 +203,6 @@ class HomePage extends State<MyHomePage> {
 
   //deletes the note at the specified positon from the score
   Note _deleteNoteAt(int index, {bool rerender = false}) {
-    print("del method start:$selectedNoteIndex");
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
       _score.removeNoteAt(index);
@@ -230,13 +229,13 @@ class HomePage extends State<MyHomePage> {
         returnMeasureProgress());
   }
 
-  /// Prints the current noteList and xPositions, debugging use only
+  // Prints the current noteList and xPositions, debugging use only
   void _printNoteInfo() {
     print(_score.allNotes);
     print(xPositions);
   }
 
-  /// Returns the fraction of the measure that has been completed
+  // Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
     try {
       noteLength = durationRatios[duration]!.toDouble(); // percentage of
@@ -302,16 +301,14 @@ class HomePage extends State<MyHomePage> {
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
-                /////////////////// All the buttons ///////////////////
+                /////////////////// left hand side buttons ///////////////////
                 ElevatedButton(
                   // delete button
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red)),
                   onPressed: () {
                     setState(() {
-                      print(selectedNoteIndex);
                       _deleteNoteAt(selectedNoteIndex, rerender: true);
-                      print(selectedNoteIndex);
                       selectedNoteIndex = selectedNoteIndex - 1;
                       if (selectedNoteIndex < 0) {
                         selectedNoteIndex = 0;
@@ -415,19 +412,35 @@ class HomePage extends State<MyHomePage> {
                     _addNoteAt, _deleteNoteAt),
               ]),
             ),
-            Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.only(top: 200.h, bottom: 165.h),
-              child: MusicPainterWidget(
-                  xPosition,
-                  xPositions,
-                  timeSignatureTop,
-                  timeSignatureBottom,
-                  _score,
-                  selectedNoteIndex,
-                  selectNewNote),
-            )),
+            Column(children: [
+              SizedBox(
+                width: 500,
+                // height: 500,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
+                    child: MusicPainterWidget(
+                        xPosition,
+                        xPositions,
+                        timeSignatureTop,
+                        timeSignatureBottom,
+                        _score,
+                        selectedNoteIndex,
+                        selectNewNote),
+                  ),
+                ),
+              ),
+              // ruben add the buttons here
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Icon(Icons.play_arrow),
+                  ),
+                ],
+              ),
+            ]),
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
