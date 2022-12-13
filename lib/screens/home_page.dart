@@ -390,7 +390,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
-                Text('Note: $note'),
+                Text('Note: ${lastNote.note.name.toUpperCase()}'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),

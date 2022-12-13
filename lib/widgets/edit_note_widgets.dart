@@ -37,11 +37,27 @@ class EditNoteButton extends StatelessWidget {
   }
 
   void changeNoteBy(int change, Note changing) {
-    int octChange = changing.increasePitch(change);
-    changing.setOctave(changing.octave + octChange);
+    if(change < 0 && changing.octave == 0 && changing.note != NoteLetter.b) {
+      print('Too low.');
+    }
+    else if(change > 0 && changing.octave == 8 && changing.note != NoteLetter.b) {
+      print('Too high.');
+    }
+    else {
+      int octChange = changing.increasePitch(change);
+      changing.setOctave(changing.octave + octChange);
+    }
   }
 
   void changeOctaveBy(int change, Note changing) {
-    changing.setOctave(changing.octave + change);
+    if(changing.octave + change == 0 && changing.note != NoteLetter.a && changing.note != NoteLetter.b) {
+      print('Too low.');
+    }
+    else if(change > 0 && changing.octave + change == 8 && changing.note != NoteLetter.c) {
+      print('Too high.');
+    }
+    else {
+      changing.setOctave(changing.octave + change);
+    }
   }
 }
