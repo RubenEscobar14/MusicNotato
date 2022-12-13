@@ -574,12 +574,6 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                IconButton(
-                  onPressed: () {
-                    playBack(); // plays back the music written on the staff
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                ),
               ]),
             )
           ],
