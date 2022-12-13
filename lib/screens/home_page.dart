@@ -426,13 +426,29 @@ class HomePage extends State<MyHomePage> {
                   ),
                 ),
               ),
-              // ruben add the buttons here
               Row(
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PlayingPage(this)),
+                      );
+                    },
                     child: const Icon(Icons.play_arrow),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SavePage(this)));
+                      },
+                      child: const Text("Switch Save")),
                 ],
               ),
             ]),
@@ -573,20 +589,6 @@ class HomePage extends State<MyHomePage> {
             )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
-            side: BorderSide(color: Color.fromARGB(255, 124, 24, 157))),
-        onPressed: () {
-          Navigator.push(
-            context,
-            //MaterialPageRoute(builder: (context) => SavePage(this)),
-            MaterialPageRoute(builder: (context) => PlayingPage(this)),
-          );
-        },
-        tooltip: 'Go to playing page',
-        child: const Icon(Icons.arrow_forward),
       ),
     );
   }
