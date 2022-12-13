@@ -13,6 +13,8 @@ class AddNoteButtonWidget extends StatelessWidget {
   int timeSignatureBottom;
   int selectedNoteIndex;
   Note previous;
+  ScrollController controller;
+  double offset;
 
   final AddNote addNote;
   final SelectLastNote selectLastNote;
@@ -26,6 +28,8 @@ class AddNoteButtonWidget extends StatelessWidget {
       this.timeSignatureBottom,
       this.selectedNoteIndex,
       this.previous,
+      this.controller,
+      this.offset,
       void this.addNote(Note note),
       void this.selectLastNote(),
       void this.setDuration(int duration));
@@ -40,6 +44,7 @@ class AddNoteButtonWidget extends StatelessWidget {
           addNote(nextNoteWithNewDuration(duration));
         }
         selectLastNote();
+        controller.animateTo(offset, duration: const Duration(milliseconds: 100), curve: Curves.linear);
       },
       style: ButtonStyle(
           backgroundColor:

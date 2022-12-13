@@ -87,6 +87,8 @@ class HomePage extends State<MyHomePage> {
   final player = AudioPlayer();
   int currentFile = 1;
 
+  ScrollController controller = ScrollController();
+
   // Getters
   Score get score => _score;
   int get tempo => _tempo;
@@ -285,6 +287,19 @@ class HomePage extends State<MyHomePage> {
     duration = newDur;
   }
 
+  /// Determines where the staff is automatically scrolled to
+  double determineScrollPosition() {
+    if(score.isEmpty) {
+      return 0;
+    }
+    else if(xPositions[xPositions.length - 1] < 500) {
+      return 0;
+    }
+    else {
+      return xPositions[xPositions.length - 1] - 420;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -310,6 +325,7 @@ class HomePage extends State<MyHomePage> {
                         selectedNoteIndex = 0;
                       }
                     });
+                    controller.animateTo(determineScrollPosition(), duration: const Duration(milliseconds: 100), curve: Curves.linear);
                   },
                   child: const Icon(Icons.delete),
                 ),
@@ -411,6 +427,7 @@ class HomePage extends State<MyHomePage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
+                  controller: controller,
                   child: MusicPainterWidget(
                       xPosition,
                       xPositions,
@@ -463,6 +480,8 @@ class HomePage extends State<MyHomePage> {
                     timeSignatureBottom,
                     selectedNoteIndex,
                     lastNote,
+                    controller,
+                    determineScrollPosition(),
                     _addNote,
                     selectLastNote,
                     setDuration),
