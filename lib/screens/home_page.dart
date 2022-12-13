@@ -456,12 +456,14 @@ class HomePage extends State<MyHomePage> {
             SizedBox(
               width: 70.w,
               child: Column(children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
+                for(int i = 32; i > 0.5; i = i ~/ 2)
+                Column(children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                  ),
+                  AddNoteButtonWidget(
                     dotted,
-                    32,
+                    i,
                     timeSignatureTop,
                     timeSignatureBottom,
                     selectedNoteIndex,
@@ -469,74 +471,7 @@ class HomePage extends State<MyHomePage> {
                     _addNote,
                     selectLastNote,
                     setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
-                    dotted,
-                    16,
-                    timeSignatureTop,
-                    timeSignatureBottom,
-                    selectedNoteIndex,
-                    lastNote,
-                    _addNote,
-                    selectLastNote,
-                    setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
-                    dotted,
-                    8,
-                    timeSignatureTop,
-                    timeSignatureBottom,
-                    selectedNoteIndex,
-                    lastNote,
-                    _addNote,
-                    selectLastNote,
-                    setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
-                    dotted,
-                    4,
-                    timeSignatureTop,
-                    timeSignatureBottom,
-                    selectedNoteIndex,
-                    lastNote,
-                    _addNote,
-                    selectLastNote,
-                    setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
-                    dotted,
-                    2,
-                    timeSignatureTop,
-                    timeSignatureBottom,
-                    selectedNoteIndex,
-                    lastNote,
-                    _addNote,
-                    selectLastNote,
-                    setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
-                AddNoteButtonWidget(
-                    dotted,
-                    1,
-                    timeSignatureTop,
-                    timeSignatureBottom,
-                    selectedNoteIndex,
-                    lastNote,
-                    _addNote,
-                    selectLastNote,
-                    setDuration),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                ),
+                ]),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),

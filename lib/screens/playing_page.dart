@@ -17,7 +17,7 @@ class PlayingPage extends StatelessWidget {
 
   late AudioPlayer player;
 
-  PlayingPage(this.homePage) {
+  PlayingPage(this.homePage, {super.key}) {
     score = homePage.score;
     tempo = homePage.tempo;
     signature_ = homePage.signatureBottom;

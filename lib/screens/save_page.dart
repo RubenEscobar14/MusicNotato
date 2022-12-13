@@ -11,7 +11,7 @@ class SavePage extends StatelessWidget {
   late int signature_;
   Save save = Save();
 
-  SavePage(this.homePage) {
+  SavePage(this.homePage, {super.key}) {
     score = homePage.score;
     tempo = homePage.tempo;
     signature_ = homePage.signatureBottom;
@@ -27,55 +27,22 @@ class SavePage extends StatelessWidget {
       ),
       body: Center(
         child: Column(children: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              homePage.onLoad(1);
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.indigoAccent)),
-            child: const Text('Save 1'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              homePage.onLoad(2);
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.indigoAccent)),
-            child: const Text('Save 2'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              homePage.onLoad(3);
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.indigoAccent)),
-            child: const Text('Save 3'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              homePage.onLoad(4);
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.indigoAccent)),
-            child: const Text('Save 4'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              homePage.onLoad(5);
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.indigoAccent)),
-            child: const Text('Save 5'),
+          for(int i = 1; i < 6; i++) 
+            Column(children: <Widget> [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  homePage.onLoad(1);
+                },
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.indigoAccent)),
+                child: Text('Save $i'),
+              ),
+            ]
           ),
         ]),
       ),
