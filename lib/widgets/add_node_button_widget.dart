@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
-import 'package:music_notato/models/score.dart';
 
 typedef AddNote = void Function(Note note);
 typedef SelectLastNote = void Function();
