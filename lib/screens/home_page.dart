@@ -412,19 +412,17 @@ class HomePage extends State<MyHomePage> {
               SizedBox(
                 width: 500,
                 // height: 500,
-                child: Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
-                    child: MusicPainterWidget(
-                        xPosition,
-                        xPositions,
-                        timeSignatureTop,
-                        timeSignatureBottom,
-                        _score,
-                        selectedNoteIndex,
-                        selectNewNote),
-                  ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
+                  child: MusicPainterWidget(
+                      xPosition,
+                      xPositions,
+                      timeSignatureTop,
+                      timeSignatureBottom,
+                      _score,
+                      selectedNoteIndex,
+                      selectNewNote),
                 ),
               ),
               Row(
