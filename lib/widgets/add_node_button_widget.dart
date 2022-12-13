@@ -55,15 +55,8 @@ class AddNoteButtonWidget extends StatelessWidget {
                               timeSignatureTop / timeSignatureBottom
                           ? MaterialStateProperty.all(Colors.indigo[400])
                           : MaterialStateProperty.all(Colors.indigo[200])),
-      child: Text(returnDurationText()),
+      child: Image.asset('assets/images/$duration.png', width: 20, height: 20),
     );
-  }
-
-  String returnDurationText() {
-    if (duration == 1) {
-      return "1";
-    }
-    return "1/$duration";
   }
 
   /// Returns a note with the same characteristics as the previous note but with the given duration
