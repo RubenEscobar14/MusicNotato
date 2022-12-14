@@ -41,7 +41,7 @@ class NoteWidget extends CustomPainter {
   // Map of base positions for each note depending on the clef
   Map<String, Map<String, double>> noteToClefBasePositions =
       <String, Map<String, double>>{
-    'c': {'treble': -3, 'alto': 0.5, 'bass': 3},
+    'c': {'treble': -3, 'alto': 0, 'bass': 3},
     'd': {'treble': -2.5, 'alto': 0.5, 'bass': 3.5},
     'e': {'treble': -2, 'alto': 1, 'bass': 4},
     'f': {'treble': -1.5, 'alto': 1.5, 'bass': 4.5},
