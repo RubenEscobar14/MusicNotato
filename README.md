@@ -22,7 +22,11 @@ To install, clone this repository onto Desktop.
 
 To run on iOS, connect the mobile device to the device with the repository. Navigate to the Runner.xcworkspace file (located in the ios folder of the project) and open it in Xcode. At the top of the file next to the Flutter icon is an option to change the device. Change this device to the mobile one connected to Desktop. To run, click the run button in the upper left hand corner. You may need to trust yourself as the developer, which you can do in Settings > General > Device Management on iOS devices.
 
-To run on Android, download an APK version of the project and install on the device.
+To run on Android, run the following in a terminal window in your project directory:
+```
+flutter build apk
+```
+Then, move the newly built APK onto an Android phone and install it.
 
 ## Features
 * Composing
@@ -45,3 +49,6 @@ To run on Android, download an APK version of the project and install on the dev
 * Also thanks to Paul Cantrell for software consultation
 * https://www.mpa.org/wp-content/uploads/2018/06/standard-practice-engraving.pdf was referenced for music notation rules
 * http://faculty.washington.edu/garmar/notehead_specs.pdf was referenced for note head design
+* https://theremin.music.uiowa.edu/MISpiano.html is where we got the piano audio files from
+* https://cloudconvert.com/ was used to convert unsupported aiff files to flac
+* https://github.com/anars/blank-audio is where we get the rest audio file from
