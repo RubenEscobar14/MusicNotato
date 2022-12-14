@@ -18,7 +18,9 @@ The app uses Flutter in order to be compatible on multible devices. The app supp
 ## Setup and Installation
 To install, clone this repository onto Desktop.
 
-To run on iOS, connect the mobile device to the device with the repository. Navigate to the Runner.xcworkspace file and open it in Xcode. At the top of the file next to the Flutter icon is an option to change the device. Change this device to the mobile one connected to Desktop. To run, click the run button in the upper left hand corner. You may need to trust yourself as the developer, which you can do in Settings > General > Device Management on iOS devices.
+![Alt text](Xcode_running.png)
+
+To run on iOS, connect the mobile device to the device with the repository. Navigate to the Runner.xcworkspace file (located in the ios folder of the project) and open it in Xcode. At the top of the file next to the Flutter icon is an option to change the device. Change this device to the mobile one connected to Desktop. To run, click the run button in the upper left hand corner. You may need to trust yourself as the developer, which you can do in Settings > General > Device Management on iOS devices.
 
 To run on Android, download an APK version of the project and install on the device.
 
