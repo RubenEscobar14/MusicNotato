@@ -87,9 +87,6 @@ class HomePage extends State<MyHomePage> {
   int get signatureBottom => timeSignatureBottom;
   Map<String, Uint8List> get audio => audioFiles;
   Note get lastNote {
-    if (_score.isEmpty) {
-      return Note(NoteLetter.a, 4, 4, 0, 0, returnMeasureProgress());
-    }
     return _score.lastNote;
   }
 
