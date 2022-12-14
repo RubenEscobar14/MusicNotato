@@ -329,6 +329,11 @@ class HomePage extends State<MyHomePage> {
                   },
                   child: const Icon(Icons.delete),
                 ),
+                if(!_score.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                ),
+                if(_score.isEmpty)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -348,10 +353,12 @@ class HomePage extends State<MyHomePage> {
                       // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
-                          numBeatsString = newValue!;
-                          setState(() {
-                            timeSignatureTop = int.parse(numBeatsString);
-                          });
+                          if(_score.isEmpty) {
+                            numBeatsString = newValue!;
+                            setState(() {
+                              timeSignatureTop = int.parse(numBeatsString);
+                            });
+                          }
                         });
                       },
                       isDense: true,
@@ -376,10 +383,12 @@ class HomePage extends State<MyHomePage> {
                       // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
-                          beatUnitString = newValue!;
-                          setState(() {
-                            timeSignatureBottom = int.parse(beatUnitString);
-                          });
+                          if(_score.isEmpty) {
+                            beatUnitString = newValue!;
+                            setState(() {
+                              timeSignatureBottom = int.parse(beatUnitString);
+                            });
+                          }
                         });
                       },
                       isDense: true,
@@ -423,7 +432,6 @@ class HomePage extends State<MyHomePage> {
             Column(children: [
               SizedBox(
                 width: 500,
-                // height: 500,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
