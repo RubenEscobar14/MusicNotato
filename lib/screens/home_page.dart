@@ -128,7 +128,7 @@ class HomePage extends State<MyHomePage> {
   void clearNotes() {
     setState(() {
       _score.clearScore();
-      xPosition = 40;
+      xPosition = 60;
       xPositions = [];
     });
   }
