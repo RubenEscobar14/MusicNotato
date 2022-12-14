@@ -27,23 +27,22 @@ class SavePage extends StatelessWidget {
       ),
       body: Center(
         child: Column(children: <Widget>[
-          for(int i = 1; i < 6; i++) 
-            Column(children: <Widget> [
+          for (int i = 1; i < 6; i++)
+            Column(children: <Widget>[
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  homePage.onLoad(1);
+                  homePage.onLoad(i);
                 },
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Colors.indigoAccent)),
                 child: Text('Save $i'),
               ),
-            ]
-          ),
+            ]),
         ]),
       ),
     );
