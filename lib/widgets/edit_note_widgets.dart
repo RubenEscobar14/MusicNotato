@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
 
+import '../models/score.dart';
+
 typedef AddNoteAt = void Function(Note note, int index);
 typedef DeleteNoteAt = Note Function(int index);
 
@@ -10,6 +12,7 @@ class EditNoteButton extends StatelessWidget {
   int octaveChange; // desired change in octave (e.g. 1 means to increase the octave by one, such as from 3 to 4)
   IconData buttonIcon;
   int selectedNoteIndex;
+  Score score;
 
   final AddNoteAt addNoteAt;
   final DeleteNoteAt deleteNoteAt;
@@ -20,6 +23,7 @@ class EditNoteButton extends StatelessWidget {
       this.octaveChange,
       this.buttonIcon,
       this.selectedNoteIndex,
+      this.score,
       void this.addNoteAt(Note note, int index),
       Note this.deleteNoteAt(int index), {super.key});
 
@@ -27,10 +31,12 @@ class EditNoteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Note previous = deleteNoteAt(selectedNoteIndex);
-        changeNoteBy(noteChange, previous);
-        changeOctaveBy(octaveChange, previous);
-        addNoteAt(previous, selectedNoteIndex);
+        if(score.getNote(selectedNoteIndex).note != NoteLetter.r) {
+          Note previous = deleteNoteAt(selectedNoteIndex);
+          changeNoteBy(noteChange, previous);
+          changeOctaveBy(octaveChange, previous);
+          addNoteAt(previous, selectedNoteIndex);
+        }
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.grey[400]),

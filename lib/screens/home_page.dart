@@ -372,7 +372,7 @@ class HomePage extends State<MyHomePage> {
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 // note up button
-                EditNoteButton(1, 0, Icons.arrow_drop_up, selectedNoteIndex,
+                EditNoteButton(1, 0, Icons.arrow_drop_up, selectedNoteIndex, _score, 
                     _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
@@ -382,13 +382,13 @@ class HomePage extends State<MyHomePage> {
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 // note down button
-                EditNoteButton(-1, 0, Icons.arrow_drop_down, selectedNoteIndex,
+                EditNoteButton(-1, 0, Icons.arrow_drop_down, selectedNoteIndex, _score, 
                     _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
                 // octave up button
-                EditNoteButton(0, 1, Icons.arrow_drop_up, selectedNoteIndex,
+                EditNoteButton(0, 1, Icons.arrow_drop_up, selectedNoteIndex, _score, 
                     _addNoteAt, _deleteNoteAt),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
@@ -398,7 +398,7 @@ class HomePage extends State<MyHomePage> {
                   padding: EdgeInsets.symmetric(vertical: 1, horizontal: 0),
                 ),
                 // octave down button
-                EditNoteButton(0, -1, Icons.arrow_drop_down, selectedNoteIndex,
+                EditNoteButton(0, -1, Icons.arrow_drop_down, selectedNoteIndex, _score, 
                     _addNoteAt, _deleteNoteAt),
               ]),
             ),
