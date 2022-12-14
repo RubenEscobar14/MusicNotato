@@ -21,14 +21,14 @@ class StaffWidget extends CustomPainter {
     // draws the staff
     canvas.drawLine(Offset(0, -2 * x), Offset(size.width, -2 * x), paint);
     canvas.drawLine(Offset(0, -x), Offset(size.width, -x), paint);
-    canvas.drawLine(Offset(0, 0), Offset(size.width, 0), paint);
+    canvas.drawLine(const Offset(0, 0), Offset(size.width, 0), paint);
     canvas.drawLine(Offset(0, x), Offset(size.width, x), paint);
     canvas.drawLine(Offset(0, 2 * x), Offset(size.width, 2 * x), paint);
 
     // draws the time signature graphic
     var textPainter = TextPainter(
         text: TextSpan(
-          text: '${timeSignatureTop}\n${timeSignatureBottom}',
+          text: '$timeSignatureTop\n$timeSignatureBottom',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,

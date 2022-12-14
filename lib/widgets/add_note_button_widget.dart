@@ -5,6 +5,7 @@ typedef AddNote = void Function(Note note);
 typedef SelectLastNote = void Function();
 typedef SetDuration = void Function(int duration);
 
+/// Class that builds a button to add a note to the canvas based on the specified duration
 class AddNoteButtonWidget extends StatelessWidget {
   int dotted;
   bool isRest;
@@ -13,8 +14,8 @@ class AddNoteButtonWidget extends StatelessWidget {
   int timeSignatureBottom;
   int selectedNoteIndex;
   Note previous;
-  ScrollController controller;
-  double offset;
+  ScrollController controller; // determines where the staff scrolls to
+  double offset; // position for the screen to scroll to after a note is added or deleted
 
   final AddNote addNote;
   final SelectLastNote selectLastNote;
@@ -39,7 +40,12 @@ class AddNoteButtonWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         if (dotted == 1) {
-          addNote(nextNoteWithNewDuration((duration * 1.5).round()));
+          if(duration == 1) { // handles dotted whole exception with duration calculation
+            addNote(nextNoteWithNewDuration(0));
+          }
+          else {
+            addNote(nextNoteWithNewDuration((duration * 1.5).round()));
+          }
         } else {
           addNote(nextNoteWithNewDuration(duration));
         }
@@ -47,7 +53,7 @@ class AddNoteButtonWidget extends StatelessWidget {
         controller.animateTo(offset, duration: const Duration(milliseconds: 100), curve: Curves.linear);
       },
       style: ButtonStyle(
-          backgroundColor:
+          backgroundColor: // determines the color of the buttons based on whether they can be used or not
               previous.measureProgress == timeSignatureTop / timeSignatureBottom
                   ? MaterialStateProperty.all(Colors.indigo[400])
                   : dotted == 1

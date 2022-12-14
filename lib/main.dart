@@ -21,6 +21,7 @@ void main() {
 
 Save save = Save();
 
+/// Class that builds the app as a whole
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Class that builds the home page for the app
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title, required this.storage});
   final Save storage;

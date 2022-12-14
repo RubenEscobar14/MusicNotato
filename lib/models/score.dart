@@ -2,9 +2,9 @@ import 'package:music_notato/models/note.dart';
 
 /// Represents the current score
 class Score {
-  // ignore: prefer_final_fields
   List<Note> _allNotes = List.empty(growable: true);
 
+  /// Getters
   bool get isEmpty => _allNotes.isEmpty;
   int get length => _allNotes.length;
   List<Note> get allNotes => _allNotes;

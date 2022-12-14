@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:music_notato/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// This class handles the transfer of information between the program and
+/// Class that handles the transfer of information between the program and
 /// save files.
 class Save {
   final JsonEncoder encoder = JsonEncoder();
@@ -12,7 +12,7 @@ class Save {
   /// Decides which directory the save file(s) should be in and returns it.
   Future<String?> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-    //final directory = await getExternalStorageDirectory();
+    // final directory = await getExternalStorageDirectory();
     return directory.path;
   }
 

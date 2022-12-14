@@ -5,6 +5,7 @@ import 'package:music_notato/models/score.dart';
 
 typedef SelectNewNote = void Function(double x);
 
+/// Class that builds the graphics containing both the staff and notes
 class MusicPainterWidget extends StatelessWidget {
   List<double> xPositions;
   double xPosition;
@@ -15,9 +16,10 @@ class MusicPainterWidget extends StatelessWidget {
 
   final SelectNewNote selectNewNotefunc;
 
-  double tappedPositionX = -1;
-  double tappedPositionY = -1;
+  double tappedPositionX = -1; // x position of where the screen has been tapped
+  double tappedPositionY = -1; // y position of where the screen has been tapped
 
+  /// Constructor
   MusicPainterWidget(
       this.xPosition,
       this.xPositions,
@@ -27,12 +29,12 @@ class MusicPainterWidget extends StatelessWidget {
       this.selectedNoteIndex,
       void this.selectNewNotefunc(double x));
 
-  // builds the widget that handles taps, and contians the painters for the staff and notes
+  /// Builds the widget that handles taps. Contians the painters for the staff and notes
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        CustomPaint(
+        CustomPaint( // creates the staff
           size: Size(
               xPosition < MediaQuery.of(context).size.width
                   ? MediaQuery.of(context).size.width
@@ -40,12 +42,12 @@ class MusicPainterWidget extends StatelessWidget {
               50),
           painter: StaffWidget('treble', signatureTop, signatureBottom),
         ),
-        GestureDetector(
+        GestureDetector( // creates the ability to select notes
           onTap: () => print('tapped!'),
           onTapDown: (TapDownDetails details) => _onTapDown(details),
           child: CustomPaint(
             size: Size(_score.length * 50, 50),
-            painter: NoteWidget(_score.allNotes, xPositions, 'treble',
+            painter: NoteWidget(_score.allNotes, xPositions, 'treble', // creates the notes
                 signatureTop, signatureBottom, selectedNoteIndex),
           ),
         ),
@@ -53,7 +55,7 @@ class MusicPainterWidget extends StatelessWidget {
     );
   }
 
-  //gets the x position from tap, and makes the home_page update its selected note
+  /// Gets the x position from tap and makes the home_page update its selected note
   _onTapDown(TapDownDetails details) {
     tappedPositionX = details.localPosition.dx;
     selectNewNotefunc(tappedPositionX);

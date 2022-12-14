@@ -7,7 +7,7 @@ import 'package:music_notato/screens/home_page.dart';
 
 /// Class responsible for playing back the music written on the staff
 class PlayingPage extends StatelessWidget {
-  // This homePage variable could be worth deleting
+  // this homePage variable could be worth deleting
   late HomePage homePage;
   late Score score;
   late int tempo;
@@ -26,7 +26,7 @@ class PlayingPage extends StatelessWidget {
   }
 
   void renderAudio() async {
-    // No point in trying to add loaded data if the data's not loaded
+    // no point in trying to add loaded data if the data's not loaded
     if (audioFiles.isEmpty) return;
     for (Note note in score.allNotes) {
       double duration = calculateDuration(note.duration, dotted: note.dotted);
@@ -39,7 +39,7 @@ class PlayingPage extends StatelessWidget {
     }
   }
 
-  // Map of duration values to fraction of a measure using whole note = 1
+  // map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
     32: 1 / 32,
     48: 3 / 64,
@@ -60,10 +60,10 @@ class PlayingPage extends StatelessWidget {
   /// unused, as duration contains all the duration information, so it can be passed
   /// in with or without dotted.
   double calculateDuration(int noteDuration, {int dotted = 0}) {
-    // Two quarter notes per second. This'll use math so that tempo can be easy to change
+    // two quarter notes per second. This'll use math so that tempo can be easy to change
     double bpm = 120;
     //https://flutterigniter.com/checking-null-aware-operators-dart/
-    // If there's no matching value in durationRatios, use 1/4 instead (as if
+    // if there's no matching value in durationRatios, use 1/4 instead (as if
     // there's a quarter note)
     double ratio = durationRatios[noteDuration] ??= 1 / 4;
     return (bpm * ratio) / 60;
@@ -71,7 +71,7 @@ class PlayingPage extends StatelessWidget {
 
   /// Plays back the music written on the staff
   Future<void> playBack() async {
-    // Try fetching the audio again if this page was loaded before the audio files
+    // try fetching the audio again if this page was loaded before the audio files
     if (audioFiles.isEmpty) {
       audioFiles = homePage.audio;
       renderAudio();
@@ -96,12 +96,6 @@ class PlayingPage extends StatelessWidget {
         title: const Text("Play your music"),
       ),
       body: Center(
-        // child: ElevatedButton(
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        //   child: const Text("Back to writing"),
-        // ),
         child: Column(children: <Widget>[
           IconButton(
             onPressed: () {

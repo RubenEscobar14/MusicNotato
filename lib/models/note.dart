@@ -5,12 +5,12 @@ class Note {
   // a, b, c, d, e, f, g, r (for rest)
   NoteLetter note;
 
-  // Which octave should be played - Middle C is C4.
+  // which octave should be played - middle C is C4.
   int octave;
 
-  // For non-dotted notes, if the duration is x, it is a 1/2^x note
-  // For dotted notes (with the exception of dotted whole notes), the duration is 1.5*x
-  // For dotted whole notes, the duration is 0
+  // for non-dotted notes, if the duration is x, it is a 1/2^x note
+  // for dotted notes (with the exception of dotted whole notes), the duration is 1.5*x
+  // for dotted whole notes, the duration is 0
   int duration;
 
   // 0 if not dotted, 1 if dotted. An integer for "when" notes with more than 1 dot are added.
@@ -19,10 +19,10 @@ class Note {
   // -2 is double flat, -1 is flat, 0 is natural, 1 is sharp, 2 is double sharp
   int accidental;
 
-  // Tracks how far this note is in its measure
+  // tracks how far this note is in its measure
   double measureProgress;
 
-  // Getters (some things, like dotted, have no getters and are meant to be directly accessed)
+  /// Getters (some things, like dotted, have no getters and are meant to be directly accessed)
   NoteLetter get noteLetter => note;
 
   /// Creates a Note object with all properties specified

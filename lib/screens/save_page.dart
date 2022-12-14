@@ -11,6 +11,7 @@ class SavePage extends StatelessWidget {
   late int signature_;
   Save save = Save();
 
+  /// Constructor
   SavePage(this.homePage, {super.key}) {
     score = homePage.score;
     tempo = homePage.tempo;

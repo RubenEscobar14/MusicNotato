@@ -8,7 +8,7 @@ import 'package:music_notato/models/note.dart';
 import 'package:music_notato/models/score.dart';
 import 'package:music_notato/screens/playing_page.dart';
 import 'package:music_notato/screens/save_page.dart';
-import 'package:music_notato/widgets/add_node_button_widget.dart';
+import 'package:music_notato/widgets/add_note_button_widget.dart';
 import 'package:music_notato/widgets/edit_note_widgets.dart';
 import 'package:music_notato/widgets/music_painter_widget.dart';
 
@@ -25,7 +25,7 @@ class HomePage extends State<MyHomePage> {
 
   final List<String> noteNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
-  String note = 'A';
+  String note = 'A'; // default note name
   int duration = 4; // default length of a note
   int octave = 4; // default octave of a note
   int dotted = 0; // default set to not dotted
@@ -33,12 +33,9 @@ class HomePage extends State<MyHomePage> {
       0; // not implemented yet (when it is implemented, will also have to implement keys)
 
   String currentClef = 'treble'; // default clef
-  String dropdownvalue = '4/4'; // default time signature
   int _tempo = 100; // default tempo
-  String numBeatsString = '4';
-  String beatUnitString = '4';
 
-  // Map of duration values to fraction of a measure using whole note = 1
+  // map of duration values to fraction of a measure using whole note = 1
   Map<int, double> durationRatios = {
     32: 1 / 32,
     48: 3 / 64,
@@ -54,14 +51,7 @@ class HomePage extends State<MyHomePage> {
     0: 3 / 2,
   };
 
-  var timeSignatures = [
-    '4/4',
-    '3/4',
-    '2/4',
-    '2/2'
-  ]; // list of available time signatures
-
-  var numBeats = [
+  var numBeats = [ // choices for the number of beats in a measure
     '1',
     '2',
     '3',
@@ -76,18 +66,20 @@ class HomePage extends State<MyHomePage> {
     '12'
   ];
 
-  var beatUnits = ['2', '4', '8', '16'];
+  var beatUnits = ['2', '4', '8', '16']; // choices for the units of beat
 
+  String numBeatsString = '4';
+  String beatUnitString = '4';
   int timeSignatureTop = 4; // default number of beats in a measure
   int timeSignatureBottom = 4; // default beat unit
-  double noteLength = 0;
+  double noteLength = 0; // fraction a note take up in a measure
 
   bool isRest = false;
 
   final player = AudioPlayer();
-  int currentFile = 1;
+  int currentFile = 1; // default save
 
-  ScrollController controller = ScrollController();
+  ScrollController controller = ScrollController(); // https://api.flutter.dev/flutter/widgets/ScrollController-class.html
 
   // Getters
   Score get score => _score;
@@ -152,6 +144,7 @@ class HomePage extends State<MyHomePage> {
     loadSave();
   }
 
+  /// Selects the last note in the composition
   void selectLastNote() {
     selectedNoteIndex = _score.length - 1;
   }
@@ -162,11 +155,11 @@ class HomePage extends State<MyHomePage> {
     _addNoteAt(currentNote, _score.length);
   }
 
-  // Like the addnote() function, but adds the note at a specified index instead of the end of the list
+  /// Like the addnote() function, but adds the note at a specified index instead of the end of the list
   void _addNoteAt(Note currentNote, int position, {bool saveOnAdd = true}) {
-    //updates the duration to the duration of the note being added
+    // updates the duration to the duration of the note being added
     duration = currentNote.duration;
-    //recalculates the measure progress for the note based on the score it's about to be added to
+    // recalculates the measure progress for the note based on the score it's about to be added to
     currentNote.measureProgress = returnMeasureProgress();
     setState(() {
       if (currentNote.measureProgress <=
@@ -199,7 +192,7 @@ class HomePage extends State<MyHomePage> {
     return _deleteNoteAt(_score.length - 1);
   }
 
-  //deletes the note at the specified positon from the score
+  /// Deletes the note at the specified positon from the score
   Note _deleteNoteAt(int index, {bool rerender = false}) {
     if (!_score.isEmpty) {
       Note toRemove = _score.getNote(index);
@@ -212,34 +205,16 @@ class HomePage extends State<MyHomePage> {
     return Note(NoteLetter.a, 4, 4, 0, 0, 0);
   }
 
-  /// Returns a note with the same characteristics as the previous note but with the given duration
-  Note nextNoteWithNewDuration(int duration) {
-    Note lastNote = this.lastNote;
-    if (isRest) {
-      return Note.rest(duration, dotted, returnMeasureProgress());
-    }
-    return Note(
-        lastNote.note == NoteLetter.r ? NoteLetter.a : lastNote.note,
-        lastNote.octave,
-        duration,
-        dotted,
-        lastNote.accidental,
-        returnMeasureProgress());
-  }
-
-  // Prints the current noteList and xPositions, debugging use only
+  /// Prints the current noteList and xPositions, debugging use only
   void _printNoteInfo() {
     print(_score.allNotes);
     print(xPositions);
   }
 
-  // Returns the fraction of the measure that has been completed
+  /// Returns the fraction of the measure that has been completed
   double returnMeasureProgress() {
     try {
-      noteLength = durationRatios[duration]!.toDouble(); // percentage of
-      if (duration == 0) {
-        noteLength = 3 / 2;
-      }
+      noteLength = durationRatios[duration]!.toDouble(); // fraction of a measure the current duration takes up
     } catch (e) {
       noteLength = 4;
     }
@@ -257,7 +232,7 @@ class HomePage extends State<MyHomePage> {
     return measureProgress;
   }
 
-  //updates the currently selected note to the nearest note to the input coordinates
+  /// Updates the currently selected note to the nearest note to the input coordinates
   void selectNewNote(double x) {
     double min = 1000;
     int minIndex = -1;
@@ -272,7 +247,7 @@ class HomePage extends State<MyHomePage> {
     });
   }
 
-  //returns the distance between two points in 1 dimension
+  /// Returns the distance between two points in 1 dimension
   double distance(double x, double y) {
     double dist = x - y;
     if (dist < 0) {
@@ -282,7 +257,7 @@ class HomePage extends State<MyHomePage> {
     }
   }
 
-  // changes the duration to a new number
+  /// Changes the duration to a new number
   void setDuration(int newDur) {
     duration = newDur;
   }
@@ -300,6 +275,7 @@ class HomePage extends State<MyHomePage> {
     }
   }
 
+  /// Main graphics for the home page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -329,28 +305,28 @@ class HomePage extends State<MyHomePage> {
                   },
                   child: const Icon(Icons.delete),
                 ),
-                if(!_score.isEmpty)
+                if(!_score.isEmpty) // keeps the spacing of the buttons the same if the drop down values are removed
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                 ),
-                if(_score.isEmpty)
-                Row(
+                if(_score.isEmpty) // prevents the user from changing the time signature once they have begun their composition
+                Row( // drop downs for changing time signature
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     DropdownButton(
-                      // Initial Value
+                      // initial value
                       value: numBeatsString,
-                      // Down Arrow Icon
+                      // down arrow icon
                       icon: const Icon(Icons.keyboard_arrow_down),
-                      // Array list of items
+                      // array list of items
                       items: numBeats.map((String items) {
                         return DropdownMenuItem(
                           value: items,
                           child: Text(items),
                         );
                       }).toList(),
-                      // After selecting the desired option, it will
-                      // change button value to selected value
+                      // after selecting the desired option, it will
+                      // change the button value to the selected value
                       onChanged: (String? newValue) {
                         setState(() {
                           if(_score.isEmpty) {
@@ -368,19 +344,19 @@ class HomePage extends State<MyHomePage> {
                       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 2),
                     ),
                     DropdownButton(
-                      // Initial Value
+                      // initial Value
                       value: beatUnitString,
-                      // Down Arrow Icon
+                      // down Arrow Icon
                       icon: const Icon(Icons.keyboard_arrow_down),
-                      // Array list of items
+                      // array list of items
                       items: beatUnits.map((String items) {
                         return DropdownMenuItem(
                           value: items,
                           child: Text(items),
                         );
                       }).toList(),
-                      // After selecting the desired option, it will
-                      // change button value to selected value
+                      // after selecting the desired option, it will
+                      // change the button value to the selected value
                       onChanged: (String? newValue) {
                         setState(() {
                           if(_score.isEmpty) {
@@ -436,7 +412,7 @@ class HomePage extends State<MyHomePage> {
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(top: 140.h, bottom: 100.h),
                   controller: controller,
-                  child: MusicPainterWidget(
+                  child: MusicPainterWidget( // staff and note-drawing graphics
                       xPosition,
                       xPositions,
                       timeSignatureTop,
@@ -448,7 +424,7 @@ class HomePage extends State<MyHomePage> {
               ),
               Row(
                 children: [
-                  ElevatedButton(
+                  ElevatedButton( // takes the user to the playing page
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -461,7 +437,7 @@ class HomePage extends State<MyHomePage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 0, horizontal: 3),
                   ),
-                  ElevatedButton(
+                  ElevatedButton( // takes the user to the different saves
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -480,7 +456,7 @@ class HomePage extends State<MyHomePage> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                   ),
-                  AddNoteButtonWidget(
+                  AddNoteButtonWidget( // rhythm buttons
                     dotted,
                     isRest,
                     i,
@@ -497,7 +473,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // dotted button
                   onPressed: () {
                     setState(() {
                       if (dotted == 0) {
@@ -528,7 +504,7 @@ class HomePage extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 0),
                 ),
-                ElevatedButton(
+                ElevatedButton( // rest button
                   onPressed: () {
                     setState(() {
                       isRest = !isRest; // toggle between notes and rests

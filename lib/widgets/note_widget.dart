@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:music_notato/models/note.dart';
 
 /// Class that draws the notes to the canvas
+/// https://www.mpa.org/wp-content/uploads/2018/06/standard-practice-engraving.pdf for music notation rules
+/// http://faculty.washington.edu/garmar/notehead_specs.pdf for note head design
 class NoteWidget extends CustomPainter {
   List<Note> noteList; // list of all notes
   List<double> xPositions; // list of x-positions for the notes
-  int toHighlight; //index of highlighted note, defaults to first note
+  int toHighlight; // index of highlighted note, defaults to first note
 
   String currentClef;
 
-  // Positions for C4-B4 depending on the clef
-  // Position is defined so that in descending order, the y-coordinate of the staff lines are 2x, x, 0, -x, and -2x
+  // positions for C4-B4 depending on the clef
+  // position is defined so that in descending order, the y-coordinate of the staff lines are 2x, x, 0, -x, and -2x
   List<double> trebleBasePositions = [-3, -2.5, -2, -1.5, -1, -0.5, 0];
   List<double> altoBasePositions = [0, 0.5, 1, 1.5, 2, 2.5, 3];
   List<double> bassBasePositions = [3, 3.5, 4, 4.5, 5, 5.5, 6];
@@ -38,7 +40,7 @@ class NoteWidget extends CustomPainter {
   NoteWidget(this.noteList, this.xPositions, this.currentClef,
       this.timeSignatureTop, this.timeSignatureBottom, this.toHighlight);
 
-  // Map of base positions for each note depending on the clef
+  // map of base positions for each note depending on the clef
   Map<String, Map<String, double>> noteToClefBasePositions =
       <String, Map<String, double>>{
     'c': {'treble': -3, 'alto': 0, 'bass': 3},
@@ -90,50 +92,12 @@ class NoteWidget extends CustomPainter {
       if (currentNote.note == NoteLetter.r) {
         drawRest(currentNote, xPosition, canvas, paint, x);
       } else {
-        // print(isBarredToNextNote(i));
         drawNote(currentNote, xPosition, canvas, paint, x);
       }
     }
   }
 
-  // use while loop to find bar end (while noteList[i].duration <= 6)
-  void handleEigthBarring(int i) {
-    int currentDuration = noteList[i].duration;
-    int j = 0;
-    while (currentDuration > 6) {
-      if (i <= noteList.length - 2) {
-        j++;
-        currentDuration = noteList[i + j].duration;
-      }
-    }
-    if (j == 0) {}
-  }
-
-  bool isBarredToNextNote(int i) {
-    try {
-      if (noteList[i].duration == 0 ||
-          noteList[i].duration == 1 ||
-          noteList[i].duration == 2 ||
-          noteList[i].duration == 3 ||
-          noteList[i].duration == 4 ||
-          noteList[i].duration == 6 ||
-          i == noteList.length - 1 ||
-          noteList[i + 1].duration == 0 ||
-          noteList[i + 1].duration == 1 ||
-          noteList[i + 1].duration == 2 ||
-          noteList[i + 1].duration == 3 ||
-          noteList[i + 1].duration == 4 ||
-          noteList[i + 1].duration == 6 ||
-          noteList[i + 1].measureProgress == noteList[i + 1].duration) {
-        return false;
-      }
-    }
-    // ignore: empty_catches
-    catch (e) {}
-    return true;
-  }
-
-  /// Draws a singular note to the staff (not barred to other notes); always used
+  /// Draws a singular (i.e. not barred to other notes) note to the staff
   void drawNote(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     double position = calculatePosition(currentNote.note, currentNote.octave,
@@ -260,7 +224,7 @@ class NoteWidget extends CustomPainter {
     canvas.restore();
   }
 
-  /// Draws a rest
+  /// Draws a rest based on the duration of the current note
   void drawRest(Note currentNote, double xPosition, Canvas canvas, Paint paint,
       double x) {
     if (currentNote.duration == 1 || currentNote.duration == 0) {
