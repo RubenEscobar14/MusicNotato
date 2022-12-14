@@ -51,4 +51,4 @@ Then, move the newly built APK onto an Android phone and install it.
 * http://faculty.washington.edu/garmar/notehead_specs.pdf was referenced for note head design
 * https://theremin.music.uiowa.edu/MISpiano.html is where we got the piano audio files from
 * https://cloudconvert.com/ was used to convert unsupported aiff files to flac
-* https://github.com/anars/blank-audio is where we get the rest audio file from
+* https://github.com/anars/blank-audio is where we got the rest audio file from
